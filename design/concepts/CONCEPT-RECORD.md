@@ -107,3 +107,151 @@ dark scrims.
 
 **Selection is the owner's.** These concepts are presented for review; nothing has been promoted
 into the app.
+
+---
+
+## Refinement: Automation in Action (2026-10-29)
+
+Owner direction: Concept 1 preferred, with Concept 2's engineering credibility. Authorized as a
+concept refinement only, not a homepage build. The original concept is untouched for comparison;
+the refinement is `automation-in-action-refined/index.html`, renders in `renders/refined/`
+(pass 1, superseded, in `renders/refined/pass1-superseded/`). Hero copy is unchanged and still
+**proposed, not approved**.
+
+### Desktop composition fix (before / after)
+
+- **Before:** the full-width headline sat above a 5/7 row whose copy was vertically centred
+  against the taller panel. That left a dead gap between the headline and the description, and the
+  panel floated mid-hero as a card with all four edges exposed.
+- **After:** the copy and the panel share one top edge directly under the headline (the
+  description starts on the panel's label row), and the panel is anchored on two edges: it bleeds
+  off the right of the viewport and sits flush on the hero's bottom edge. The hero now ends where
+  the panel ends, and the next section's heading shows at the fold. The primary CTA moved up from
+  654px to 537px at 1440x900. The panel's connectors finish in coral, the colour of the headline's
+  second line.
+
+### One motivated motion (emil-design-eng budget)
+
+On load, at 768px and wider, a coral signal travels once through the workflow. Each node shows a
+brief ring as it "receives" it, and the outputs stagger 60ms apart; about 2s in total, never
+looping. Only `opacity` and `clip-path` are animated. **Fails open:** the static state is the
+finished state. With reduced motion there is no animation and the finished state shows. CTAs
+press to `scale(.97)` over 160ms, hover is gated to fine pointers, and `:focus-visible` gives a
+2px ring. A full-page capture (a viewport resize) replays the signal: harmless, recorded.
+
+### Credibility section (from Concept 2)
+
+"Built by an engineer, not a marketer." with Kevin's career facts and a build-standard panel
+that reuses the hero's panel and node language. Every string traces to a source; nothing new is
+claimed:
+
+| Content | Source |
+|---|---|
+| Heading | existing site copy (`lib/content.ts`, About eyebrow) |
+| "led by Kevin Pilgrim, a software engineer with 30+ years of experience" | brief A2 |
+| Healthcare / Payments / Manufacturing facts, labelled "From Kevin's career" | brief A2 (Kevin's career, never presented as KAP's) |
+| "designed and built the way enterprise software is built": Monitored, Recoverable, Documented, Engineered for change | existing About page copy |
+
+Placed after the problems section to follow brief A4's order (sections 3-4 are not part of this
+concept). "Monitored" describes how automations are designed, not an ongoing monitoring service
+(B3: ongoing support is unconfirmed).
+
+### Hero impact gate (CLAUDE.md §7.2): CORRECT, bound reached
+
+| Pass | Verdict | Single biggest weakness named |
+|---|---|---|
+| Critic 1 (fresh context) | CORRECT, "close to STRONG on desktop" | The diagram carries the idea, but below desktop it leaves the first viewport and becomes a generic stack of boxes. |
+| Refinement | (one, targeted at that weakness) | Tablet uses the horizontal diagram; the phone gets a compact flow (inquiry, AI step, three results under a branch bus; node details kept for assistive technology). |
+| Critic 2 (fresh context) | CORRECT, "a strong CORRECT, close to STRONG" | The diagram is a generic node-card flowchart in a separate box; it reads as a widget beside the headline. |
+
+- **Recurring across both critiques:** the diagram's *form* is category-generic (any automation
+  agency could use it), the panel reads as a boxed module rather than part of the composition, and
+  the desktop area below the CTAs is unused. Both praise the headline, the coral second line, the
+  CTA path and the honest caption.
+- **Evidence vs. one claim:** critic 2 says the phone diagram falls "almost entirely below the
+  fold". Measured at 390x844 (mobile context), the whole path and every label are above the fold
+  (results row 756-856px; titles visible). It does occupy only the bottom third.
+- **Missing business input that could materially improve it:** a sanitised capture of a real KAP
+  workflow (brief B5, preferred: KAP's own lead pipeline). It is the concept's original path to
+  STRONG and directly answers "generic flowchart".
+- **Next step:** the owner-run exploration below. Not attempted or approximated here.
+
+```
+/prototype KAP homepage hero (design/concepts/automation-in-action-refined/index.html), first viewport only. Recurring weakness across two independent critiques: the workflow diagram is a generic boxed node-card flowchart parked beside the headline rather than part of one composition, and the area below the desktop CTAs is unused. Explore two genuinely different compositional ideas that make the inquiry-to-results flow and the headline one composition (for example, the flow emerging from or threading through the type, or the flow as the hero's dominant ground with the copy set into it), at 1440, 768 and 390. Keep: proposed copy unchanged (not approved), "Let's Talk About Your Business" primary CTA to /contact, KAP palette (charcoal, cream, magenta, coral, amber), the diagram labelled "Illustrative example, not a client project", no invented claims, WCAG AA, reduced motion respected.
+```
+
+### Correctness (CLAUDE.md §7.1), final render
+
+- **Widths:** 320, 359, 360, 390, 400, 401, 767, 768, 769, 1023, 1024, 1025, 1100, 1150, 1440,
+  1920 (breakpoints read from this file: 359/360, 400/401, 767/768, 1023/1024). No horizontal
+  overflow, no clipped text, header content never overlaps the hero, nav on one line, no CTA wraps,
+  headline 2 lines from 767px up.
+- **20px text:** both methods (CSS root size, and Chromium's default font size via CDP
+  `Page.setFontSizes`) at the same widths: pass. Note: most concept type is sized in `px`, so it
+  does not grow with the reader's setting; the build must size text in `rem`.
+- **Contrast (computed, solid grounds):** every text element is at least 5.63:1 (diagram kind
+  labels); career label 5.98; header text 16.9 and 9.2. CTA text 6.15.
+- **Console:** clean except the browser's automatic `/favicon.ico` request (the concept has no
+  favicon).
+- **Fixed during QA:** an 11px header overflow at about 360px wide, inherited from the original
+  concept (narrow-phone gutters and header button), and a regression from that fix (shorthand
+  `padding` removed the hero's top padding at 400px and below) caught in the render and corrected.
+
+### Taste pre-flight (rendered), deviations only
+
+All other applicable checks pass: zero em-dashes, one eyebrow, one radius system (documented at
+the top of the stylesheet), no CTA wrap, contrast, no scroll cues, decorative dots or version
+labels.
+
+- **HTML diagram instead of photography (§4.8, §9.F):** intentional; brief A8 directs explanatory
+  HTML/CSS/SVG diagrams and forbids fabricated screenshots. It is captioned as illustrative.
+- **Theme switch from a dark hero to cream sections (§4.11):** intentional, a single transition
+  carrying the brand's cream. CLAUDE.md §6 makes the theme lock advisory.
+- **"Let's Talk" (header) and "Let's Talk About Your Business" (hero), same intent (§4.5):** the
+  existing header label and the brief's approved primary label. Unify in the build if the owner
+  agrees.
+- **Lucide icons:** the project already depends on `lucide-react`.
+- **Google Fonts link and no dark/light pair:** concept-surface shortcuts; the build uses
+  `next/font` and decides the colour-scheme strategy.
+
+### Full-page impact (§7.4)
+
+Not run: this is a three-section concept, not the homepage. It runs once the full homepage
+exists.
+
+---
+
+## Hero prototype and light treatments (2026-10-29)
+
+**Owner-run `/prototype`** (`hero-prototype/`): Current (baseline), Route (transit-line flow)
+and Annotated (flow set on the headline's lines). Owner ranking: Current, then Route ("distinctive,
+not as balanced"), then Annotated ("too cramped; do not pursue"). The owner especially values the
+workflow animation. The harness is kept on the owner's instruction not to remove concepts.
+
+**Owner direction change:** the dark treatment reads as too heavy and imposing. Keep Current's
+layout and the animation, and move to a warm, light appearance where charcoal gives typographic
+contrast and occasional dramatic moments. This supersedes the dark ground of the refined concept;
+the dark version stays as the record of what was tried.
+
+**Light treatments** (`light-treatments/index.html?theme=ivory|balanced|optimism`, comparison at
+`light-treatments/compare.html`, renders in `light-treatments/renders/`). One layout and identical
+wording; only colour and atmosphere differ:
+
+| Treatment | Second headline line | Workflow surface | Build-standard plate | Atmosphere |
+|---|---|---|---|---|
+| Warm Ivory | coral ink | deep cream, paper nodes | light | none |
+| Balanced Contrast | coral ink | charcoal (original panel) | charcoal | none |
+| Modern Optimism | magenta | paper, logo-gradient top edge | charcoal, logo-gradient edge | soft amber, coral and magenta light, kept clear of the text columns |
+
+- **Coral ink `#B8503A`:** the logo coral deepened along its own hue, for coral text and lines on
+  light grounds (4.8:1 on cream). The logo coral is 2.75:1 on cream, so it stays the CTA fill;
+  amber stays a fill only (1.7:1 on cream).
+- **Gates (all three):** 16 widths, 20px text by both methods, no overflow, clipping or header
+  collision; minimum text contrast 4.8:1; finished connector lines 4.3-5.6:1 against their surface
+  (3:1 required for graphics); Optimism's glows checked at worst case (charcoal 14.8:1, magenta
+  5.2:1, body grey 7.5:1). The animation runs at tablet and desktop in all three; reduced motion
+  gets no animation and the finished static state.
+- **Selected: Modern Optimism** (owner, 2026-10-29), recorded as brief A12. The owner liked the
+  warm, welcoming appearance, the magenta headline emphasis, the light workflow panel and the
+  animated workflow. Implementation in the app follows; the homepage design record is
+  `design/homepage.md`.

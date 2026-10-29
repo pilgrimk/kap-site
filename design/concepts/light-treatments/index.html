@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en" data-theme="ivory">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept: Automation in Action, light treatments</title>
+<!-- Light treatments of the refined "Current" concept. One layout, three themes:
+     ?theme=ivory | balanced | optimism (default ivory, also without JavaScript).
+     Hero copy is PROPOSED, NOT APPROVED (brief B1). -->
+<script>
+  (function () {
+    var t = new URLSearchParams(location.search).get('theme');
+    if (t === 'ivory' || t === 'balanced' || t === 'optimism') document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  /* Radius system: buttons 10px, panels 20px, nodes 14px, tiles 10px (8px small). */
+  :root {
+    /* Brand */
+    --cream: #fffced; --charcoal: #1a1a1a; --magenta: #b1296e; --coral: #f17558; --amber: #f0ba58;
+    /* Coral deepened along its own hue for text and lines on light grounds (4.8:1 on cream).
+       The CTA keeps the logo coral; amber is used as a fill only. */
+    --coral-ink: #b8503a;
+    --paper: #fffef8; --deep-cream: #f6efd6; --rule: #e3dcc2; --ink-soft: #4a4a4a; --ink-mute: #5c5c5c;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+    /* Shared light page */
+    --hero-bg: var(--cream); --ink: var(--charcoal); --sub: var(--ink-soft); --nav: var(--ink-soft);
+    --hair-ui: rgba(26, 26, 26, .16); --focus: var(--charcoal); --link-line: rgba(26, 26, 26, .4);
+    --line-b: var(--coral-ink);
+
+    /* Light workflow surface (Ivory, Optimism) */
+    --panel-bg: var(--deep-cream); --panel-border: var(--rule); --node-bg: var(--paper); --node-border: #e6dcbc;
+    --p-ink: var(--charcoal); --p-soft: var(--ink-soft); --p-mute: var(--ink-mute);
+    --wire: rgba(26, 26, 26, .26); --signal: var(--coral-ink); --p-focus: var(--charcoal);
+
+    /* Build-standard plate */
+    --plate-bg: var(--deep-cream); --plate-border: var(--rule); --plate-ink: var(--charcoal); --plate-soft: var(--ink-soft);
+    --plate-node-bg: var(--paper); --plate-node-border: #e6dcbc; --plate-tile-bg: var(--amber); --plate-tile-ink: var(--charcoal);
+  }
+
+  /* 1. Warm Ivory: cream-dominant, charcoal type, coral CTA, light workflow surface */
+  [data-theme="ivory"] { --eyebrow: var(--coral-ink); }
+
+  /* 2. Balanced Contrast: light page, a charcoal workflow panel so the signal and logo colours carry */
+  [data-theme="balanced"] {
+    --eyebrow: var(--magenta);
+    --panel-bg: #232323; --panel-border: rgba(255, 252, 237, .14); --node-bg: #2c2c2c; --node-border: rgba(255, 252, 237, .14);
+    --p-ink: var(--cream); --p-soft: rgba(255, 252, 237, .72); --p-mute: rgba(255, 252, 237, .58);
+    --wire: rgba(255, 252, 237, .38); --signal: var(--coral); --p-focus: var(--cream);
+    --plate-bg: #232323; --plate-border: transparent; --plate-ink: var(--cream); --plate-soft: rgba(255, 252, 237, .72);
+    --plate-node-bg: #2c2c2c; --plate-node-border: rgba(255, 252, 237, .14); --plate-tile-bg: rgba(240, 186, 88, .14); --plate-tile-ink: var(--amber);
+  }
+
+  /* 3. Modern Optimism: warm light ground with soft logo-colour atmosphere, magenta second line,
+     a logo-gradient edge on the workflow surface, and one charcoal moment (the build standard) */
+  [data-theme="optimism"] {
+    --eyebrow: var(--coral-ink); --line-b: var(--magenta);
+    --panel-bg: var(--paper); --node-bg: var(--cream);
+    --plate-bg: #232323; --plate-border: transparent; --plate-ink: var(--cream); --plate-soft: rgba(255, 252, 237, .72);
+    --plate-node-bg: #2c2c2c; --plate-node-border: rgba(255, 252, 237, .14); --plate-tile-bg: rgba(240, 186, 88, .14); --plate-tile-ink: var(--amber);
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: Geist, system-ui, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header { position: absolute; inset: 0 0 auto; z-index: 5; color: var(--ink); }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; text-decoration: none; white-space: nowrap; }
+  .brand img { height: 32px; width: auto; }
+  .nav { display: flex; gap: 32px; font-size: 14px; }
+  .nav a { color: var(--nav); text-decoration: none; }
+  .actions { display: flex; align-items: center; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: transform 160ms var(--ease-out), background-color 150ms ease; }
+  .btn:active { transform: scale(.97); }
+  .btn-primary { background: var(--coral); color: var(--charcoal); }
+  .btn-sm { height: 40px; padding: 0 16px; font-size: 14px; }
+  .btn-lg { height: 54px; padding: 0 26px; font-size: 16px; }
+  .menu { display: none; width: 40px; height: 40px; border: 1px solid var(--hair-ui); border-radius: 10px; background: transparent; color: var(--ink); align-items: center; justify-content: center; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 10px; }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover { background: #f38a70; }
+    .nav a:hover { color: var(--ink); }
+    .link:hover { border-color: var(--coral-ink); }
+  }
+
+  /* Hero. The copy and the workflow panel share one top edge under the headline; the panel
+     bleeds off the right of the viewport and stands on the hero's baseline rule. */
+  .hero { position: relative; background: var(--hero-bg); color: var(--ink); overflow: hidden; border-bottom: 1px solid var(--rule); }
+  .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 56px; row-gap: 48px; align-items: start; padding-top: 120px; }
+  .headline { grid-column: 1 / -1; }
+  .eyebrow { font-family: "Geist Mono", monospace; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--eyebrow); }
+  h1 { font-family: "Bricolage Grotesque", Geist, sans-serif; font-weight: 700; font-size: clamp(2.5rem, 1.1rem + 3.4vw, 4.6rem); line-height: 1.02; letter-spacing: -.025em; margin-top: 20px; }
+  h1 .second { display: block; color: var(--line-b); }
+  .copy { padding-top: 22px; padding-bottom: 56px; }
+  .sub { font-size: 1.15rem; line-height: 1.55; color: var(--sub); max-width: 34ch; }
+  .ctas { margin-top: 36px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+  .link { font-weight: 600; font-size: 15px; text-decoration: none; border-bottom: 1px solid var(--link-line); padding-bottom: 2px; transition: border-color 150ms ease; }
+
+  /* Modern Optimism atmosphere: soft logo-colour light, kept clear of the text columns */
+  [data-theme="optimism"] .hero::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(55% 65% at 92% 22%, rgba(240, 186, 88, .22), transparent 70%),
+      radial-gradient(40% 50% at 4% 100%, rgba(241, 117, 88, .12), transparent 70%),
+      radial-gradient(30% 35% at 52% 0%, rgba(177, 41, 110, .06), transparent 70%);
+  }
+
+  /* Workflow panel */
+  .flow { position: relative; margin-right: min(-24px, calc((1280px - 100vw) / 2 - 24px)); background: var(--panel-bg); color: var(--p-ink); border: 1px solid var(--panel-border); border-right: 0; border-bottom: 0; border-radius: 20px 0 0 0; padding: 28px 36px 32px; overflow: hidden; }
+  [data-theme="optimism"] .flow::before, [data-theme="optimism"] .standard::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, var(--magenta), var(--coral) 55%, var(--amber)); }
+  .flow-head { display: flex; justify-content: space-between; align-items: center; font-family: "Geist Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--p-mute); }
+  .diagram { margin-top: 22px; display: grid; grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr) 48px minmax(0, 1.15fr); align-items: center; list-style: none; padding: 0; }
+  .node { position: relative; background: var(--node-bg); border: 1px solid var(--node-border); border-radius: 14px; padding: 16px; }
+  .tile { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; }
+  .tile svg { width: 18px; height: 18px; }
+  .t-trigger { background: var(--magenta); color: var(--cream); }
+  .t-ai { background: var(--coral); color: var(--charcoal); }
+  .t-result { background: var(--amber); color: var(--charcoal); }
+  .kind { margin-top: 14px; font-family: "Geist Mono", monospace; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--p-mute); }
+  .title { margin-top: 4px; font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .desc { margin-top: 4px; font-size: 13px; line-height: 1.4; color: var(--p-soft); }
+  .conn-h, .conn-b { position: relative; height: 100%; }
+  .conn { position: absolute; inset: 0; height: 100%; width: 100%; display: block; }
+  .conn path, .conn line { stroke: var(--wire); stroke-width: 2; fill: none; vector-effect: non-scaling-stroke; }
+  .conn.sig path, .conn.sig line { stroke: var(--signal); }
+  .outputs { display: grid; grid-template-rows: repeat(3, 1fr); list-style: none; padding: 0; }
+  .outputs li { padding: 7px 0; }
+  .outputs .node { display: flex; gap: 12px; align-items: center; padding: 12px 14px; }
+  .outputs .tile { width: 30px; height: 30px; border-radius: 8px; flex: none; }
+  .outputs .tile svg { width: 15px; height: 15px; }
+  .outputs .title { margin-top: 0; font-size: 14px; }
+  .outputs .desc { margin-top: 2px; font-size: 12.5px; }
+  .caption { margin-top: 18px; font-size: 12.5px; color: var(--p-mute); }
+  .flow a:focus-visible { outline-color: var(--p-focus); }
+
+  /* The workflow animation: on load, an inquiry travels through the workflow once.
+     Fails open: the static state is the finished state. Tablet and desktop; never on reduced motion. */
+  .node::after { content: ""; position: absolute; inset: -1px; border: 1.5px solid var(--signal); border-radius: inherit; opacity: 0; pointer-events: none; }
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .flow .node::after { animation: receive 900ms var(--ease-out) var(--d, 0ms) both; }
+    .conn.sig { animation: travel 320ms var(--ease-in-out) var(--d, 0ms) both; }
+    .n1 { --d: 500ms; } .c1 { --d: 700ms; } .n2 { --d: 980ms; } .c2 { --d: 1180ms; }
+    .outputs li:nth-child(1) .node { --d: 1460ms; }
+    .outputs li:nth-child(2) .node { --d: 1520ms; }
+    .outputs li:nth-child(3) .node { --d: 1580ms; }
+  }
+  @keyframes receive { 0% { opacity: 0; } 22% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes travel { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+  /* Problems section */
+  .hours { padding: 96px 0; }
+  .hours h2, .cred h2 { font-family: "Bricolage Grotesque", Geist, sans-serif; font-size: clamp(2rem, 1.2rem + 2vw, 3rem); letter-spacing: -.02em; line-height: 1.05; }
+  .rows { margin-top: 40px; border-top: 1px solid var(--rule); }
+  .row { display: grid; grid-template-columns: 1fr 32px 1fr; gap: 16px; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--rule); font-size: 1.1rem; }
+  .row .today { color: var(--ink-soft); }
+  .row .arrow { color: var(--magenta); }
+  .row .auto { font-weight: 600; }
+
+  /* Engineering credibility (proposed section) */
+  .cred { padding: 24px 0 112px; }
+  .cred-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); column-gap: 72px; align-items: center; }
+  .lead { margin-top: 20px; font-size: 1.15rem; line-height: 1.55; color: var(--ink-soft); max-width: 40ch; }
+  .career-label { margin-top: 40px; font-size: 14px; font-weight: 600; color: var(--magenta); }
+  .career { margin-top: 16px; display: grid; gap: 20px; }
+  .career div { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 16px; align-items: baseline; }
+  .career dt { font-family: "Bricolage Grotesque", Geist, sans-serif; font-weight: 600; font-size: 1.3rem; letter-spacing: -.01em; }
+  .career dd { color: var(--ink-soft); line-height: 1.5; }
+  .standard { position: relative; overflow: hidden; background: var(--plate-bg); color: var(--plate-ink); border: 1px solid var(--plate-border); border-radius: 20px; padding: 32px; }
+  .standard-lead { font-size: 1.05rem; line-height: 1.5; color: var(--plate-soft); max-width: 32ch; }
+  .traits { margin-top: 24px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; list-style: none; padding: 0; }
+  .traits .node { display: flex; flex-direction: column; gap: 14px; padding: 18px; background: var(--plate-node-bg); border-color: var(--plate-node-border); }
+  .traits .tile { background: var(--plate-tile-bg); color: var(--plate-tile-ink); }
+  .traits .title { margin-top: 0; font-size: 16px; }
+
+  /* Tablet: single column; the horizontal workflow keeps its fan-out in the first viewport */
+  @media (max-width: 1023px) {
+    .hero-grid { grid-template-columns: 1fr; row-gap: 0; padding-top: 112px; }
+    .headline { margin-bottom: 32px; }
+    .copy { padding-top: 0; padding-bottom: 40px; }
+    .flow { margin: 0 -24px; border-radius: 20px 20px 0 0; border-right: 1px solid var(--panel-border); padding: 24px; }
+    .cred { padding-bottom: 88px; }
+    .cred-grid { grid-template-columns: 1fr; row-gap: 48px; }
+  }
+  @media (max-width: 767px) {
+    .nav { display: none; }
+    .menu { display: inline-flex; }
+    .bar { height: 64px; }
+    .hero-grid { padding-top: 92px; }
+    .headline { margin-bottom: 24px; }
+    .copy { padding-bottom: 32px; }
+    .eyebrow { font-size: 11px; }
+    .sub { font-size: 1.05rem; }
+    .ctas { margin-top: 24px; }
+    .btn-lg { width: 100%; }
+
+    /* Phone: a compact flow, so the whole inquiry path reads in the first viewport.
+       Node details stay available to assistive technology. Connectors show the finished state. */
+    .flow { padding: 20px; --wire: var(--signal); }
+    .diagram { margin-top: 16px; grid-template-columns: 1fr; }
+    .diagram .kind, .diagram .desc { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .diagram > .node { display: flex; align-items: center; gap: 12px; padding: 12px; }
+    .diagram .tile { width: 30px; height: 30px; border-radius: 8px; flex: none; }
+    .diagram .tile svg { width: 15px; height: 15px; }
+    .diagram .title { margin-top: 0; font-size: 14px; }
+    .conn-h, .conn-b { height: 14px; width: 2px; margin-left: 27px; background: var(--wire); }
+    .conn-h svg, .conn-b svg { display: none; }
+    .outputs { position: relative; grid-template-rows: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding-top: 14px; }
+    .outputs::before { content: ""; position: absolute; top: 0; left: 27px; right: calc((100% - 16px) / 3 - 29px); height: 2px; background: var(--wire); }
+    .outputs li { position: relative; padding: 0; }
+    .outputs li::before { content: ""; position: absolute; top: -14px; left: 27px; width: 2px; height: 14px; background: var(--wire); }
+    .outputs .node { flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px; height: 100%; }
+    .outputs .title { font-size: 13px; }
+
+    .hours { padding: 72px 0; }
+    .row { grid-template-columns: 1fr; gap: 4px; }
+    .row .arrow { display: none; }
+    .cred { padding: 8px 0 72px; }
+    .career div { grid-template-columns: 1fr; gap: 4px; }
+    .standard { padding: 24px; margin: 0 -8px; }
+    .traits { grid-template-columns: 1fr; }
+    .traits .node { flex-direction: row; align-items: center; padding: 14px 16px; }
+  }
+  /* Narrow phones: the header's brand, CTA and menu control must share one line */
+  @media (max-width: 400px) {
+    /* padding-inline only: the hero's top padding lives on the same .wrap element */
+    .wrap { padding-inline: 16px; }
+    .bar { gap: 8px; }
+    .btn-sm { padding: 0 12px; }
+    .flow { margin: 0 -16px; }
+  }
+  /* Smallest phones: the hero's full-width CTA sits directly below, so the header copy yields */
+  @media (max-width: 359px) {
+    .actions .btn-sm { display: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#"><img src="../../../public/logo.png" alt=""><span>KAP Enterprises</span></a>
+    <nav class="nav" aria-label="Primary"><a href="#">Services</a><a href="#">About</a><a href="#">Contact</a></nav>
+    <div class="actions">
+      <a class="btn btn-primary btn-sm" href="#">Let's Talk</a>
+      <button class="menu" aria-label="Open menu" type="button"><i data-lucide="menu"></i></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="headline">
+        <p class="eyebrow">AI automation for small and mid-sized businesses</p>
+        <h1>Your tools, connected. <span class="second">Your busywork, automated.</span></h1>
+      </div>
+      <div class="copy">
+        <p class="sub">We connect the tools you use and automate follow-ups, data entry and handoffs, so your team can focus on customers.</p>
+        <div class="ctas">
+          <a class="btn btn-primary btn-lg" href="#">Let's Talk About Your Business</a>
+          <a class="link" href="#how">See how it works</a>
+        </div>
+      </div>
+
+      <figure class="flow" aria-labelledby="flow-caption">
+        <div class="flow-head"><span>Example workflow</span><span>New inquiry</span></div>
+        <ol class="diagram">
+          <li class="node n1">
+            <div class="tile t-trigger"><i data-lucide="inbox"></i></div>
+            <p class="kind">Starts when</p>
+            <p class="title">A website inquiry arrives</p>
+            <p class="desc">From your site's contact form</p>
+          </li>
+          <li class="conn-h" aria-hidden="true">
+            <svg class="conn" viewBox="0 0 40 100" preserveAspectRatio="none"><line x1="0" y1="50" x2="40" y2="50"/></svg>
+            <svg class="conn sig c1" viewBox="0 0 40 100" preserveAspectRatio="none"><line x1="0" y1="50" x2="40" y2="50"/></svg>
+          </li>
+          <li class="node n2">
+            <div class="tile t-ai"><i data-lucide="sparkles"></i></div>
+            <p class="kind">AI step</p>
+            <p class="title">AI reads and sorts it</p>
+            <p class="desc">Service, urgency and the right next step</p>
+          </li>
+          <li class="conn-b" aria-hidden="true">
+            <svg class="conn" viewBox="0 0 48 300" preserveAspectRatio="none"><path d="M0 150 C 24 150, 24 50, 48 50"/><line x1="0" y1="150" x2="48" y2="150"/><path d="M0 150 C 24 150, 24 250, 48 250"/></svg>
+            <svg class="conn sig c2" viewBox="0 0 48 300" preserveAspectRatio="none"><path d="M0 150 C 24 150, 24 50, 48 50"/><line x1="0" y1="150" x2="48" y2="150"/><path d="M0 150 C 24 150, 24 250, 48 250"/></svg>
+          </li>
+          <li>
+            <ul class="outputs">
+              <li><div class="node"><div class="tile t-result"><i data-lucide="contact"></i></div><div><p class="title">CRM record updated</p><p class="desc">Contact and deal, no retyping</p></div></div></li>
+              <li><div class="node"><div class="tile t-result"><i data-lucide="send"></i></div><div><p class="title">Follow-up sent</p><p class="desc">In your words, on your rules</p></div></div></li>
+              <li><div class="node"><div class="tile t-result"><i data-lucide="bell-ring"></i></div><div><p class="title">Your team is told</p><p class="desc">Only when a person is needed</p></div></div></li>
+            </ul>
+          </li>
+        </ol>
+        <figcaption class="caption" id="flow-caption">Illustrative example, not a client project. Every workflow is built around the tools you already use.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="hours" id="how">
+    <div class="wrap">
+      <h2>Where the hours actually go.</h2>
+      <div class="rows">
+        <div class="row"><span class="today">The same customer details typed into three systems</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Entered once, synced everywhere</span></div>
+        <div class="row"><span class="today">A website inquiry waits until someone checks the inbox</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Acknowledged and routed right away</span></div>
+        <div class="row"><span class="today">Reminders and status updates sent by hand every week</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Sent on schedule, exceptions flagged</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proposed section. Sources: heading = existing site copy; lead and career facts = brief A2
+       (Kevin's career, never company accomplishments); build standard = existing About page. -->
+  <section class="cred" aria-labelledby="cred-title">
+    <div class="wrap cred-grid">
+      <div>
+        <h2 id="cred-title">Built by an engineer, not a marketer.</h2>
+        <p class="lead">KAP Enterprises is led by Kevin Pilgrim, a software engineer with 30+ years of experience.</p>
+        <p class="career-label">From Kevin's career</p>
+        <dl class="career">
+          <div><dt>Healthcare</dt><dd>HL7 clinical interfaces processing millions of healthcare transactions a month</dd></div>
+          <div><dt>Payments</dt><dd>PCI-compliant payment integrations for nationwide property management platforms</dd></div>
+          <div><dt>Manufacturing</dt><dd>Machine-control software for semiconductor equipment installed in four countries</dd></div>
+        </dl>
+      </div>
+      <div class="standard">
+        <p class="standard-lead">KAP automations are designed and built the way enterprise software is built:</p>
+        <ul class="traits">
+          <li class="node"><div class="tile"><i data-lucide="activity"></i></div><p class="title">Monitored</p></li>
+          <li class="node"><div class="tile"><i data-lucide="rotate-ccw"></i></div><p class="title">Recoverable</p></li>
+          <li class="node"><div class="tile"><i data-lucide="file-text"></i></div><p class="title">Documented</p></li>
+          <li class="node"><div class="tile"><i data-lucide="refresh-cw"></i></div><p class="title">Engineered for change</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+<script>window.lucide && lucide.createIcons();</script>
+</body>
+</html>

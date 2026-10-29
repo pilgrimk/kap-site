@@ -1,0 +1,32 @@
+/* Modern Optimism details shared by homepage sections (brief A12). */
+
+/* Soft logo-colour light behind the hero, kept clear of the text columns
+   (worst case behind text: charcoal 14.8:1, magenta 5.2:1, body grey 7.5:1). */
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 65% at 92% 22%, rgba(240, 186, 88, 0.22), transparent 70%),
+    radial-gradient(40% 50% at 4% 100%, rgba(241, 117, 88, 0.12), transparent 70%),
+    radial-gradient(30% 35% at 52% 0%, rgba(177, 41, 110, 0.06), transparent 70%);
+}
+
+/* Video poster: the hero's soft light, scaled to the player */
+.videoPoster {
+  background:
+    radial-gradient(60% 80% at 85% 15%, rgba(240, 186, 88, 0.22), transparent 70%),
+    radial-gradient(45% 60% at 10% 100%, rgba(241, 117, 88, 0.12), transparent 70%),
+    var(--paper);
+}
+
+/* The thin logo-gradient edge used on the workflow panel, carried to a few key surfaces */
+.accentEdge::before {
+  content: "";
+  position: absolute;
+  z-index: 1; /* above full-cover children such as the video poster */
+  inset: 0 0 auto;
+  height: 3px;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--brand-magenta), var(--brand-coral) 55%, var(--brand-amber));
+}

@@ -48,8 +48,8 @@ export function Navbar() {
         </nav>
 
         <div className="hidden md:block">
-          <Button asChild size="sm" className="h-9 px-4 text-sm">
-            <Link href={PRIMARY_CTA.href}>{PRIMARY_CTA.label}</Link>
+          <Button asChild variant="coral" size="sm" className="h-10 rounded-[10px] px-4 text-sm">
+            <Link href={PRIMARY_CTA.href}>{PRIMARY_CTA.shortLabel}</Link>
           </Button>
         </div>
 
@@ -81,7 +81,7 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Button asChild size="sm" className="mt-2 h-9 px-4 text-sm">
+          <Button asChild variant="coral" size="sm" className="mt-2 h-11 rounded-[10px] px-4 text-sm">
             <Link href={PRIMARY_CTA.href} onClick={() => setOpen(false)}>
               {PRIMARY_CTA.label}
             </Link>

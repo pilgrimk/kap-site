@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hero prototype: Annotated</title>
+<!-- Prototype variant (owner-run /prototype). Hero copy is PROPOSED, NOT APPROVED (brief B1). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  /* Variant "Annotated": type-led. From 1200px the workflow is set on the headline's own lines:
+     a wire leaves "Your tools, connected." into the inquiry and AI steps, and the three results
+     sit on the line "Your busywork, automated." Below 1200px the same annotation sits directly
+     under the headline. No panel, no cards. Radius: buttons 10px, tiles 10px. */
+  :root {
+    --cream: #fffced; --charcoal: #1a1a1a; --magenta: #b1296e; --coral: #f17558; --amber: #f0ba58;
+    --cream-70: rgba(255, 252, 237, .72); --cream-55: rgba(255, 252, 237, .58);
+    --hair: rgba(255, 252, 237, .14); --rule: #e3dcc2; --ink-soft: #4a4a4a;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1); --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --h1: clamp(2.5rem, 1.1rem + 3.4vw, 4.6rem);
+    --tile: 40px; --sw: 150px; --gap: 16px; --drop: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: Geist, system-ui, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding-inline: 24px; }
+
+  header { position: absolute; inset: 0 0 auto; z-index: 5; color: var(--cream); }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; text-decoration: none; white-space: nowrap; }
+  .brand img { height: 32px; width: auto; }
+  .nav { display: flex; gap: 32px; font-size: 14px; }
+  .nav a { color: var(--cream-70); text-decoration: none; }
+  .actions { display: flex; align-items: center; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: transform 160ms var(--ease-out), background-color 150ms ease; }
+  .btn:active { transform: scale(.97); }
+  .btn-primary { background: var(--coral); color: var(--charcoal); }
+  .btn-sm { height: 40px; padding: 0 16px; font-size: 14px; }
+  .btn-lg { height: 54px; padding: 0 26px; font-size: 16px; }
+  .menu { display: none; width: 40px; height: 40px; border: 1px solid var(--hair); border-radius: 10px; background: transparent; color: var(--cream); align-items: center; justify-content: center; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; border-radius: 10px; }
+  .hours a:focus-visible { outline-color: var(--charcoal); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover { background: #f38a70; }
+    .nav a:hover { color: var(--cream); }
+    .link:hover { border-color: var(--coral); }
+  }
+
+  .hero { background: var(--charcoal); color: var(--cream); overflow: hidden; padding: 128px 0 80px; }
+  .eyebrow { font-family: "Geist Mono", monospace; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--amber); }
+  .lockup { margin-top: 20px; }
+  h1 { font-family: "Bricolage Grotesque", Geist, sans-serif; font-weight: 700; font-size: var(--h1); line-height: 1.02; letter-spacing: -.025em; }
+  h1 .line { display: block; }
+  h1 .second { color: var(--coral); }
+  .sub { margin-top: 36px; font-size: 1.15rem; line-height: 1.55; color: var(--cream-70); max-width: 34ch; }
+  .ctas { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+  .link { font-weight: 600; font-size: 15px; text-decoration: none; border-bottom: 1px solid var(--cream-55); padding-bottom: 2px; transition: border-color 150ms ease; }
+
+  /* The annotation, stacked form (below 1200px) */
+  .flow { margin-top: 28px; }
+  .row-1 { display: flex; align-items: stretch; }
+  .step { display: flex; gap: 12px; }
+  .pin { display: flex; flex-direction: column; align-items: center; flex: none; }
+  .tile { width: var(--tile); height: var(--tile); border-radius: 10px; display: grid; place-items: center; position: relative; flex: none; }
+  .tile svg { width: 18px; height: 18px; }
+  .t-trigger { background: var(--magenta); color: var(--cream); }
+  .t-ai { background: var(--coral); color: var(--charcoal); }
+  .t-result { background: var(--amber); color: var(--charcoal); }
+  .label { padding-top: 2px; }
+  .kind { font-family: "Geist Mono", monospace; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-55); }
+  .title { font-size: 15px; font-weight: 600; line-height: 1.25; }
+  .wire { flex: 0 0 32px; height: 2px; margin: calc(var(--tile) / 2 - 1px) 12px 0; background: var(--coral); }
+  .wire.lead { display: none; }
+  /* The drop from the AI step stretches to the bus under row 1, whatever the label heights */
+  .s-ai .drop { flex: 1; width: 2px; min-height: 0; margin-bottom: calc(-1 * var(--drop)); background: var(--coral); }
+  /* Shrink to the three results so the bus ends on the last one */
+  .results { position: relative; display: flex; gap: var(--gap); width: max-content; margin-top: var(--drop); padding-top: 18px; }
+  .results::before { content: ""; position: absolute; top: 0; height: 2px; left: calc(var(--tile) / 2 - 1px); right: calc(var(--sw) - var(--tile) / 2 - 1px); background: var(--coral); }
+  .results .step { position: relative; flex: 0 0 var(--sw); flex-direction: column; gap: 10px; }
+  .results .step::before { content: ""; position: absolute; left: calc(var(--tile) / 2 - 1px); top: -18px; width: 2px; height: 18px; background: var(--coral); }
+  .results .title { font-size: 14px; }
+  .caption { margin-top: 18px; font-size: 12.5px; color: var(--cream-55); }
+
+  /* Wide screens: the annotation moves onto the headline's own lines */
+  @media (min-width: 1200px) {
+    /* The headline is capped so its second line (about 11.9em) plus the results row (about
+       470px) always fits the container, even with enlarged text. */
+    :root { --h1: min(clamp(2.5rem, 1.1rem + 3vw, 4.1rem), calc((min(100vw - 48px, 1232px) - 470px) / 11.9)); --sw: 130px; --gap: 16px; --tile: 36px; --drop: 0px; }
+    .lockup { display: grid; }
+    .lockup > * { grid-area: 1 / 1; }
+    h1 { position: relative; z-index: 1; pointer-events: none; }
+    /* The wire starts behind the text; each line knocks it out with the hero ground */
+    h1 .line > span { background: var(--charcoal); padding-right: .25em; }
+    .flow { margin-top: 0; font-size: var(--h1); display: grid; grid-template-rows: 1.02em 1.02em auto; }
+    .flow > * { font-size: 16px; }
+    .row-1 { justify-content: flex-end; }
+    .row-1 .step { --pad: calc((1.02 * var(--h1) - var(--tile)) / 2); }
+    .row-1 .pin { padding-top: var(--pad); }
+    .row-1 .label { align-self: center; padding-top: 0; }
+    .row-1 .title { max-width: 12ch; }
+    .wire { margin-top: calc((1.02 * var(--h1)) / 2 - 1px); }
+    .wire.lead { display: block; flex: 1 1 auto; margin-left: 0; margin-right: 16px; min-width: 40px; }
+    .wire.mid { flex-basis: 40px; margin-inline: 14px; }
+    .s-ai { width: 200px; }
+    .results { justify-self: end; margin-top: 0; padding-top: 0; }
+    .results .step { flex-direction: row; align-items: center; gap: 10px; }
+    .results .step::before { top: 0; height: calc((100% - var(--tile)) / 2); }
+    .results .title { font-size: 13.5px; max-width: 10ch; }
+    .caption { text-align: right; margin-top: 20px; }
+    .sub { margin-top: 28px; }
+  }
+
+  /* One motivated motion: the wire draws out of the headline, then each step receives it.
+     Fails open: the static state is the finished state. */
+  .tile::after { content: ""; position: absolute; inset: -6px; border-radius: 14px; border: 2px solid var(--coral); opacity: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    .wire { animation: draw 420ms var(--ease-in-out) var(--d, 0ms) both; }
+    .drop, .results .step::before { animation: drop 260ms var(--ease-in-out) var(--d, 0ms) both; }
+    .results::before { animation: draw 380ms var(--ease-in-out) 1460ms both; }
+    .wire.lead { --d: 400ms; } .wire.mid { --d: 820ms; } .drop { --d: 1240ms; } .results .step::before { --d: 1820ms; }
+    .tile::after { animation: ring 900ms var(--ease-out) var(--r, 0ms) both; }
+    .s-in .tile::after { --r: 780ms; } .s-ai .tile::after { --r: 1200ms; }
+    .results .step:nth-child(1) .tile::after { --r: 1900ms; } .results .step:nth-child(2) .tile::after { --r: 1960ms; } .results .step:nth-child(3) .tile::after { --r: 2020ms; }
+  }
+  @keyframes draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes drop { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes ring { 0% { opacity: 0; transform: scale(.92); } 25% { opacity: 1; } 100% { opacity: 0; transform: scale(1.12); } }
+
+  .hours { padding: 96px 0; }
+  .hours h2 { font-family: "Bricolage Grotesque", Geist, sans-serif; font-size: clamp(2rem, 1.2rem + 2vw, 3rem); letter-spacing: -.02em; line-height: 1.05; }
+  .rows { margin-top: 40px; border-top: 1px solid var(--rule); }
+  .row { display: grid; grid-template-columns: 1fr 32px 1fr; gap: 16px; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--rule); font-size: 1.1rem; }
+  .row .today { color: var(--ink-soft); } .row .arrow { color: var(--magenta); } .row .auto { font-weight: 600; }
+
+  @media (max-width: 1023px) { .hero { padding: 112px 0 88px; } }
+  @media (max-width: 767px) {
+    :root { --tile: 34px; --gap: 10px; --sw: calc((100% - 2 * var(--gap)) / 3); }
+    .results { width: auto; }
+    .nav { display: none; } .menu { display: inline-flex; } .bar { height: 64px; }
+    .hero { padding: 92px 0 64px; }
+    .eyebrow { font-size: 11px; } .sub { margin-top: 28px; font-size: 1.05rem; }
+    .ctas { margin-top: 24px; } .btn-lg { width: 100%; }
+    .flow { margin-top: 24px; }
+    .tile { border-radius: 9px; } .tile svg { width: 16px; height: 16px; }
+    .row-1 .step { flex: 1 1 0; min-width: 0; }
+    .row-1 .kind { display: none; }
+    .row-1 .label { padding-top: 0; align-self: flex-start; }
+    .row-1 .title { font-size: 14px; }
+    .wire.mid { flex-basis: 16px; margin-inline: 8px; }
+    .results .title { font-size: 13px; }
+    .hours { padding: 72px 0; } .row { grid-template-columns: 1fr; gap: 4px; } .row .arrow { display: none; }
+  }
+  @media (max-width: 400px) { .wrap { padding-inline: 16px; } .bar { gap: 8px; } .btn-sm { padding: 0 12px; } }
+  @media (max-width: 359px) { .actions .btn-sm { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#"><img src="../../../public/logo.png" alt=""><span>KAP Enterprises</span></a>
+    <nav class="nav" aria-label="Primary"><a href="#">Services</a><a href="#">About</a><a href="#">Contact</a></nav>
+    <div class="actions">
+      <a class="btn btn-primary btn-sm" href="#">Let's Talk</a>
+      <button class="menu" aria-label="Open menu" type="button"><i data-lucide="menu"></i></button>
+    </div>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">AI automation for small and mid-sized businesses</p>
+      <div class="lockup">
+        <h1><span class="line"><span>Your tools, connected.</span></span> <span class="line second"><span>Your busywork, automated.</span></span></h1>
+        <figure class="flow" aria-labelledby="flow-cap">
+          <div class="row-1">
+            <span class="wire lead" aria-hidden="true"></span>
+            <div class="step s-in"><div class="pin"><span class="tile t-trigger"><i data-lucide="inbox"></i></span></div><div class="label"><p class="kind">Starts when</p><p class="title">A website inquiry arrives</p></div></div>
+            <span class="wire mid" aria-hidden="true"></span>
+            <div class="step s-ai"><div class="pin"><span class="tile t-ai"><i data-lucide="sparkles"></i></span><span class="drop" aria-hidden="true"></span></div><div class="label"><p class="kind">AI step</p><p class="title">AI reads and sorts it</p></div></div>
+          </div>
+          <div class="results">
+            <div class="step"><span class="tile t-result"><i data-lucide="contact"></i></span><p class="title">CRM record updated</p></div>
+            <div class="step"><span class="tile t-result"><i data-lucide="send"></i></span><p class="title">Follow-up sent</p></div>
+            <div class="step"><span class="tile t-result"><i data-lucide="bell-ring"></i></span><p class="title">Your team is told</p></div>
+          </div>
+          <figcaption class="caption" id="flow-cap">Illustrative example, not a client project.</figcaption>
+        </figure>
+      </div>
+      <p class="sub">We connect the tools you use and automate follow-ups, data entry and handoffs, so your team can focus on customers.</p>
+      <div class="ctas">
+        <a class="btn btn-primary btn-lg" href="#">Let's Talk About Your Business</a>
+        <a class="link" href="#how">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="hours" id="how">
+    <div class="wrap">
+      <h2>Where the hours actually go.</h2>
+      <div class="rows">
+        <div class="row"><span class="today">The same customer details typed into three systems</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Entered once, synced everywhere</span></div>
+        <div class="row"><span class="today">A website inquiry waits until someone checks the inbox</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Acknowledged and routed right away</span></div>
+        <div class="row"><span class="today">Reminders and status updates sent by hand every week</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Sent on schedule, exceptions flagged</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>window.lucide && lucide.createIcons();</script>
+</body>
+</html>

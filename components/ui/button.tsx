@@ -10,6 +10,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
+        // Primary contact CTA (brief A12): logo coral with charcoal text, 6.15:1.
+        coral:
+          "bg-brand-coral font-semibold text-brand-charcoal transition-[transform,background-color] duration-150 active:not-aria-[haspopup]:translate-y-0 active:scale-[0.97] [a]:hover:bg-[#f38a70]",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:

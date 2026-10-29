@@ -1,73 +1,255 @@
-export type Testimonial = {
-  quote: string;
-  author: string;
-  title: string;
-  company: string;
-};
-
-export type Solution = {
-  icon: string;
-  title: string;
-  description: string;
-};
-
-export type ProblemPoint = {
-  icon: string;
-  title: string;
-  body: string;
-};
-
 export type Stat = {
   value: string;
   label: string;
 };
 
-export const HERO_COPY = {
-  eyebrow: "Done-for-you AI automation",
-  headline:
-    "AI automation systems built to save time, cut costs, and scale your business.",
+/* ---------------------------------------------------------------------------------------------
+   Homepage (brief A4, A12). The hero headline is working copy, open to revision at acceptance
+   review (brief B1). Factual claims trace to brief A2 or to existing site copy.
+   ------------------------------------------------------------------------------------------- */
+
+export const HOME_HERO = {
+  eyebrow: "AI automation for small and mid-sized businesses",
+  headlineLead: "Your tools, connected.",
+  headlineEmphasis: "Your busywork, automated.",
   subhead:
-    "Custom-built automation systems for SMBs that streamline operations, reduce manual work, and help your business grow faster.",
+    "We connect the tools you use and automate follow-ups, data entry and handoffs, so your team can focus on customers.",
+  secondaryCta: { label: "See how it works", href: "#how" },
 };
 
-export const HERO_TRUST: string[] = [
-  "30+ years engineering",
-  "Done-for-you delivery",
-  "Trusted by SMBs",
-];
+export type WorkflowStep = { kind?: string; title: string; detail: string };
 
-export const PROBLEM_COPY = {
-  eyebrow: "The hidden cost of manual work",
-  title: "Manual processes are quietly draining your business.",
-  description:
-    "Every spreadsheet you maintain by hand, every email you copy-paste, every recurring task you do twice — they're costing you in places you can't see on a P&L.",
+export const HOME_WORKFLOW: {
+  label: string;
+  trigger: string;
+  start: WorkflowStep;
+  ai: WorkflowStep;
+  results: WorkflowStep[];
+  caption: string;
+} = {
+  label: "Example workflow",
+  trigger: "New inquiry",
+  start: {
+    kind: "Starts when",
+    title: "A website inquiry arrives",
+    detail: "From your site's contact form",
+  },
+  ai: {
+    kind: "AI step",
+    title: "AI reads and sorts it",
+    detail: "Service, urgency and the right next step",
+  },
+  results: [
+    { title: "CRM record updated", detail: "Contact and deal, no retyping" },
+    { title: "Follow-up sent", detail: "In your words, on your rules" },
+    { title: "Your team is told", detail: "Only when a person is needed" },
+  ],
+  caption:
+    "Illustrative example, not a client project. Every workflow is built around the tools you already use.",
 };
 
-export const PROBLEMS: ProblemPoint[] = [
-  {
-    icon: "Clock",
-    title: "Time",
-    body: "Repetitive manual tasks consume hours every day — time your team should be spending on growth, customers, and strategy.",
-  },
-  {
-    icon: "TrendingDown",
-    title: "Revenue",
-    body: "Every minute spent on busywork is a minute not spent closing deals, serving customers, or shipping the work that actually moves the business.",
-  },
-  {
-    icon: "Lightbulb",
-    title: "Opportunity",
-    body: "Manual operations don't scale. The work piles up faster than you can hire — and the best opportunities slip past while you're stuck in the queue.",
-  },
-];
-
-export const SOLUTIONS_COPY = {
-  eyebrow: "What we build",
-  title: "Automation systems wired into the seams of your business.",
-  description:
-    "Done-for-you AI workflows that connect the tools you already use, eliminate handoffs, and run unattended in production.",
+export const HOME_HOURS = {
+  title: "Where the hours actually go.",
+  todayLabel: "Today",
+  automatedLabel: "Done automatically",
+  rows: [
+    {
+      today: "The same customer details typed into three systems",
+      automated: "Entered once, synced everywhere",
+    },
+    {
+      today: "A website inquiry waits until someone checks the inbox",
+      automated: "Acknowledged and routed right away",
+    },
+    {
+      today: "New leads sit in a spreadsheet until someone has time to chase them",
+      automated: "Every lead logged and followed up on time",
+    },
+    {
+      today: "Reminders and status updates sent by hand every week",
+      automated: "Sent on schedule, exceptions flagged",
+    },
+  ],
 };
 
+export type Service = {
+  icon: "Workflow" | "MessagesSquare" | "Megaphone" | "Blocks" | "Globe";
+  title: string;
+  description: string;
+};
+
+// Five categories from brief A3; AI automation carries the most weight (A4). Service pages are
+// not built yet, so no card links to a missing page.
+export const HOME_SERVICES: {
+  title: string;
+  intro: string;
+  featured: Service & { points: string[] };
+  others: Service[];
+} = {
+  title: "What we automate.",
+  intro:
+    "Practical automation for the work that slows a small business down, with AI doing the reading, sorting and drafting in between.",
+  featured: {
+    icon: "Workflow",
+    title: "AI Workflow Automation",
+    description:
+      "Connect the tools you already use so data entry, handoffs and follow-ups run on their own.",
+    points: [
+      "Data moved between systems without retyping",
+      "Inquiries and requests sorted and routed",
+      "Routine updates and reminders sent on schedule",
+    ],
+  },
+  others: [
+    {
+      icon: "MessagesSquare",
+      title: "AI-Powered Customer Engagement",
+      description:
+        "Respond to inquiries faster and more consistently, with AI that sorts, drafts and routes each one.",
+    },
+    {
+      icon: "Megaphone",
+      title: "Sales & Marketing Automation",
+      description:
+        "Capture leads, keep follow-ups going and move your pipeline forward without manual chasing.",
+    },
+    {
+      icon: "Blocks",
+      title: "Custom Software & Integrations",
+      description:
+        "When off-the-shelf tools won't talk to each other, we build the integration or interface that connects them.",
+    },
+    {
+      icon: "Globe",
+      title: "Website Design & Development",
+      description:
+        "Websites built to turn visitors into inquiries, connected to the systems behind them.",
+    },
+  ],
+};
+
+// Owner-approved working copy (2026-10-29), kept verbatim, including its dash. The owner confirmed
+// the video still represents KAP's current services. The summary states only verified facts: the
+// video's content could not be reviewed (YouTube blocks automated viewing), and caption
+// availability is unverified (design/open-items.md).
+export const HOME_VIDEO = {
+  title: "See What Automation Can Do",
+  paragraphs: [
+    "At KAP Enterprises, we don't just build automations for businesses. We put them to work in our own operations.",
+    "This video introduces the possibilities of AI-powered automation—and it's also an example of automation in action.",
+  ],
+  highlight: "We created it using one of our own automated video-production workflows.",
+  closing: "Imagine what the right automation could do for your business.",
+  disclosure:
+    "Created using a KAP Enterprises automation workflow. Features an AI-generated presenter.",
+  video: {
+    id: "bjfNFUCjJLU",
+    // The video's published YouTube title
+    title: "KAP Enterprises - Automations",
+    kicker: "Video",
+    note: "Plays on YouTube, with sound",
+  },
+  summaryLabel: "About this video",
+  summary:
+    "An introduction to AI-powered automation for businesses from KAP Enterprises, presented by an AI-generated presenter. The video was produced with one of KAP's own automated video-production workflows.",
+};
+
+// Proposed process wording (brief A4: keep proposed wording distinct from verified practice).
+// Needs the owner's confirmation before launch; it makes no ongoing-support promise (brief B3).
+export const HOME_PROCESS = {
+  title: "How we work together.",
+  steps: [
+    {
+      title: "Talk it through",
+      body: "Tell us where the time goes and which tools you use. We'll look at what's worth automating first.",
+    },
+    {
+      title: "Map the work",
+      body: "We trace how the work moves today and design the automation around the tools you already have.",
+    },
+    {
+      title: "Build and test",
+      body: "We build it and test it with you before anything goes live.",
+    },
+    {
+      title: "Hand it over",
+      body: "You get a documented system your team understands, built to adapt as your tools change.",
+    },
+  ],
+};
+
+// Sources: heading = existing site copy; lead and career facts = brief A2 (Kevin's career, never
+// company accomplishments); build standard = existing About page copy.
+export const HOME_CREDIBILITY = {
+  title: "Built by an engineer, not a marketer.",
+  lead: "KAP Enterprises is led by Kevin Pilgrim, a software engineer with 30+ years of experience.",
+  careerLabel: "From Kevin's career",
+  career: [
+    {
+      field: "Healthcare",
+      fact: "HL7 clinical interfaces processing millions of healthcare transactions a month",
+    },
+    {
+      field: "Payments",
+      fact: "PCI-compliant payment integrations for nationwide property management platforms",
+    },
+    {
+      field: "Manufacturing",
+      fact: "Machine-control software for semiconductor equipment installed in four countries",
+    },
+  ],
+  standardLead:
+    "KAP automations are designed and built the way enterprise software is built:",
+  traits: ["Monitored", "Recoverable", "Documented", "Engineered for change"] as const,
+};
+
+export type Recommendation = {
+  quote: string;
+  author: string;
+  role: string;
+  company: string;
+  relationship: string;
+};
+
+// Whole-sentence excerpts, unedited, from the recommendations already published on the current
+// site. Relationships per brief A7. To be checked against the LinkedIn originals (brief B4).
+export const HOME_RECOMMENDATIONS: { title: string; items: Recommendation[] } = {
+  title: "What clients say.",
+  items: [
+    {
+      quote:
+        "He took the time to walk me through the entire process so I understood how everything worked.",
+      author: "Hunter O'Brien",
+      role: "Creative Team Lead",
+      company: "MemberUp",
+      relationship: "Client, n8n automation project",
+    },
+    {
+      quote:
+        "He doesn't just teach the 'how,' he also explains the 'why,' which made everything click so much faster.",
+      author: "Peter Greco",
+      role: "Agile Coach & Senior Product Manager",
+      company: "Independent Consultant",
+      relationship: "Client",
+    },
+    {
+      quote:
+        "His technical expertise is nothing short of genius, and his ability to implement innovative solutions has significantly improved our efficiency and marketing effectiveness.",
+      author: "Chandra Wrightsell",
+      role: "Global Strategy & Branding Executive",
+      company: "JT Advisors Group LLC",
+      relationship: "Client",
+    },
+  ],
+};
+
+export const HOME_FINAL_CTA = {
+  title: "Tell us where the busywork piles up.",
+  body: "Describe how work moves through your business today, and we'll talk through what's worth automating first.",
+  emailLead: "Prefer email?",
+};
+
+// Not on the homepage: placement and reassurance wording await owner approval (brief B2).
 export const SOLUTIONS_SURVEY_COPY = {
   eyebrow: "Quick fit-check",
   title: "Is your business ready for automation?",
@@ -79,52 +261,6 @@ export const SOLUTIONS_SURVEY_COPY = {
   },
   reassurance: "No obligation · Instant results · 100% confidential",
 };
-
-export const SOLUTIONS_FEATURED: Solution = {
-  icon: "Sparkles",
-  title: "General AI Automation",
-  description:
-    "Custom-built systems wiring AI into the seams of your business — connecting tools you already use, eliminating manual handoffs, and running unattended in production. Every engagement starts here: we map your operations, find the highest-leverage automation, and ship it.",
-};
-
-export const SOLUTIONS: Solution[] = [
-  {
-    icon: "Users",
-    title: "CRM Systems",
-    description:
-      "Automate lead capture, contact enrichment, follow-up sequences, and pipeline transitions across your CRM.",
-  },
-  {
-    icon: "Mail",
-    title: "Email Management",
-    description:
-      "Personalized cold outreach, smart inbox routing, auto-responses, and AI-drafted replies built around your sales motion.",
-  },
-  {
-    icon: "MessageSquare",
-    title: "Social Media",
-    description:
-      "Schedule, generate, repurpose, and publish content across platforms with AI-assisted creative pipelines.",
-  },
-  {
-    icon: "Headphones",
-    title: "Customer Service",
-    description:
-      "First-response workflows, ticket triage, and knowledge-base–backed answers that escalate intelligently to humans.",
-  },
-  {
-    icon: "Target",
-    title: "Lead Generation",
-    description:
-      "Outbound systems that source prospects, qualify intent, personalize messaging, and book meetings while you sleep.",
-  },
-  {
-    icon: "Video",
-    title: "Video Automation",
-    description:
-      "Programmatic short-form and instructional video generation for marketing, training, and onboarding.",
-  },
-];
 
 export const WHY_KAP_COPY = {
   eyebrow: "Built by an engineer, not a marketer",
@@ -140,37 +276,6 @@ export const WHY_KAP_STATS: Stat[] = [
   { value: "3.5M+", label: "Transactions per month built and maintained" },
   { value: "30+", label: "Years shipping production software" },
   { value: "200+", label: "Enterprise client systems integrated" },
-];
-
-export const TESTIMONIALS_COPY = {
-  eyebrow: "What clients are saying",
-  title: "Real systems. Real outcomes.",
-  description:
-    "Three perspectives from clients who've worked directly with Kevin — across automation, technical strategy, and engagement.",
-};
-
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    quote:
-      "Kevin helped me set up an n8n project, and I couldn't recommend him more highly. He took the time to walk me through the entire process so I understood how everything worked. If you're looking for someone who not only delivers great technical work but also genuinely cares about your understanding and success, Kevin is your guy.",
-    author: "Hunter O'Brien",
-    title: "Creative Team Lead",
-    company: "MemberUp",
-  },
-  {
-    quote:
-      "Kevin is incredibly knowledgeable. He doesn't just teach the 'how,' he also explains the 'why,' which made everything click so much faster. By the end of our time together, I felt confident and equipped to build automations on my own. He's the real deal.",
-    author: "Peter Greco",
-    title: "Agile Coach & Senior Product Manager",
-    company: "Independent Consultant",
-  },
-  {
-    quote:
-      "Kevin has played a pivotal role in enhancing our digital presence and client engagement strategies. His technical expertise is nothing short of genius, and his ability to implement innovative solutions has significantly improved our efficiency and marketing effectiveness.",
-    author: "Chandra Wrightsell",
-    title: "Global Strategy & Branding Executive",
-    company: "JT Advisors Group LLC",
-  },
 ];
 
 export const FINAL_CTA_COPY = {

@@ -183,16 +183,37 @@ Eight authentic LinkedIn recommendations, with the relationships the owner gave:
 - No commit, push, merge, preview or deployment, and no change to production settings (Stripe,
   Vercel, GA4, environment variables), without the owner's explicit authorization for that action.
 
+### A12. Approved visual direction: Modern Optimism (owner decision, 2026-10-29)
+
+Selected from three light treatments of the refined *Automation in Action* concept
+(`design/concepts/light-treatments/`, theme `optimism`). Supersedes the dark treatment, which the
+owner found too heavy and imposing.
+
+- Preserve the refined concept's hero composition and hierarchy: headline across the top, copy and
+  the workflow panel sharing one top edge, the panel bleeding off the right edge.
+- Warm, light overall appearance using KAP's palette: cream, charcoal, magenta, coral and amber.
+  Magenta carries the headline's second line; coral is the primary CTA; amber marks results.
+  Coral text and lines on light grounds use the deepened coral `#B8503A` for contrast.
+- A light workflow panel with a thin logo-gradient accent; soft logo-colour atmosphere kept clear
+  of text.
+- Charcoal is used selectively, for typographic contrast and engineering credibility.
+- The animated workflow demonstration repeats about every 7 seconds (inquiry arrives, AI step,
+  three results in sequence, a brief completed hold, then again), pauses while the page is hidden,
+  and shows the complete static diagram to reduced-motion users. It stays labelled as an
+  illustrative example.
+- Keep "Where the hours actually go" and the engineering-credibility section (factual claims only).
+- Implementation of the homepage in the Next.js app is authorized on `kap-website-redesign`;
+  committing it needs separate approval.
+
 ---
 
 ## Part B — Awaiting owner approval (not decided)
 
 ### B1. Homepage hero and concept
 
-- **Concept selection.** Three homepage concepts are rendered under `design/concepts/`. The
-  recommendation is *Automation in Action*, with an unresolved desktop composition weakness. Not
-  yet selected.
-- **Hero copy — PROPOSED, NOT APPROVED:**
+- **Concept selection:** resolved; see A12 (Modern Optimism).
+- **Hero copy — WORKING COPY for implementation (owner, 2026-10-29), open to revision at
+  acceptance review; not yet final:**
   - Eyebrow: "AI automation for small and mid-sized businesses"
   - Headline: "Your tools, connected. Your busywork, automated."
   - Supporting copy: "We connect the tools you use and automate follow-ups, data entry and handoffs,

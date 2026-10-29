@@ -46,6 +46,13 @@
   --color-brand-charcoal: var(--brand-charcoal);
   --color-brand-magenta: var(--brand-magenta);
   --color-brand-coral: var(--brand-coral);
+  --color-brand-amber: var(--brand-amber);
+  --color-coral-ink: var(--coral-ink);
+  --color-paper: var(--paper);
+  --color-deep-cream: var(--deep-cream);
+  --color-rule: var(--rule);
+  --color-ink-soft: var(--ink-soft);
+  --font-display: var(--font-bricolage), var(--font-sans);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -61,6 +68,15 @@
   --brand-charcoal: #1a1a1a;
   --brand-magenta: #b1296e;
   --brand-coral: #f17558;
+  --brand-amber: #f0ba58;
+
+  /* Modern Optimism (brief A12). Coral text and lines on light grounds use coral-ink, the logo
+     coral deepened along its own hue (4.8:1 on cream); amber is a fill colour only. */
+  --coral-ink: #b8503a;
+  --paper: #fffef8;
+  --deep-cream: #f6efd6;
+  --rule: #e3dcc2;
+  --ink-soft: #4a4a4a;
 
   --background: #fffced;
   --foreground: #1a1a1a;

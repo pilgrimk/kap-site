@@ -13,19 +13,16 @@ export const NAV_LINKS = [
   { label: "Contact", href: "/contact" },
 ] as const;
 
+// Approved primary CTA label (brief A6); the header uses the compact form.
 export const PRIMARY_CTA = {
-  label: "Get Started",
+  label: "Let's Talk About Your Business",
+  shortLabel: "Let's Talk",
   href: "/contact",
 } as const;
 
 export const PAYMENT_LINK = {
   label: "Make Payment",
   href: "/payment",
-} as const;
-
-export const SECONDARY_CTA = {
-  label: "Learn More",
-  href: "/#solutions",
 } as const;
 
 export const SEO_KEYWORDS = [

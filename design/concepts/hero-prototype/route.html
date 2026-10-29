@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hero prototype: Route</title>
+<!-- Prototype variant (owner-run /prototype). Hero copy is PROPOSED, NOT APPROVED (brief B1). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  /* Variant "Route": no panel. The workflow is a transit line that enters from the viewport's
+     left edge and runs across the hero; each step is a station on it. Radius: buttons 10px. */
+  :root {
+    --cream: #fffced; --charcoal: #1a1a1a; --magenta: #b1296e; --coral: #f17558; --amber: #f0ba58;
+    --cream-70: rgba(255, 252, 237, .72); --cream-55: rgba(255, 252, 237, .58);
+    --hair: rgba(255, 252, 237, .14); --rule: #e3dcc2; --ink-soft: #4a4a4a;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1); --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --dot: 44px; --y: 22px; /* station size and the line's centre */
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: Geist, system-ui, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding-inline: 24px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  header { position: absolute; inset: 0 0 auto; z-index: 5; color: var(--cream); }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; text-decoration: none; white-space: nowrap; }
+  .brand img { height: 32px; width: auto; }
+  .nav { display: flex; gap: 32px; font-size: 14px; }
+  .nav a { color: var(--cream-70); text-decoration: none; }
+  .actions { display: flex; align-items: center; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: transform 160ms var(--ease-out), background-color 150ms ease; }
+  .btn:active { transform: scale(.97); }
+  .btn-primary { background: var(--coral); color: var(--charcoal); }
+  .btn-sm { height: 40px; padding: 0 16px; font-size: 14px; }
+  .btn-lg { height: 54px; padding: 0 26px; font-size: 16px; }
+  .menu { display: none; width: 40px; height: 40px; border: 1px solid var(--hair); border-radius: 10px; background: transparent; color: var(--cream); align-items: center; justify-content: center; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; border-radius: 10px; }
+  .hours a:focus-visible { outline-color: var(--charcoal); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover { background: #f38a70; }
+    .nav a:hover { color: var(--cream); }
+    .link:hover { border-color: var(--coral); }
+  }
+
+  .hero { background: var(--charcoal); color: var(--cream); overflow: hidden; padding: 120px 0 48px; }
+  .eyebrow { font-family: "Geist Mono", monospace; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--amber); }
+  h1 { font-family: "Bricolage Grotesque", Geist, sans-serif; font-weight: 700; font-size: clamp(2.5rem, 1.1rem + 3.4vw, 4.6rem); line-height: 1.02; letter-spacing: -.025em; margin-top: 20px; }
+  h1 .second { display: block; color: var(--coral); }
+  /* Description left, actions right: one horizontal band under the headline */
+  .copy { margin-top: 36px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px 48px; }
+  .sub { font-size: 1.15rem; line-height: 1.55; color: var(--cream-70); max-width: 34ch; }
+  .ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+  .link { font-weight: 600; font-size: 15px; text-decoration: none; border-bottom: 1px solid var(--cream-55); padding-bottom: 2px; transition: border-color 150ms ease; }
+
+  /* The route */
+  .route { margin-top: 64px; }
+  .route-head { font-family: "Geist Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-55); }
+  .stations { margin-top: 22px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.25fr); list-style: none; padding: 0; }
+  .st { position: relative; padding-right: 32px; }
+  /* Line segments: each station carries the line across its own width */
+  .st::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--y) - 1.5px); height: 3px; background: var(--coral); }
+  /* The first station's line comes in from beyond the viewport's left edge */
+  .st:first-child::after { content: ""; position: absolute; right: 100%; width: 100vw; top: calc(var(--y) - 1.5px); height: 3px; background: var(--coral); }
+  .st-out { padding-right: 0; }
+  .st-out::before { right: auto; width: 22px; }
+  .dot { position: relative; z-index: 1; width: var(--dot); height: var(--dot); border-radius: 50%; display: grid; place-items: center; box-shadow: 0 0 0 5px var(--charcoal); }
+  .dot svg { width: 19px; height: 19px; }
+  .t-trigger { background: var(--magenta); color: var(--cream); }
+  .t-ai { background: var(--coral); color: var(--charcoal); }
+  .t-result { background: var(--amber); color: var(--charcoal); }
+  .kind { margin-top: 16px; font-family: "Geist Mono", monospace; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-55); }
+  .title { margin-top: 4px; font-size: 16px; font-weight: 600; line-height: 1.3; }
+  .desc { margin-top: 4px; font-size: 13.5px; line-height: 1.4; color: var(--cream-70); max-width: 24ch; }
+  /* The junction: the line branches (metro-style, at right angles) into three terminal stations.
+     Each terminal draws its own tick and the bus segment down to the next, so wrapping labels
+     never break the branch. */
+  .terminals { list-style: none; padding: 0 0 0 48px; display: grid; gap: 16px; }
+  .term { position: relative; display: flex; align-items: flex-start; gap: 14px; padding-top: 4px; }
+  .term::before { content: ""; position: absolute; left: -28px; width: 28px; top: calc(var(--y) - 1.5px); height: 3px; background: var(--coral); }
+  .term:not(:last-child)::after { content: ""; position: absolute; left: -29.5px; width: 3px; top: calc(var(--y) - 1.5px); height: calc(100% + 16px); background: var(--coral); }
+  .term .dot { --dot: 36px; flex: none; box-shadow: 0 0 0 4px var(--charcoal); }
+  .term > div { padding-top: 7px; }
+  .term .dot svg { width: 16px; height: 16px; }
+  .term .title { margin-top: 0; font-size: 15px; }
+  .term .desc { margin-top: 2px; font-size: 13px; }
+  .caption { margin-top: 28px; font-size: 12.5px; color: var(--cream-55); }
+
+  /* One motivated motion: the line lights up from the left once, stations receive it in turn.
+     Fails open: the static state is the finished state. */
+  .dot::after { content: ""; position: absolute; inset: -9px; border-radius: 50%; border: 2px solid var(--coral); opacity: 0; }
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .st::before, .st:first-child::after { animation: draw 420ms var(--ease-in-out) var(--d, 0ms) both; }
+    .st:first-child::after { --d: 300ms; } .st:nth-child(1)::before { --d: 700ms; } .st:nth-child(2)::before { --d: 1100ms; }
+    .st-out::before, .term::before { animation: draw 240ms var(--ease-out) 1500ms both; }
+    .term:not(:last-child)::after { animation: drop 300ms var(--ease-in-out) 1560ms both; }
+    .dot::after { animation: ring 900ms var(--ease-out) var(--r, 0ms) both; }
+    .st:nth-child(1) > .dot { --r: 700ms; } .st:nth-child(2) > .dot { --r: 1100ms; }
+    .term:nth-child(2) .dot { --r: 1860ms; } .term:nth-child(3) .dot { --r: 1920ms; } .term:nth-child(4) .dot { --r: 1980ms; }
+  }
+  @keyframes draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes drop { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes ring { 0% { opacity: 0; transform: scale(.9); } 25% { opacity: 1; } 100% { opacity: 0; transform: scale(1.15); } }
+
+  .hours { padding: 96px 0; }
+  .hours h2 { font-family: "Bricolage Grotesque", Geist, sans-serif; font-size: clamp(2rem, 1.2rem + 2vw, 3rem); letter-spacing: -.02em; line-height: 1.05; }
+  .rows { margin-top: 40px; border-top: 1px solid var(--rule); }
+  .row { display: grid; grid-template-columns: 1fr 32px 1fr; gap: 16px; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--rule); font-size: 1.1rem; }
+  .row .today { color: var(--ink-soft); } .row .arrow { color: var(--magenta); } .row .auto { font-weight: 600; }
+
+  @media (max-width: 1023px) {
+    .hero { padding-top: 112px; }
+    .copy { flex-direction: column; align-items: flex-start; }
+    .route { margin-top: 48px; }
+    .st { padding-right: 20px; }
+  }
+  /* Phone: the line turns and runs down the left; stations hang off it */
+  @media (max-width: 767px) {
+    .nav { display: none; } .menu { display: inline-flex; } .bar { height: 64px; }
+    .hero { padding: 92px 0 32px; }
+    .eyebrow { font-size: 11px; } .sub { font-size: 1.05rem; }
+    .copy { margin-top: 24px; gap: 24px; } .ctas { width: 100%; } .btn-lg { width: 100%; }
+    .route { margin-top: 36px; }
+    .stations { margin-top: 28px; grid-template-columns: 1fr; --dot: 36px; --y: 18px; }
+    .st { display: flex; align-items: center; gap: 14px; padding: 0 0 16px; }
+    .st::before { left: calc(var(--dot) / 2 - 1.5px); right: auto; top: 0; bottom: 0; width: 3px; height: auto; }
+    .st:first-child::after { right: auto; left: calc(var(--dot) / 2 - 1.5px); top: auto; bottom: 100%; width: 3px; height: 14px; }
+    .st-out { display: block; padding: 0; }
+    .st-out::before { display: none; }
+    .dot svg { width: 16px; height: 16px; }
+    .st .kind, .st .desc { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .title { margin-top: 0; font-size: 15px; }
+    .terminals { position: relative; padding-left: 44px; gap: 8px; }
+    .terminals::before { content: ""; position: absolute; left: calc(var(--dot) / 2 - 1.5px); top: 0; height: calc(100% - 16px); width: 3px; background: var(--coral); }
+    .term { align-items: center; min-height: 32px; gap: 12px; padding-top: 0; }
+    .term > div { padding-top: 0; }
+    .term::before { left: auto; right: 100%; width: 26px; top: calc(50% - 1.5px); }
+    .term:not(:last-child)::after { display: none; }
+    .term .dot { --dot: 32px; } .term .dot svg { width: 14px; height: 14px; }
+    .caption { margin-top: 16px; }
+    .hours { padding: 72px 0; } .row { grid-template-columns: 1fr; gap: 4px; } .row .arrow { display: none; }
+  }
+  @media (max-width: 400px) { .wrap { padding-inline: 16px; } .bar { gap: 8px; } .btn-sm { padding: 0 12px; } }
+  @media (max-width: 359px) { .actions .btn-sm { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#"><img src="../../../public/logo.png" alt=""><span>KAP Enterprises</span></a>
+    <nav class="nav" aria-label="Primary"><a href="#">Services</a><a href="#">About</a><a href="#">Contact</a></nav>
+    <div class="actions">
+      <a class="btn btn-primary btn-sm" href="#">Let's Talk</a>
+      <button class="menu" aria-label="Open menu" type="button"><i data-lucide="menu"></i></button>
+    </div>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">AI automation for small and mid-sized businesses</p>
+      <h1>Your tools, connected. <span class="second">Your busywork, automated.</span></h1>
+      <div class="copy">
+        <p class="sub">We connect the tools you use and automate follow-ups, data entry and handoffs, so your team can focus on customers.</p>
+        <div class="ctas">
+          <a class="btn btn-primary btn-lg" href="#">Let's Talk About Your Business</a>
+          <a class="link" href="#how">See how it works</a>
+        </div>
+      </div>
+
+      <figure class="route" aria-labelledby="route-cap">
+        <p class="route-head">Example workflow</p>
+        <ol class="stations">
+          <li class="st">
+            <span class="dot t-trigger"><i data-lucide="inbox"></i></span>
+            <div><p class="kind">Starts when</p><p class="title">A website inquiry arrives</p><p class="desc">From your site's contact form</p></div>
+          </li>
+          <li class="st">
+            <span class="dot t-ai"><i data-lucide="sparkles"></i></span>
+            <div><p class="kind">AI step</p><p class="title">AI reads and sorts it</p><p class="desc">Service, urgency and the right next step</p></div>
+          </li>
+          <li class="st st-out">
+            <ul class="terminals">
+              <li class="term"><span class="dot t-result"><i data-lucide="contact"></i></span><div><p class="title">CRM record updated</p><p class="desc">Contact and deal, no retyping</p></div></li>
+              <li class="term"><span class="dot t-result"><i data-lucide="send"></i></span><div><p class="title">Follow-up sent</p><p class="desc">In your words, on your rules</p></div></li>
+              <li class="term"><span class="dot t-result"><i data-lucide="bell-ring"></i></span><div><p class="title">Your team is told</p><p class="desc">Only when a person is needed</p></div></li>
+            </ul>
+          </li>
+        </ol>
+        <figcaption class="caption" id="route-cap">Illustrative example, not a client project. Every workflow is built around the tools you already use.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="hours" id="how">
+    <div class="wrap">
+      <h2>Where the hours actually go.</h2>
+      <div class="rows">
+        <div class="row"><span class="today">The same customer details typed into three systems</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Entered once, synced everywhere</span></div>
+        <div class="row"><span class="today">A website inquiry waits until someone checks the inbox</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Acknowledged and routed right away</span></div>
+        <div class="row"><span class="today">Reminders and status updates sent by hand every week</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Sent on schedule, exceptions flagged</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>window.lucide && lucide.createIcons();</script>
+</body>
+</html>
