@@ -17,8 +17,10 @@ export function Hero() {
       </div>
 
       <div className="mx-auto max-w-6xl px-6 pt-24 pb-32 md:px-8 md:pt-32 md:pb-40">
+        {/* initial={false}: the hero renders in its final position, with no
+            entrance movement before or after JavaScript loads. */}
         <motion.div
-          initial="hidden"
+          initial={false}
           animate="show"
           variants={staggerContainer}
           className="mx-auto max-w-4xl text-center"
@@ -59,7 +61,7 @@ export function Hero() {
 
           <motion.div
             variants={fadeUp}
-            className="mt-12 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/55"
+            className="mt-12 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/70"
           >
             {HERO_TRUST.map((item, i) => (
               <span key={item} className="flex items-center gap-4">

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { SectionContainer } from "@/components/shared/SectionContainer";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { EyebrowTag } from "@/components/shared/EyebrowTag";
-import { YoutubeLoop } from "@/components/shared/YoutubeLoop";
+import { YoutubeEmbed } from "@/components/shared/YoutubeEmbed";
 import {
   SOLUTIONS,
   SOLUTIONS_COPY,
@@ -87,7 +87,7 @@ export function Solutions() {
         viewport={viewportOnce}
         className="mt-6"
       >
-        <YoutubeLoop
+        <YoutubeEmbed
           videoId="bjfNFUCjJLU"
           startSeconds={53}
           title="KAP Enterprises automation in action"
@@ -156,7 +156,7 @@ export function Solutions() {
                 </a>
               </Button>
             </div>
-            <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/55">
+            <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/70">
               {SOLUTIONS_SURVEY_COPY.reassurance}
             </p>
           </div>

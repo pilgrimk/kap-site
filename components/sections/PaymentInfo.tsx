@@ -15,8 +15,10 @@ const ITEMS = [
   },
   {
     icon: Receipt,
-    label: "Receipt",
-    value: "Stripe emails you a receipt as soon as the payment confirms.",
+    label: "Confirmation",
+    // Neutral until Stripe receipt delivery is verified in the Dashboard.
+    value:
+      "After you pay, you'll see a payment reference to keep for your records.",
   },
 ];
 
@@ -33,7 +35,7 @@ export function PaymentInfo() {
               <Icon className="size-4" strokeWidth={1.75} />
             </div>
             <div className="text-sm">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/55">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/70">
                 {label}
               </dt>
               <dd className="mt-1.5 text-foreground/85">{value}</dd>
@@ -43,7 +45,7 @@ export function PaymentInfo() {
       </dl>
 
       <div className="mt-10 border-t border-border/60 pt-6">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-foreground/55">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-foreground/70">
           Need help?
         </p>
         <p className="mt-3 text-sm text-muted-foreground">
@@ -54,7 +56,7 @@ export function PaymentInfo() {
           >
             {CONTACT_EMAIL}
           </a>{" "}
-          and we'll sort it out.
+          and we&apos;ll sort it out.
         </p>
       </div>
     </aside>

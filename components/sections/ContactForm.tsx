@@ -1,28 +1,56 @@
 "use client";
 
-import { useState, type FormEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { ChevronDown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CONTACT_EMAIL } from "@/lib/constants";
 import { GOAL_OPTIONS } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import {
+  CONTACT_LIMITS,
+  MAX_EMAIL_LENGTH,
+  contactFieldErrors,
+  type ContactField,
+} from "@/lib/validation";
 
 type Status = "idle" | "submitting" | "success" | "error";
+type FieldErrors = Partial<Record<ContactField, string>>;
+
+const FIELD_ORDER: ContactField[] = ["name", "email", "company", "message"];
 
 const inputClasses =
-  "block w-full rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground transition-colors placeholder:text-foreground/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25 disabled:opacity-60";
+  "block w-full rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground transition-colors placeholder:text-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25 disabled:opacity-60 aria-invalid:border-destructive";
+
+function errorId(field: ContactField) {
+  return `${field}-error`;
+}
+
+/** aria-invalid / aria-describedby for a field, only while it has an error. */
+function errorProps(errors: FieldErrors, field: ContactField) {
+  return errors[field]
+    ? { "aria-invalid": true, "aria-describedby": errorId(field) }
+    : {};
+}
 
 function Field({
   label,
   htmlFor,
   required,
   hint,
+  error,
   children,
 }: {
   label: string;
-  htmlFor: string;
+  htmlFor: ContactField | "goal";
   required?: boolean;
   hint?: string;
+  error?: string;
   children: ReactNode;
 }) {
   return (
@@ -46,6 +74,11 @@ function Field({
         ) : null}
       </label>
       {children}
+      {error && htmlFor !== "goal" ? (
+        <p id={errorId(htmlFor)} className="text-xs text-destructive">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -53,12 +86,43 @@ function Field({
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const formRef = useRef<HTMLFormElement>(null);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
+  const pendingFocusRef = useRef<ContactField | null>(null);
+
+  // Announce the confirmation: the form it replaces held keyboard focus.
+  useEffect(() => {
+    if (status === "success") successHeadingRef.current?.focus();
+  }, [status]);
+
+  // Focus the first invalid field once it has re-rendered (and is no longer
+  // disabled from submitting), so its error is read out with it.
+  useEffect(() => {
+    const field = pendingFocusRef.current;
+    if (!field || status === "submitting") return;
+    pendingFocusRef.current = null;
+    const element = formRef.current?.elements.namedItem(field);
+    if (element instanceof HTMLElement) element.focus();
+  }, [fieldErrors, status]);
+
+  function showFieldErrors(errors: FieldErrors) {
+    pendingFocusRef.current = FIELD_ORDER.find((field) => errors[field]) ?? null;
+    setFieldErrors(errors);
+  }
+
+  function clearFieldError(field: ContactField) {
+    if (!fieldErrors[field]) return;
+    setFieldErrors((current) => {
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+  }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (status === "submitting") return;
-    setStatus("submitting");
-    setError(null);
 
     const form = e.currentTarget;
     const data = new FormData(form);
@@ -71,14 +135,39 @@ export function ContactForm() {
       hp: data.get("hp"),
     };
 
+    const errors = contactFieldErrors(payload);
+    if (Object.keys(errors).length > 0) {
+      setError(null);
+      showFieldErrors(errors);
+      return;
+    }
+
+    setStatus("submitting");
+    setError(null);
+    setFieldErrors({});
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      if (res.status === 429) {
+        throw new Error(
+          `Too many messages have been sent from your connection. Please wait a minute and try again, or email ${CONTACT_EMAIL} directly.`,
+        );
+      }
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
+        if (
+          typeof body.field === "string" &&
+          FIELD_ORDER.includes(body.field as ContactField) &&
+          typeof body.error === "string"
+        ) {
+          setStatus("idle");
+          showFieldErrors({ [body.field as ContactField]: body.error });
+          return;
+        }
         throw new Error(body.error ?? "Something went wrong. Please try again.");
       }
       setStatus("success");
@@ -97,11 +186,15 @@ export function ContactForm() {
             ✓
           </span>
         </div>
-        <h2 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">
+        <h2
+          ref={successHeadingRef}
+          tabIndex={-1}
+          className="mt-5 scroll-mt-32 text-2xl font-semibold tracking-tight text-foreground focus:outline-none"
+        >
           Message received.
         </h2>
         <p className="mt-3 max-w-md text-sm text-muted-foreground">
-          We'll review what you sent and get back to you within one business
+          We&apos;ll review what you sent and get back to you within one business
           day. If something is urgent, you can also email{" "}
           <a
             href={`mailto:${CONTACT_EMAIL}`}
@@ -129,47 +222,67 @@ export function ContactForm() {
 
   return (
     <form
+      ref={formRef}
       onSubmit={onSubmit}
       noValidate
       className="rounded-2xl bg-card p-8 ring-1 ring-foreground/8"
     >
       <div className="space-y-5">
         <div className="grid gap-5 md:grid-cols-2">
-          <Field label="Name" htmlFor="name" required>
+          <Field label="Name" htmlFor="name" required error={fieldErrors.name}>
             <input
               id="name"
               name="name"
               type="text"
               required
+              maxLength={CONTACT_LIMITS.name}
               autoComplete="name"
               disabled={submitting}
               className={inputClasses}
               placeholder="Kevin Pilgrim"
+              onInput={() => clearFieldError("name")}
+              {...errorProps(fieldErrors, "name")}
             />
           </Field>
-          <Field label="Email" htmlFor="email" required>
+          <Field
+            label="Email"
+            htmlFor="email"
+            required
+            error={fieldErrors.email}
+          >
             <input
               id="email"
               name="email"
               type="email"
               required
+              maxLength={MAX_EMAIL_LENGTH}
               autoComplete="email"
               disabled={submitting}
               className={inputClasses}
               placeholder="you@company.com"
+              onInput={() => clearFieldError("email")}
+              {...errorProps(fieldErrors, "email")}
             />
           </Field>
         </div>
 
-        <Field label="Company" htmlFor="company" hint="Optional">
+        <Field
+          label="Company"
+          htmlFor="company"
+          hint="Optional"
+          error={fieldErrors.company}
+        >
           <input
             id="company"
             name="company"
             type="text"
+            maxLength={CONTACT_LIMITS.company}
             autoComplete="organization"
             disabled={submitting}
             className={inputClasses}
             placeholder="Acme Inc."
+            onInput={() => clearFieldError("company")}
+            {...errorProps(fieldErrors, "company")}
           />
         </Field>
 
@@ -198,15 +311,23 @@ export function ContactForm() {
           </div>
         </Field>
 
-        <Field label="Message" htmlFor="message" required>
+        <Field
+          label="Message"
+          htmlFor="message"
+          required
+          error={fieldErrors.message}
+        >
           <textarea
             id="message"
             name="message"
             required
             rows={5}
+            maxLength={CONTACT_LIMITS.message}
             disabled={submitting}
             className={cn(inputClasses, "resize-y")}
             placeholder="Tell us about the busywork, the tools you use, and what success looks like."
+            onInput={() => clearFieldError("message")}
+            {...errorProps(fieldErrors, "message")}
           />
         </Field>
 
@@ -233,7 +354,7 @@ export function ContactForm() {
 
         <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">
-            We'll reply within one business day.
+            We&apos;ll reply within one business day.
           </p>
           <Button
             type="submit"

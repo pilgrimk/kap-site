@@ -50,7 +50,7 @@ export function WhyKap() {
               variants={fadeUp}
               className="bg-card px-8 py-10 text-center"
             >
-              <dt className="font-mono text-[11px] uppercase tracking-[0.22em] text-foreground/55">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.22em] text-foreground/70">
                 {label}
               </dt>
               <dd className="mt-3 text-4xl font-semibold tracking-tight text-foreground md:text-5xl">

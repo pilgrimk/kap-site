@@ -1,18 +1,16 @@
 import { NextResponse } from "next/server";
 import { CONTACT_EMAIL } from "@/lib/constants";
+import { GOAL_OPTIONS } from "@/lib/content";
+import {
+  isCrossSiteRequest,
+  readJsonBody,
+  validateContactSubmission,
+} from "@/lib/validation";
 
-type ContactPayload = {
-  name?: unknown;
-  email?: unknown;
-  company?: unknown;
-  goal?: unknown;
-  message?: unknown;
-  hp?: unknown;
-};
+// Message is capped at 5,000 characters; 32 KB covers that in any encoding.
+const MAX_BODY_BYTES = 32 * 1024;
 
-function asString(value: unknown): string {
-  return typeof value === "string" ? value.trim() : "";
-}
+const ALLOWED_GOALS = GOAL_OPTIONS.map((option) => option.label);
 
 function escapeHtml(s: string) {
   return s
@@ -24,42 +22,34 @@ function escapeHtml(s: string) {
 }
 
 export async function POST(request: Request) {
-  let body: ContactPayload;
-  try {
-    body = (await request.json()) as ContactPayload;
-  } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  if (isCrossSiteRequest(request)) {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 403 });
   }
 
+  const parsed = await readJsonBody(request, MAX_BODY_BYTES);
+  if (!parsed.ok) {
+    return NextResponse.json(
+      { error: "Invalid request body" },
+      { status: parsed.status },
+    );
+  }
+  const body = parsed.body;
+
   // Honeypot — silently accept to avoid signaling bots
-  if (asString(body.hp)) {
+  if (typeof body.hp === "string" && body.hp.trim()) {
     return NextResponse.json({ ok: true });
   }
 
-  const name = asString(body.name);
-  const email = asString(body.email);
-  const company = asString(body.company);
-  const goal = asString(body.goal);
-  const message = asString(body.message);
-
-  if (!name) {
-    return NextResponse.json({ error: "Name is required." }, { status: 400 });
-  }
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  const result = validateContactSubmission(body, ALLOWED_GOALS);
+  if (!result.ok) {
     return NextResponse.json(
-      { error: "A valid email address is required." },
+      { error: result.error, field: result.field },
       { status: 400 },
     );
   }
-  if (!message) {
-    return NextResponse.json({ error: "Message is required." }, { status: 400 });
-  }
-  if (message.length > 5000) {
-    return NextResponse.json(
-      { error: "Message is too long." },
-      { status: 400 },
-    );
-  }
+  // Single-line fields are already free of line breaks and control characters,
+  // so the subject line cannot be split.
+  const { name, email, company, goal, message } = result.value;
 
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM || "onboarding@resend.dev";
@@ -114,7 +104,8 @@ export async function POST(request: Request) {
     });
 
     if (!res.ok) {
-      const errorBody = await res.text();
+      // Truncated: the body is for diagnosis and should never carry message content.
+      const errorBody = (await res.text()).slice(0, 300);
       console.error("Resend error:", res.status, errorBody);
       return NextResponse.json(
         {
@@ -126,7 +117,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("Contact form error:", err);
+    console.error("Contact form error:", (err as Error)?.name);
     return NextResponse.json(
       { error: "Server error. Please try again." },
       { status: 500 },

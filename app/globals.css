@@ -162,6 +162,12 @@
   html {
     @apply font-sans;
   }
+  /* Keep focused fields, and the labels above them, clear of the sticky header. */
+  input,
+  select,
+  textarea {
+    scroll-margin-top: 8rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

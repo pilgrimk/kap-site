@@ -39,7 +39,7 @@ export function ContactInfo() {
               <Icon className="size-4" strokeWidth={1.75} />
             </div>
             <div className="text-sm">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/55">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/70">
                 {label}
               </dt>
               <dd className="mt-1.5 text-foreground/85">{value}</dd>
@@ -49,7 +49,7 @@ export function ContactInfo() {
       </dl>
 
       <div className="mt-10 border-t border-border/60 pt-6">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-foreground/55">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-foreground/70">
           What helps us help you
         </p>
         <ul className="mt-3 space-y-2 text-sm text-muted-foreground">

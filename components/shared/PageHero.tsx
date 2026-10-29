@@ -23,8 +23,10 @@ export function PageHero({
         <div className="absolute -top-10 left-[-10%] h-[400px] w-[55%] bg-[radial-gradient(ellipse_at_center,rgba(177,41,110,0.08),transparent_70%)]" />
       </div>
       <div className="mx-auto max-w-6xl px-6 pt-24 pb-16 md:px-8 md:pt-32 md:pb-24">
+        {/* initial={false}: the hero renders in its final position, with no
+            entrance movement before or after JavaScript loads. */}
         <motion.div
-          initial="hidden"
+          initial={false}
           animate="show"
           variants={staggerContainer}
           className="mx-auto max-w-3xl text-center"

@@ -28,7 +28,7 @@ export function AboutPrinciples() {
               variants={fadeUp}
               className="rounded-2xl bg-background p-8 ring-1 ring-foreground/8"
             >
-              <div className="font-mono text-xs uppercase tracking-[0.22em] text-foreground/55">
+              <div className="font-mono text-xs uppercase tracking-[0.22em] text-foreground/70">
                 {String(i + 1).padStart(2, "0")}
               </div>
               <h3 className="mt-4 text-xl font-semibold tracking-tight text-foreground">
