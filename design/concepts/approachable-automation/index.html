@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept: Approachable Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  /* Concept 3. Radius system: pill buttons, 20px cards. */
+  :root {
+    --cream: #fffced; --sand: #f7efdc; --charcoal: #1a1a1a; --warm-ink: #18120c;
+    --magenta: #b1296e; --coral: #f17558; --amber: #f0ba58;
+    --cream-80: rgba(255, 252, 237, .84);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: "Plus Jakarta Sans", system-ui, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
+
+  header { position: absolute; inset: 0 0 auto; z-index: 5; color: var(--cream); }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; text-decoration: none; white-space: nowrap; }
+  .brand img { height: 32px; width: auto; }
+  .nav { display: flex; gap: 32px; font-size: 15px; font-weight: 500; }
+  .nav a { color: var(--cream-80); text-decoration: none; }
+  .actions { display: flex; align-items: center; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .btn-primary { background: var(--coral); color: var(--charcoal); }
+  .btn-sm { height: 42px; padding: 0 20px; font-size: 14px; }
+  .btn-lg { height: 56px; padding: 0 30px; font-size: 16.5px; }
+  .menu { display: none; width: 42px; height: 42px; border-radius: 999px; border: 1px solid rgba(255, 252, 237, .35); background: rgba(24, 18, 12, .3); color: var(--cream); align-items: center; justify-content: center; }
+
+  /* Full-bleed hero with a directional warm-dark gradient on the copy side */
+  .hero { position: relative; min-height: min(100svh, 900px); display: flex; align-items: center; color: var(--cream); overflow: hidden; background: var(--warm-ink); }
+  /* Layer order: photo, then gradient, then copy. */
+  .hero img { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; }
+  .hero::before { content: ""; position: absolute; inset: 0; z-index: 1; background:
+      linear-gradient(180deg, rgba(24, 18, 12, .55) 0, rgba(24, 18, 12, 0) 140px),
+      /* Fix pass: gradient holds further across, so the wider copy column stays on a dark ground. */
+      linear-gradient(90deg, rgba(24, 18, 12, .94) 0%, rgba(24, 18, 12, .88) 38%, rgba(24, 18, 12, .55) 58%, rgba(24, 18, 12, 0) 78%); }
+  .hero .wrap { position: relative; z-index: 2; width: 100%; padding-top: 96px; padding-bottom: 64px; }
+  .copy { max-width: 760px; }
+  .eyebrow { font-size: 15px; font-weight: 600; color: var(--amber); }
+  h1 { margin-top: 18px; font-weight: 800; font-size: clamp(2.5rem, 1.2rem + 3.2vw, 3.9rem); line-height: 1.04; letter-spacing: -.03em; }
+  .sub { margin-top: 24px; font-size: 1.2rem; line-height: 1.55; color: var(--cream-80); max-width: 32ch; }
+  .ctas { margin-top: 36px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; }
+  .link { font-weight: 700; font-size: 15.5px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .link svg { width: 18px; height: 18px; }
+
+  /* Next section: plain-language recognition */
+  .familiar { background: var(--sand); padding: 88px 0; }
+  .familiar h2 { font-size: clamp(2rem, 1.2rem + 2vw, 3rem); font-weight: 800; letter-spacing: -.025em; }
+  .familiar .lead { margin-top: 12px; font-size: 1.15rem; color: #4a4339; max-width: 46ch; }
+  .scenes { margin-top: 40px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; list-style: none; padding: 0; }
+  .scene { background: var(--cream); border-radius: 20px; padding: 24px 26px; display: flex; gap: 16px; align-items: flex-start; font-size: 1.1rem; font-weight: 600; line-height: 1.4; }
+  .scene:nth-child(1) { grid-row: span 2; flex-direction: column; justify-content: space-between; font-size: 1.45rem; background: var(--charcoal); color: var(--cream); }
+  .dot { width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center; flex: none; background: var(--amber); color: var(--charcoal); }
+  .dot svg { width: 19px; height: 19px; }
+
+  @media (max-width: 767px) {
+    .nav { display: none; }
+    .menu { display: inline-flex; }
+    .bar { height: 64px; }
+    .hero { align-items: flex-end; min-height: 100svh; }
+    .hero img { object-position: 72% 30%; }
+    .hero::before { background:
+        linear-gradient(180deg, rgba(24, 18, 12, .6) 0, rgba(24, 18, 12, 0) 120px),
+        linear-gradient(0deg, rgba(24, 18, 12, .97) 0%, rgba(24, 18, 12, .93) 58%, rgba(24, 18, 12, .55) 72%, rgba(24, 18, 12, 0) 86%); }
+    .hero .wrap { padding-bottom: 40px; }
+    .eyebrow { font-size: 14px; }
+    .sub { font-size: 1.05rem; }
+    .ctas { margin-top: 28px; }
+    .btn-lg { width: 100%; }
+    .scenes { grid-template-columns: 1fr; }
+    .scene:nth-child(1) { grid-row: auto; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#"><img src="../../../public/logo.png" alt=""><span>KAP Enterprises</span></a>
+    <nav class="nav" aria-label="Primary"><a href="#">Services</a><a href="#">About</a><a href="#">Contact</a></nav>
+    <div class="actions">
+      <a class="btn btn-primary btn-sm" href="#">Let's Talk</a>
+      <button class="menu" aria-label="Open menu" type="button"><i data-lucide="menu"></i></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <!-- Representative image (generated), not KAP's office: the headline addresses the visitor's own business. -->
+    <img src="../../../public/images/hero/approachable-office-dusk.webp" alt="" width="1536" height="1024">
+    <div class="wrap">
+      <div class="copy">
+        <p class="eyebrow">AI automation for small and mid-sized businesses</p>
+        <h1>Your tools, connected. Your busywork, automated.</h1>
+        <p class="sub">We connect the tools you use and automate follow-ups, data entry and handoffs, so your team can focus on customers.</p>
+        <div class="ctas">
+          <a class="btn btn-primary btn-lg" href="#">Let's Talk About Your Business</a>
+          <a class="link" href="#how">See how it works <i data-lucide="arrow-down"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="familiar" id="how">
+    <div class="wrap">
+      <h2>Sound familiar?</h2>
+      <p class="lead">These are the kinds of everyday tasks automation is built to take over.</p>
+      <ul class="scenes">
+        <li class="scene"><span class="dot"><i data-lucide="repeat"></i></span><span>The same customer details get typed into three different systems.</span></li>
+        <li class="scene"><span class="dot"><i data-lucide="inbox"></i></span><span>Website inquiries wait until someone checks the inbox.</span></li>
+        <li class="scene"><span class="dot"><i data-lucide="calendar-clock"></i></span><span>Reminders and follow-ups depend on someone remembering.</span></li>
+      </ul>
+    </div>
+  </section>
+</main>
+<script>window.lucide && lucide.createIcons();</script>
+</body>
+</html>

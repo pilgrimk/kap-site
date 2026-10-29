@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept: Engineering Credibility</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  /* Concept 2. Radius system: 4px everywhere. Hairlines organize real content only. */
+  :root {
+    --cream: #fffced; --paper: #ffffff; --charcoal: #1a1a1a; --muted: #4f4f4f;
+    --rule: #e3dcc2; --magenta: #b1296e; --coral: #f17558; --amber: #f0ba58;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: "IBM Plex Sans", system-ui, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+  .mono { font-family: "IBM Plex Mono", monospace; }
+
+  header { border-bottom: 1px solid var(--rule); background: var(--cream); }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; text-decoration: none; white-space: nowrap; }
+  .brand img { height: 32px; width: auto; }
+  .nav { display: flex; gap: 32px; font-size: 14px; font-weight: 500; }
+  .nav a { color: var(--muted); text-decoration: none; }
+  .actions { display: flex; align-items: center; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 4px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .btn-primary { background: var(--magenta); color: var(--cream); }
+  .btn-outline { border: 1px solid var(--charcoal); color: var(--charcoal); }
+  .btn-sm { height: 40px; padding: 0 16px; font-size: 14px; }
+  .btn-lg { height: 52px; padding: 0 24px; font-size: 16px; }
+  .menu { display: none; width: 40px; height: 40px; border: 1px solid var(--rule); border-radius: 4px; background: var(--paper); align-items: center; justify-content: center; }
+
+  /* Hero: twelve-column structure, copy on columns 1-7, system map on 8-12 */
+  /* padding-block only: the .wrap side gutters must survive on this element. */
+  .hero-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 32px; padding-block: 64px 56px; min-height: calc(min(100svh, 900px) - 73px); align-content: center; }
+  .copy { grid-column: 1 / span 7; align-self: center; }
+  .eyebrow { font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--magenta); padding-bottom: 14px; border-bottom: 1px solid var(--rule); display: inline-block; }
+  h1 { margin-top: 28px; font-weight: 600; font-size: clamp(2.5rem, 1.2rem + 3.2vw, 4.1rem); line-height: 1.04; letter-spacing: -.028em; }
+  .sub { margin-top: 24px; font-size: 1.15rem; line-height: 1.6; color: var(--muted); max-width: 36ch; }
+  .ctas { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .map { grid-column: 8 / span 5; align-self: center; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 24px; }
+  .map-head { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+  .layer-label { margin-top: 18px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .chips { margin-top: 10px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; list-style: none; padding: 0; }
+  .chip { border: 1px solid var(--rule); border-radius: 4px; padding: 10px 10px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; background: var(--cream); }
+  .chip svg { width: 15px; height: 15px; color: var(--magenta); flex: none; }
+  .wires { height: 28px; margin: 6px 0; background:
+      linear-gradient(var(--charcoal), var(--charcoal)) 16.66% 0 / 1.5px 100% no-repeat,
+      linear-gradient(var(--charcoal), var(--charcoal)) 50% 0 / 1.5px 100% no-repeat,
+      linear-gradient(var(--charcoal), var(--charcoal)) 83.33% 0 / 1.5px 100% no-repeat; }
+  .core { background: var(--charcoal); color: var(--cream); border-radius: 4px; padding: 16px 18px; border-left: 4px solid var(--magenta); }
+  .core-title { font-weight: 600; font-size: 15px; }
+  .core-specs { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 12px; list-style: none; padding: 0; }
+  .core-specs li { display: flex; align-items: center; gap: 6px; }
+  .core-specs svg { width: 14px; height: 14px; color: var(--amber); }
+  .chips.out .chip { background: var(--paper); }
+  .chips.out .chip svg { color: var(--charcoal); }
+  .caption { margin-top: 16px; font-size: 12px; color: var(--muted); }
+
+  /* Credential band, directly below the hero */
+  .cred { background: var(--charcoal); color: var(--cream); padding: 72px 0; }
+  .cred-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; }
+  .cred h2 { font-size: clamp(1.8rem, 1.1rem + 1.6vw, 2.6rem); line-height: 1.1; letter-spacing: -.02em; font-weight: 600; }
+  .cred .who { margin-top: 18px; color: rgba(255, 252, 237, .75); font-size: 1.05rem; line-height: 1.6; max-width: 40ch; }
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid rgba(255, 252, 237, .2); list-style: none; padding: 0; }
+  .facts li { padding: 20px 20px 0 0; }
+  .facts .k { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); }
+  .facts .v { margin-top: 10px; font-size: 15px; line-height: 1.5; color: rgba(255, 252, 237, .88); }
+
+  @media (max-width: 1023px) {
+    .hero-grid { padding-block: 48px; row-gap: 40px; min-height: 0; }
+    .copy, .map { grid-column: 1 / -1; }
+    .cred-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 767px) {
+    .wrap { padding: 0 20px; }
+    .nav { display: none; }
+    .menu { display: inline-flex; }
+    .bar { height: 64px; }
+    .hero-grid { padding-top: 32px; }
+    h1 { margin-top: 20px; }
+    .sub { font-size: 1.05rem; }
+    .ctas { margin-top: 28px; }
+    .ctas .btn { width: 100%; }
+    .chips { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .wires { background-position: 25% 0, 75% 0, 200% 0; }
+    .facts { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#"><img src="../../../public/logo.png" alt=""><span>KAP Enterprises</span></a>
+    <nav class="nav" aria-label="Primary"><a href="#">Services</a><a href="#">About</a><a href="#">Contact</a></nav>
+    <div class="actions">
+      <a class="btn btn-primary btn-sm" href="#">Let's Talk</a>
+      <button class="menu" aria-label="Open menu" type="button"><i data-lucide="menu"></i></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="wrap hero-grid">
+      <div class="copy">
+        <p class="eyebrow mono">AI automation for small and mid-sized businesses</p>
+        <h1>Your tools, connected. Your busywork, automated.</h1>
+        <p class="sub">We connect the tools you use and automate follow-ups, data entry and handoffs, so your team can focus on customers.</p>
+        <div class="ctas">
+          <a class="btn btn-primary btn-lg" href="#">Let's Talk About Your Business</a>
+          <a class="btn btn-outline btn-lg" href="#how">See how it works</a>
+        </div>
+      </div>
+
+      <figure class="map" aria-labelledby="map-caption">
+        <div class="map-head mono"><span>System map</span><span>Example</span></div>
+        <p class="layer-label mono">Systems you already run</p>
+        <ul class="chips">
+          <li class="chip"><i data-lucide="calculator"></i>Accounting</li>
+          <li class="chip"><i data-lucide="contact"></i>CRM</li>
+          <li class="chip"><i data-lucide="calendar"></i>Scheduling</li>
+          <li class="chip"><i data-lucide="mail"></i>Email</li>
+          <li class="chip"><i data-lucide="sheet"></i>Spreadsheets</li>
+          <li class="chip"><i data-lucide="database"></i>Older databases</li>
+        </ul>
+        <div class="wires" aria-hidden="true"></div>
+        <div class="core">
+          <p class="core-title">Integration layer, built by KAP</p>
+          <ul class="core-specs mono">
+            <li><i data-lucide="activity"></i>Monitored</li>
+            <li><i data-lucide="file-text"></i>Documented</li>
+            <li><i data-lucide="rotate-ccw"></i>Recoverable</li>
+          </ul>
+        </div>
+        <div class="wires" aria-hidden="true"></div>
+        <p class="layer-label mono">What your team sees</p>
+        <ul class="chips out">
+          <li class="chip"><i data-lucide="refresh-cw"></i>Records in sync</li>
+          <li class="chip"><i data-lucide="send"></i>Follow-ups on time</li>
+          <li class="chip"><i data-lucide="bell-ring"></i>Alerts when needed</li>
+        </ul>
+        <figcaption class="caption" id="map-caption">Illustrative system map. Each build connects the systems your business actually uses.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="cred" id="how">
+    <div class="wrap cred-grid">
+      <div>
+        <h2>Built by an engineer, not a marketer.</h2>
+        <p class="who">KAP Enterprises is led by Kevin Pilgrim, who has spent more than 30 years building software that has to keep running.</p>
+      </div>
+      <ul class="facts">
+        <li><p class="k mono">Healthcare</p><p class="v">Clinical interfaces processing millions of healthcare transactions a month</p></li>
+        <li><p class="k mono">Payments</p><p class="v">PCI-compliant payment integrations for nationwide property management platforms</p></li>
+        <li><p class="k mono">Manufacturing</p><p class="v">Machine-control software for semiconductor equipment in four countries</p></li>
+      </ul>
+    </div>
+  </section>
+</main>
+<script>window.lucide && lucide.createIcons();</script>
+</body>
+</html>

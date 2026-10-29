@@ -1,0 +1,17 @@
+{
+  "provider": "openai",
+  "model": "gpt-image-2.5-flare",
+  "asset_type": "ai_generated",
+  "generated_at": "2026-10-29T20:25:50.942628+00:00",
+  "output": "D:\\My Documents\\Programming\\ClaudeCode\\Projects\\web-dev\\client-websites\\kap-site\\public\\images\\hero\\approachable-office-dusk.webp",
+  "format": "webp",
+  "size": "1536x1024",
+  "quality": "high",
+  "bytes": 1134892,
+  "prompt": "Editorial interior photograph of a small independent business office at the end of the workday, shot at eye level, landscape. The subject sits in the RIGHT half of the frame: a tidy wooden desk by a large window with a closed laptop, a ceramic coffee mug, a neat closed folder and a set of keys resting on top, a small potted plant, a desk lamp switched on. Warm late-afternoon golden light streams in from the right, long soft shadows, calm and unhurried mood: the day's paperwork is done. The LEFT 45 percent of the frame is a softly out-of-focus, darker plaster wall and a low shelf with a few plain binders, very little detail, so text can sit there. Natural colour, gentle film grain, shallow depth of field, realistic, not staged or glossy. No people, no hands, no faces, no screens showing content, no visible text, no logos, no signage, no brand names.",
+  "usage": {
+    "input_tokens": 199,
+    "output_tokens": 1372,
+    "total_tokens": 1571
+  }
+}

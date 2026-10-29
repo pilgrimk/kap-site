@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept: Automation in Action</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+  /* Concept 1. Radius system: buttons 10px, panels 20px, nodes 14px. */
+  :root {
+    --cream: #fffced; --charcoal: #1a1a1a; --panel: #232323; --node: #2c2c2c;
+    --magenta: #b1296e; --coral: #f17558; --amber: #f0ba58;
+    --cream-70: rgba(255, 252, 237, .72); --cream-55: rgba(255, 252, 237, .58);
+    --hair: rgba(255, 252, 237, .14);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: Geist, system-ui, sans-serif; background: var(--cream); color: var(--charcoal); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  header { position: absolute; inset: 0 0 auto; z-index: 5; color: var(--cream); }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; text-decoration: none; white-space: nowrap; }
+  .brand img { height: 32px; width: auto; }
+  .nav { display: flex; gap: 32px; font-size: 14px; }
+  .nav a { color: var(--cream-70); text-decoration: none; }
+  .actions { display: flex; align-items: center; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .btn-primary { background: var(--coral); color: var(--charcoal); }
+  .btn-sm { height: 40px; padding: 0 16px; font-size: 14px; }
+  .btn-lg { height: 54px; padding: 0 26px; font-size: 16px; }
+  .menu { display: none; width: 40px; height: 40px; border: 1px solid var(--hair); border-radius: 10px; background: transparent; color: var(--cream); align-items: center; justify-content: center; }
+
+  /* Hero */
+  .hero { background: var(--charcoal); color: var(--cream); overflow: hidden; }
+  /* Fix pass: the headline spans the full width above the copy/workflow row, so it holds two lines on desktop. */
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 56px; align-items: center; align-content: center; min-height: min(100svh, 880px); padding-top: 104px; padding-bottom: 64px; }
+  .headline { grid-column: 1 / -1; }
+  .eyebrow { font-family: "Geist Mono", monospace; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--amber); }
+  h1 { font-family: "Bricolage Grotesque", Geist, sans-serif; font-weight: 700; font-size: clamp(2.5rem, 1.1rem + 3.4vw, 4.6rem); line-height: 1.02; letter-spacing: -.025em; margin-top: 20px; }
+  h1 .second { display: block; color: var(--coral); }
+  .sub { margin-top: 40px; font-size: 1.15rem; line-height: 1.55; color: var(--cream-70); max-width: 34ch; }
+  .ctas { margin-top: 36px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+  .link { font-weight: 600; font-size: 15px; text-decoration: none; border-bottom: 1px solid var(--cream-55); padding-bottom: 2px; }
+
+  /* Workflow panel: bleeds off the right edge of the viewport */
+  .flow { margin-right: min(-24px, calc((1280px - 100vw) / 2 - 24px)); background: var(--panel); border: 1px solid var(--hair); border-right: 0; border-radius: 20px 0 0 20px; padding: 28px 36px 26px; }
+  .flow-head { display: flex; justify-content: space-between; align-items: center; font-family: "Geist Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-55); }
+  .diagram { margin-top: 22px; display: grid; grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr) 48px minmax(0, 1.15fr); align-items: center; list-style: none; padding: 0; }
+  .node { background: var(--node); border: 1px solid var(--hair); border-radius: 14px; padding: 16px; }
+  .tile { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; }
+  .tile svg { width: 18px; height: 18px; }
+  .t-trigger { background: var(--magenta); color: var(--cream); }
+  .t-ai { background: var(--coral); color: var(--charcoal); }
+  .t-result { background: var(--amber); color: var(--charcoal); }
+  .kind { margin-top: 14px; font-family: "Geist Mono", monospace; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--cream-55); }
+  .title { margin-top: 4px; font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .desc { margin-top: 4px; font-size: 13px; line-height: 1.4; color: var(--cream-70); }
+  .conn { height: 100%; width: 100%; display: block; }
+  .conn path, .conn line { stroke: rgba(255, 252, 237, .38); stroke-width: 2; fill: none; vector-effect: non-scaling-stroke; }
+  .conn circle { fill: var(--coral); }
+  .outputs { display: grid; grid-template-rows: repeat(3, 1fr); list-style: none; padding: 0; }
+  .outputs li { padding: 7px 0; }
+  .outputs .node { display: flex; gap: 12px; align-items: center; padding: 12px 14px; }
+  .outputs .tile { width: 30px; height: 30px; border-radius: 8px; flex: none; }
+  .outputs .tile svg { width: 15px; height: 15px; }
+  .outputs .title { margin-top: 0; font-size: 14px; }
+  .outputs .desc { margin-top: 2px; font-size: 12.5px; }
+  .caption { margin-top: 18px; font-size: 12.5px; color: var(--cream-55); }
+
+  /* Next section, to show the page rhythm */
+  .hours { padding: 96px 0; }
+  .hours h2 { font-family: "Bricolage Grotesque", Geist, sans-serif; font-size: clamp(2rem, 1.2rem + 2vw, 3rem); letter-spacing: -.02em; line-height: 1.05; }
+  .rows { margin-top: 40px; border-top: 1px solid #e3dcc2; }
+  .row { display: grid; grid-template-columns: 1fr 32px 1fr; gap: 16px; align-items: center; padding: 22px 0; border-bottom: 1px solid #e3dcc2; font-size: 1.1rem; }
+  .row .today { color: #4a4a4a; }
+  .row .arrow { color: var(--magenta); }
+  .row .auto { font-weight: 600; }
+
+  /* Tablet and phone: single column, vertical workflow */
+  @media (max-width: 1023px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; min-height: 0; padding-top: 112px; padding-bottom: 0; }
+    .sub { margin-top: 0; }
+    .flow { margin: 0 -24px; border-radius: 20px 20px 0 0; border-right: 1px solid var(--hair); padding: 24px; }
+    .diagram { grid-template-columns: 1fr; gap: 0; }
+    .conn-h { height: 24px; width: 2px; margin-left: 33px; background: rgba(255, 252, 237, .38); }
+    .conn-h svg, .conn-b { display: none; }
+    .outputs { grid-template-rows: none; border-left: 2px solid rgba(255, 252, 237, .38); margin-left: 33px; padding: 6px 0 0 18px; }
+  }
+  @media (max-width: 767px) {
+    .nav { display: none; }
+    .menu { display: inline-flex; }
+    .bar { height: 64px; }
+    .hero-grid { padding-top: 92px; gap: 32px; }
+    .eyebrow { font-size: 11px; }
+    .sub { font-size: 1.05rem; }
+    .ctas { margin-top: 28px; }
+    .btn-lg { width: 100%; }
+    .row { grid-template-columns: 1fr; gap: 4px; }
+    .row .arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#"><img src="../../../public/logo.png" alt=""><span>KAP Enterprises</span></a>
+    <nav class="nav" aria-label="Primary"><a href="#">Services</a><a href="#">About</a><a href="#">Contact</a></nav>
+    <div class="actions">
+      <a class="btn btn-primary btn-sm" href="#">Let's Talk</a>
+      <button class="menu" aria-label="Open menu" type="button"><i data-lucide="menu"></i></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="headline">
+        <p class="eyebrow">AI automation for small and mid-sized businesses</p>
+        <h1>Your tools, connected. <span class="second">Your busywork, automated.</span></h1>
+      </div>
+      <div>
+        <p class="sub">We connect the tools you use and automate follow-ups, data entry and handoffs, so your team can focus on customers.</p>
+        <div class="ctas">
+          <a class="btn btn-primary btn-lg" href="#">Let's Talk About Your Business</a>
+          <a class="link" href="#how">See how it works</a>
+        </div>
+      </div>
+
+      <figure class="flow" aria-labelledby="flow-caption">
+        <div class="flow-head"><span>Example workflow</span><span class="live">New inquiry</span></div>
+        <ol class="diagram">
+          <li class="node">
+            <div class="tile t-trigger"><i data-lucide="inbox"></i></div>
+            <p class="kind">Starts when</p>
+            <p class="title">A website inquiry arrives</p>
+            <p class="desc">From your site's contact form</p>
+          </li>
+          <li class="conn-h" aria-hidden="true"><svg class="conn" viewBox="0 0 40 100" preserveAspectRatio="none"><line x1="0" y1="50" x2="40" y2="50"/></svg></li>
+          <li class="node">
+            <div class="tile t-ai"><i data-lucide="sparkles"></i></div>
+            <p class="kind">AI step</p>
+            <p class="title">AI reads and sorts it</p>
+            <p class="desc">Service, urgency and the right next step</p>
+          </li>
+          <li class="conn-b" aria-hidden="true" style="height:100%"><svg class="conn" viewBox="0 0 48 300" preserveAspectRatio="none"><path d="M0 150 C 24 150, 24 50, 48 50"/><line x1="0" y1="150" x2="48" y2="150"/><path d="M0 150 C 24 150, 24 250, 48 250"/></svg></li>
+          <li>
+            <ul class="outputs">
+              <li><div class="node"><div class="tile t-result"><i data-lucide="contact"></i></div><div><p class="title">CRM record updated</p><p class="desc">Contact and deal, no retyping</p></div></div></li>
+              <li><div class="node"><div class="tile t-result"><i data-lucide="send"></i></div><div><p class="title">Follow-up sent</p><p class="desc">In your words, on your rules</p></div></div></li>
+              <li><div class="node"><div class="tile t-result"><i data-lucide="bell-ring"></i></div><div><p class="title">Your team is told</p><p class="desc">Only when a person is needed</p></div></div></li>
+            </ul>
+          </li>
+        </ol>
+        <figcaption class="caption" id="flow-caption">Illustrative example. Every workflow is built around the tools you already use.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="hours" id="how">
+    <div class="wrap">
+      <h2>Where the hours actually go.</h2>
+      <div class="rows">
+        <div class="row"><span class="today">The same customer details typed into three systems</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Entered once, synced everywhere</span></div>
+        <div class="row"><span class="today">A website inquiry waits until someone checks the inbox</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Acknowledged and routed right away</span></div>
+        <div class="row"><span class="today">Reminders and status updates sent by hand every week</span><span class="arrow" aria-hidden="true">→</span><span class="auto">Sent on schedule, exceptions flagged</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>window.lucide && lucide.createIcons();</script>
+</body>
+</html>
