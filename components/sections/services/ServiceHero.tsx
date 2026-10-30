@@ -1,19 +1,12 @@
-import Link from "next/link";
 import { Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { PRIMARY_CTA } from "@/lib/constants";
 import type { ServiceIcon } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import o from "@/components/shared/optimism.module.css";
 import { serviceIcons } from "./icons";
+import { ServiceHeroCopy, type ServiceHeroCopyContent } from "./ServiceHeroCopy";
 import s from "./services.module.css";
 
-type HeroContent = {
-  eyebrow: string;
-  headlineLead: string;
-  headlineEmphasis: string;
-  subhead: string;
-  secondaryCta: { label: string; href: string };
+type HeroContent = ServiceHeroCopyContent & {
   board: {
     label: string;
     manual: string;
@@ -30,42 +23,13 @@ type HeroContent = {
  * "by hand" to "automated" on load, then the outcomes strip on the hero's baseline.
  */
 export function ServiceHero({ content }: { content: HeroContent }) {
-  const { eyebrow, headlineLead, headlineEmphasis, subhead, secondaryCta, board, outcomesLabel, outcomes } =
-    content;
+  const { board, outcomesLabel, outcomes } = content;
 
   return (
     <section aria-labelledby="service-title" className="relative overflow-hidden border-b border-rule">
       <div aria-hidden className={o.atmosphere} />
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-x-14 gap-y-10 px-6 pt-8 pb-12 md:px-8 md:pt-14 md:pb-16 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] *:min-w-0">
-        <div>
-          <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-coral-ink md:text-xs">
-            {eyebrow}
-          </p>
-          <h1
-            id="service-title"
-            className="mt-4 font-display text-[clamp(2.75rem,1.4rem+3.6vw,4.9rem)] font-bold leading-[1.02] tracking-tight md:mt-5"
-          >
-            {headlineLead} <span className="block text-brand-magenta">{headlineEmphasis}</span>
-          </h1>
-          <p className="mt-6 max-w-[42ch] text-[1.05rem] leading-[1.6] text-ink-soft md:text-[1.15rem]">
-            {subhead}
-          </p>
-          <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-3 md:mt-9">
-            <Button
-              asChild
-              variant="coral"
-              className="h-auto min-h-13.5 w-full rounded-[10px] px-6.5 py-3 text-center text-base whitespace-normal md:w-auto"
-            >
-              <Link href={PRIMARY_CTA.href}>{PRIMARY_CTA.label}</Link>
-            </Button>
-            <Link
-              href={secondaryCta.href}
-              className="rounded-sm border-b border-foreground/40 pb-0.5 text-[0.9375rem] font-semibold transition-colors duration-150 hover:border-coral-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
-            >
-              {secondaryCta.label}
-            </Link>
-          </div>
-        </div>
+        <ServiceHeroCopy content={content} />
 
         <figure
           aria-labelledby="board-caption"

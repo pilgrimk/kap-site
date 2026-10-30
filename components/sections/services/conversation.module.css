@@ -1,0 +1,35 @@
+/* Customer Engagement hero: an example conversation that plays once, then holds. As with the other
+   service visuals, the un-animated state is the finished conversation, so reduced-motion users and
+   anyone the animation never runs for see all of it. Only opacity and transform animate. */
+
+.conversation {
+  --enter: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* A reply and the typing dots that precede it share one grid cell */
+.stack { display: grid; justify-items: start; }
+.stack > * { grid-area: 1 / 1; }
+
+.customer { transform-origin: 100% 100%; }
+.assistant { transform-origin: 0 100%; }
+
+/* Shown only while the animation runs */
+.typing { opacity: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .msg { animation: msg-in 360ms var(--enter) var(--d) both; }
+  .typing { animation: typing 800ms linear var(--d) both; }
+  .typing > span { animation: dot 560ms ease-in-out calc(var(--d) + var(--i) * 110ms) 2 both; }
+  .handoff { animation: handoff-in 460ms var(--enter) var(--d) both; }
+
+  /* Held while the page is hidden or the figure is off screen (WorkflowMotion), so a visitor who
+     scrolls to it on a phone still sees it play */
+  .conversation[data-paused] *,
+  .conversation[data-paused] *::before,
+  .conversation[data-paused] *::after { animation-play-state: paused; }
+}
+
+@keyframes msg-in { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes typing { 0% { opacity: 0; } 12%, 88% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes dot { 0%, 100% { opacity: 0.35; transform: none; } 50% { opacity: 1; transform: translateY(-3px); } }
+@keyframes handoff-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }

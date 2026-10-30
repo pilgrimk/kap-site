@@ -31,13 +31,13 @@ export function CredibilitySection() {
 
         <div className={cn("relative overflow-hidden rounded-[20px] bg-[#232323] p-6 text-brand-cream md:p-8", h.accentEdge)}>
           <p className="max-w-[32ch] text-[1.05rem] leading-normal text-brand-cream/75">{standardLead}</p>
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+          <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {traits.map((trait, i) => {
               const Icon = traitIcons[i];
               return (
                 <li
                   key={trait}
-                  className="flex items-center gap-3.5 rounded-[14px] border border-brand-cream/15 bg-[#2c2c2c] px-4 py-3.5 sm:flex-col sm:items-start sm:p-[1.125rem]"
+                  className="flex flex-wrap items-center gap-3.5 rounded-[14px] border border-brand-cream/15 bg-[#2c2c2c] px-4 py-3.5 sm:flex-col sm:items-start sm:p-[1.125rem]"
                 >
                   <div className="flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-brand-amber/15 text-brand-amber">
                     <Icon aria-hidden className="size-4.5" />

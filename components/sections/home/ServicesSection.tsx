@@ -74,6 +74,15 @@ export function ServicesSection() {
                     <p className="mt-1.5 text-[0.95rem] leading-relaxed text-ink-soft">
                       {service.description}
                     </p>
+                    {service.link ? (
+                      <Link
+                        href={service.link.href}
+                        className="mt-3 inline-flex items-center gap-1.5 rounded-sm border-b border-foreground/40 pb-0.5 text-[0.9375rem] font-semibold transition-colors duration-150 hover:border-coral-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
+                      >
+                        {service.link.label}
+                        <ArrowRight aria-hidden className="size-3.5 text-coral-ink" />
+                      </Link>
+                    ) : null}
                   </div>
                 </li>
               );

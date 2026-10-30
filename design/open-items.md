@@ -54,6 +54,18 @@ Record: `design/services.md`.
 - **Nav label "Solutions" vs "Services":** recommended change once a services overview exists.
 - **Social image:** the page uses the site-wide Open Graph image; a service-specific one is optional.
 
+## AI-Powered Customer Engagement page (approved by the owner 2026-10-29)
+
+Record: `design/services.md` (Phase 2B).
+
+- **Proposed wording:** everything except the hero headline and supporting copy (the owner's).
+- **Brief B3:** confirm which channels KAP has delivered or will offer: website chat, messaging, email, AI voice agents. The page frames them as possibilities, not delivered work.
+- **Scheduling:** confirm KAP builds appointment and callback request flows for clients.
+- **Chandra Wrightsell's quote:** the first sentence of the published recommendation; to be checked against the LinkedIn original (B4).
+- **Example conversations** are illustrative, with invented customers and businesses; confirm the owner is comfortable with the HVAC and catering examples.
+- **Social image:** site-wide Open Graph image; a service-specific one is optional.
+- **Nav label:** still "Solutions" (see the Workflow item).
+
 ## Pending owner decisions
 
 - **Hero copy** — the proposed headline is not approved (brief, Part B).

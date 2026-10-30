@@ -76,14 +76,15 @@ export type Service = {
   icon: "Workflow" | "MessagesSquare" | "Megaphone" | "Blocks" | "Globe";
   title: string;
   description: string;
+  link?: { label: string; href: string };
 };
 
-// Five categories from brief A3; AI automation carries the most weight (A4). Service pages are
-// not built yet, so no card links to a missing page.
+// Five categories from brief A3; AI automation carries the most weight (A4). Only services whose
+// pages exist carry a link, so nothing points at a missing page.
 export const HOME_SERVICES: {
   title: string;
   intro: string;
-  featured: Service & { points: string[]; link?: { label: string; href: string } };
+  featured: Service & { points: string[] };
   others: Service[];
 } = {
   title: "What we automate.",
@@ -107,6 +108,7 @@ export const HOME_SERVICES: {
       title: "AI-Powered Customer Engagement",
       description:
         "Respond to inquiries faster and more consistently, with AI that sorts, drafts and routes each one.",
+      link: { label: "Explore Customer Engagement", href: "/services/customer-engagement" },
     },
     {
       icon: "Megaphone",
@@ -261,7 +263,8 @@ export const HOME_FINAL_CTA = {
 export type ServiceIcon =
   | "Inbox" | "Sparkles" | "Contact" | "Send" | "BellRing" | "Keyboard" | "Clock"
   | "FileSpreadsheet" | "Repeat" | "Funnel" | "CalendarCheck" | "Mail" | "ArrowLeftRight"
-  | "Search" | "Lightbulb" | "Wrench" | "FileCheck";
+  | "Search" | "Lightbulb" | "Wrench" | "FileCheck" | "PhoneMissed" | "Hourglass" | "Moon"
+  | "MessageCircleQuestion" | "UserRound" | "SlidersHorizontal" | "Plug";
 
 export const SERVICE_WORKFLOW = {
   path: "/services/workflow-automation",
@@ -383,6 +386,209 @@ export const SERVICE_WORKFLOW = {
   closing: {
     title: "What's one task you'd love to never do again?",
     body: "Tell us about a repetitive process in your business. We'll talk through whether it can be automated, and what it would take.",
+    emailLead: "Prefer email?",
+  },
+};
+
+/* ---------------------------------------------------------------------------------------------
+   Service page: AI-Powered Customer Engagement (/services/customer-engagement, brief A3 and A5).
+   Hero headline and supporting copy, the outcomes and the section outline come from the owner's
+   instruction (2026-10-29); the supporting copy keeps its dash verbatim. Everything else is
+   proposed wording. AI voice and support agents are still to be classified (brief B3), so channels
+   and capabilities are framed as what can be set up, never as delivered projects. Both example
+   conversations are illustrative, with invented customers and businesses.
+   ------------------------------------------------------------------------------------------- */
+
+export const SERVICE_ENGAGEMENT = {
+  path: "/services/customer-engagement",
+  meta: {
+    title: "AI-Powered Customer Engagement",
+    description:
+      "KAP Enterprises helps small businesses answer inquiries promptly, handle routine questions, capture customer details and route leads with AI, while people stay in charge of the conversations that need them.",
+  },
+  hero: {
+    eyebrow: "AI-Powered Customer Engagement",
+    headlineLead: "Every inquiry",
+    headlineEmphasis: "deserves an answer.",
+    subhead:
+      "Give customers a faster way to get answers, share what they need, and reach the right person—even when your team is busy.",
+    secondaryCta: { label: "Follow a conversation", href: "#conversation" },
+    chat: {
+      channel: "Website chat",
+      assistant: "AI assistant",
+      customerLabel: "Customer",
+      replay: "Replay",
+      replayLabel: "Replay the example conversation",
+      messages: [
+        { from: "customer", text: "Hi, do you have any openings this week? Our AC stopped working." },
+        {
+          from: "assistant",
+          text: "Sorry to hear that. I can request a visit for you. What name should I give the team, and when is best to call?",
+        },
+        { from: "customer", text: "Dana. Afternoons are best." },
+        {
+          from: "assistant",
+          text: "Thanks, Dana. I've passed this to the team so they can call you this afternoon.",
+        },
+      ] as { from: "customer" | "assistant"; text: string }[],
+      captured: { label: "Details captured", fields: ["Dana", "AC repair", "Call: afternoons"] },
+      handoff: {
+        label: "Sent to your team",
+        title: "Service request from Dana",
+        details: ["AC not working", "Call back this afternoon"],
+      },
+      caption: "Illustrative example conversation, not a client project.",
+    },
+  },
+  day: {
+    title: "Where conversations slip away.",
+    intro:
+      "None of this means anyone is doing a bad job. It's what happens when a small team is busy doing the work.",
+    label: "An ordinary day",
+    moments: [
+      {
+        time: "8:40 am",
+        icon: "PhoneMissed",
+        title: "A missed call",
+        body: "The phone rings while you're with a customer, and the caller doesn't leave a message.",
+      },
+      {
+        time: "11:15 am",
+        icon: "Hourglass",
+        title: "A slow reply",
+        body: "A website inquiry waits in the inbox until someone has a spare moment.",
+      },
+      {
+        time: "2:30 pm",
+        icon: "Repeat",
+        title: "The same questions",
+        body: "Hours, services, availability: answered again, one message at a time.",
+      },
+      {
+        time: "9:20 pm",
+        icon: "Moon",
+        title: "After hours",
+        body: "Someone is ready to get started tonight, and there's nobody there to answer.",
+      },
+    ] as { time: string; icon: ServiceIcon; title: string; body: string }[],
+    caption: "Illustrative times.",
+  },
+  capabilities: {
+    title: "What AI customer engagement can handle.",
+    intro:
+      "Practical jobs an assistant can take on, set up around your business. Which ones make sense depends on how your customers reach you.",
+    items: [
+      { icon: "MessageCircleQuestion", title: "Routine questions", body: "Hours, services, service areas and next steps, answered from information you approve." },
+      { icon: "Contact", title: "Customer details", body: "Names, contact details and the reason for getting in touch, captured as the conversation happens." },
+      { icon: "Funnel", title: "Lead qualification and routing", body: "A few well-chosen questions, so each inquiry reaches the right person with the right context." },
+      { icon: "Send", title: "Prompt follow-up", body: "Replies and reminders that keep a promising inquiry from going quiet." },
+      { icon: "CalendarCheck", title: "Appointment and callback requests", body: "Customers can ask for a time or a callback, and the request reaches your team or your scheduling tool." },
+      { icon: "UserRound", title: "Handoffs to your team", body: "When a conversation needs a person, it's passed on with everything said so far." },
+    ] as { icon: ServiceIcon; title: string; body: string }[],
+    channels: {
+      label: "Where it can work",
+      items: ["Website chat", "Messaging", "Email", "Phone, with an AI voice agent"],
+      note: "Which channels and integrations fit depends on your business and the tools you already use. We work that out together before anything is built.",
+    },
+  },
+  conversation: {
+    title: "A conversation, start to handoff.",
+    intro: "An inquiry that arrives after hours, and what your team finds waiting the next morning.",
+    label: "Example conversation",
+    time: "9:12 pm",
+    channel: "Website chat",
+    customerLabel: "Customer",
+    assistantLabel: "AI assistant",
+    messages: [
+      { from: "customer", text: "Hi, do you cater office lunches? We'd need food for about 30 people." },
+      {
+        from: "assistant",
+        text: "Yes, we cater office lunches. What date are you planning for, and where is the office?",
+        note: "Answers from information you approve",
+      },
+      { from: "customer", text: "Thursday the 14th, downtown. Can someone tell me the pricing?" },
+      {
+        from: "assistant",
+        text: "Pricing depends on the menu, so our catering manager will send you options. What's the best email for you?",
+        note: "Leaves pricing to a person",
+      },
+      { from: "customer", text: "jordan@example.com" },
+      {
+        from: "assistant",
+        text: "Thanks, Jordan. You'll hear from us tomorrow morning.",
+        note: "Sets a clear expectation",
+      },
+    ] as { from: "customer" | "assistant"; text: string; note?: string }[],
+    handoff: {
+      label: "Handoff to your team",
+      title: "New catering inquiry",
+      fields: [
+        { name: "Contact", value: "Jordan, jordan@example.com" },
+        { name: "Request", value: "Office lunch for about 30" },
+        { name: "Date", value: "Thursday the 14th, downtown" },
+        { name: "Needs a person", value: "Pricing and menu options" },
+        { name: "Received", value: "9:12 pm, by website chat" },
+      ],
+      footer: "The full conversation comes with it.",
+    },
+    caption:
+      "Illustrative example, not a client project. What's captured, and where it goes, is designed around your business.",
+  },
+  boundaries: {
+    title: "People stay in charge.",
+    intro:
+      "An assistant is there to support your team, not to replace it. Before anything goes live, you decide what it handles, what it hands over, and how it introduces itself to customers.",
+    assistant: {
+      label: "The assistant handles",
+      items: [
+        "Routine questions with answers you've approved",
+        "Collecting contact details and the reason for the inquiry",
+        "Appointment and callback requests",
+        "Replies when your team is busy or away",
+      ],
+    },
+    team: {
+      label: "Your team handles",
+      items: [
+        "Pricing, quotes and anything that needs judgement",
+        "Complaints and sensitive conversations",
+        "Anything the assistant isn't sure about",
+        "Any customer who asks for a person",
+      ],
+    },
+    handover: "Hands over",
+    rule: "Every handoff carries the conversation so far, so customers don't have to start again.",
+  },
+  // Proposed wording; no ongoing-support promise (brief B3).
+  approach: {
+    title: "How we set it up.",
+    intro: "A careful process, because these are conversations with your customers.",
+    steps: [
+      { icon: "Search", title: "Discovery", body: "We learn how customers reach you today, what they ask most and where inquiries get stuck." },
+      { icon: "SlidersHorizontal", title: "Configuration", body: "We set up the assistant's answers, questions and boundaries with you, in your business's voice." },
+      { icon: "Plug", title: "Integration", body: "We connect it to the channels and tools you already use, such as your website and CRM." },
+      { icon: "FileCheck", title: "Testing", body: "We test realistic conversations, including the awkward ones, and refine them until the handoffs work." },
+      { icon: "Wrench", title: "Handoff", body: "We hand it over with documentation, so your team knows how it works and how to adjust it." },
+    ] as { icon: ServiceIcon; title: string; body: string }[],
+  },
+  tools: {
+    title: "Engineered, not improvised.",
+    body: "Customer conversations carry your reputation, so we build them the way enterprise software is built: AI language models connected to your website, CRM and business tools through established platforms such as n8n and Make, with clear rules for what happens next.",
+    chips: ["AI language models", "Website chat", "CRMs", "n8n", "Make", "REST APIs"],
+    credential: "KAP Enterprises is led by Kevin Pilgrim, a software engineer with 30+ years of experience.",
+    // First sentence, unedited, of the recommendation already published on the current site
+    // (brief A7; still to be checked against the LinkedIn original, B4).
+    recommendation: {
+      quote: "Kevin has played a pivotal role in enhancing our digital presence and client engagement strategies.",
+      author: "Chandra Wrightsell",
+      role: "Global Strategy & Branding Executive",
+      company: "JT Advisors Group LLC",
+      relationship: "Client",
+    },
+  },
+  closing: {
+    title: "Where do your customer conversations get stuck?",
+    body: "Tell us how customers reach you today. We'll talk through where an AI assistant could help, and where your team should stay in the conversation.",
     emailLead: "Prefer email?",
   },
 };

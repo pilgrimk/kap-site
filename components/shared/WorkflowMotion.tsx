@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
  * never re-renders: it pauses the cycle while the page is hidden or the figure is off screen,
  * and restarts every stage together when the layout switches between the phone and wider
  * diagrams (each uses different connector elements, which would otherwise start out of step).
+ * Pass `layoutQuery={null}` when the figure has no layout-specific animations to resync.
  * Reduced motion needs nothing here: the CSS only animates under no-preference.
  */
 export function WorkflowMotion({
@@ -18,7 +19,7 @@ export function WorkflowMotion({
   className?: string;
   labelledBy: string;
   /** Media query at which the diagram switches layout (and so its connector elements) */
-  layoutQuery?: string;
+  layoutQuery?: string | null;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -44,7 +45,7 @@ export function WorkflowMotion({
     observer.observe(el);
 
     let frame = 0;
-    const layout = window.matchMedia(layoutQuery);
+    const layout = layoutQuery ? window.matchMedia(layoutQuery) : null;
     const restart = () => {
       cancelAnimationFrame(frame);
       // Next frame, so animations on newly displayed connector pieces exist before resetting.
@@ -54,14 +55,14 @@ export function WorkflowMotion({
         });
       });
     };
-    layout.addEventListener("change", restart);
+    layout?.addEventListener("change", restart);
 
     apply();
 
     return () => {
       document.removeEventListener("visibilitychange", onVisibility);
       observer.disconnect();
-      layout.removeEventListener("change", restart);
+      layout?.removeEventListener("change", restart);
       cancelAnimationFrame(frame);
     };
   }, [layoutQuery]);

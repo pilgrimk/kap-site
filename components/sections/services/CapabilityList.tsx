@@ -6,12 +6,14 @@ type CapabilityContent = {
   title: string;
   intro: string;
   items: { icon: ServiceIcon; title: string; body: string }[];
+  /** Optional row of channels the capabilities can run on */
+  channels?: { label: string; items: string[]; note: string };
 };
 
 /** Examples of what can be built, as a ruled list rather than a wall of cards. */
-export function CapabilityList({ content }: { content: CapabilityContent }) {
+export function CapabilityList({ content, className }: { content: CapabilityContent; className?: string }) {
   return (
-    <section aria-labelledby="capabilities-title">
+    <section aria-labelledby="capabilities-title" className={className}>
       <div className="mx-auto max-w-6xl px-6 pb-18 md:px-8 md:pb-24">
         <HomeHeading id="capabilities-title">{content.title}</HomeHeading>
         <p className="mt-5 max-w-[60ch] text-[1.05rem] leading-relaxed text-ink-soft md:text-lg">
@@ -33,6 +35,23 @@ export function CapabilityList({ content }: { content: CapabilityContent }) {
             );
           })}
         </ul>
+        {content.channels ? (
+          <div className="mt-10">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+              <p id="channels-label" className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-ink-soft">
+                {content.channels.label}
+              </p>
+              <ul aria-labelledby="channels-label" className="flex flex-wrap gap-2">
+                {content.channels.items.map((channel) => (
+                  <li key={channel} className="rounded-full border border-[#e6dcbc] bg-paper px-3.5 py-1.5 text-[0.9rem] font-medium">
+                    {channel}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <p className="mt-4 max-w-[62ch] text-[0.95rem] leading-relaxed text-ink-soft">{content.channels.note}</p>
+          </div>
+        ) : null}
       </div>
     </section>
   );

@@ -29,7 +29,7 @@ export function ClosingCTA({
         <div>
           <h2
             id={id}
-            className="font-display text-[clamp(2.25rem,1.3rem+2.6vw,3.75rem)] font-bold leading-[1.04] tracking-tight text-balance"
+            className="font-display text-[clamp(2rem,1.3rem+2.6vw,3.75rem)] font-bold leading-[1.04] tracking-tight text-balance wrap-break-word"
           >
             {title}
           </h2>
