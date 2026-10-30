@@ -8,16 +8,18 @@ type ApproachContent = {
   steps: { icon: ServiceIcon; title: string; body: string }[];
 };
 
-/** The working process as a vertical timeline beside its heading. */
-export function ApproachSteps({ content }: { content: ApproachContent }) {
+/** The working process as a vertical timeline beside its heading, with an optional `aside` below the intro. */
+export function ApproachSteps({ content, aside }: { content: ApproachContent; aside?: React.ReactNode }) {
   return (
     <section aria-labelledby="approach-title">
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-x-16 gap-y-10 px-6 py-18 md:px-8 md:py-24 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] *:min-w-0">
-        <div className="lg:sticky lg:top-28 lg:self-start">
+        {/* Sticky beside the steps, unless an aside makes the column too tall to stay in view */}
+        <div className={aside ? "lg:self-start" : "lg:sticky lg:top-28 lg:self-start"}>
           <HomeHeading id="approach-title">{content.title}</HomeHeading>
           <p className="mt-5 max-w-[40ch] text-[1.05rem] leading-relaxed text-ink-soft md:text-lg">
             {content.intro}
           </p>
+          {aside}
         </div>
         <div className="relative">
           {/* The line that joins the steps */}

@@ -7,11 +7,15 @@ export const SITE_URL = "https://kap-enterprises-llc.com";
 export const CONTACT_EMAIL = "sales@kap-enterprises-llc.com";
 export const MAILING_ADDRESS = "PO Box 3573, Scottsdale, AZ 85271";
 
+// Footer navigation. The header shows Home, the Services menu and About, with the contact CTA.
 export const NAV_LINKS = [
-  { label: "Solutions", href: "/#solutions" },
+  { label: "Services", href: "/#solutions" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;
+
+export const HOME_LINK = { label: "Home", href: "/" } as const;
+export const ABOUT_LINK = NAV_LINKS[1];
 
 // Approved primary CTA label (brief A6); the header uses the compact form.
 export const PRIMARY_CTA = {

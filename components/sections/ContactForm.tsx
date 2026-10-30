@@ -286,7 +286,7 @@ export function ContactForm() {
           />
         </Field>
 
-        <Field label="What do you want to automate?" htmlFor="goal" hint="Optional">
+        <Field label="What can we help with?" htmlFor="goal" hint="Optional">
           <div className="relative">
             <select
               id="goal"

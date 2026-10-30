@@ -127,6 +127,7 @@ export const HOME_SERVICES: {
       title: "Website Design & Development",
       description:
         "Websites built to turn visitors into inquiries, connected to the systems behind them.",
+      link: { label: "Explore Website Development", href: "/services/websites" },
     },
   ],
 };
@@ -264,7 +265,9 @@ export type ServiceIcon =
   | "Inbox" | "Sparkles" | "Contact" | "Send" | "BellRing" | "Keyboard" | "Clock"
   | "FileSpreadsheet" | "Repeat" | "Funnel" | "CalendarCheck" | "Mail" | "ArrowLeftRight"
   | "Search" | "Lightbulb" | "Wrench" | "FileCheck" | "PhoneMissed" | "Hourglass" | "Moon"
-  | "MessageCircleQuestion" | "UserRound" | "SlidersHorizontal" | "Plug";
+  | "MessageCircleQuestion" | "UserRound" | "SlidersHorizontal" | "Plug" | "Palette"
+  | "MonitorSmartphone" | "Signpost" | "MousePointerClick" | "Gauge" | "FileCode2"
+  | "LayoutTemplate" | "MessageSquareText" | "Rocket";
 
 export const SERVICE_WORKFLOW = {
   path: "/services/workflow-automation",
@@ -593,6 +596,195 @@ export const SERVICE_ENGAGEMENT = {
   },
 };
 
+/* ---------------------------------------------------------------------------------------------
+   Service page: Website Design & Development (/services/websites, brief A3 and A5).
+   Hero headline, supporting copy, the problems, qualities, process stages and the automation
+   examples come from the owner's Phase 2C instruction (2026-10-29); the rest is proposed wording.
+   Commercial website engagements are not yet classified (brief B3), so the page shows KAP's own
+   site as its example and never presents it, or the illustrative "Fernway" business, as a client
+   project. No search-ranking, lead or revenue promises.
+   ------------------------------------------------------------------------------------------- */
+
+export type SiteMock = {
+  name: string;
+  nav: string[];
+  navCta: string;
+  headline: string;
+  body: string;
+  cta: string;
+  secondary: string;
+  tiles: string[];
+};
+
+export const SERVICE_WEBSITES = {
+  path: "/services/websites",
+  meta: {
+    title: "Website Design & Development",
+    description:
+      "KAP Enterprises designs and builds modern, mobile-friendly websites for small businesses, with clear messaging, easy ways to get in touch and fast, accessible pages, and can connect them to the workflows behind them.",
+  },
+  hero: {
+    eyebrow: "Website Design & Development",
+    headlineLead: "A website that looks great.",
+    headlineEmphasis: "And works harder.",
+    subhead:
+      "We build modern, professional websites that help small businesses make a strong first impression, earn customer trust, and turn more visitors into inquiries.",
+    secondaryCta: { label: "See a before and after", href: "#compare" },
+    // An invented business, captioned as illustrative wherever it appears.
+    site: {
+      name: "Fernway Landscaping",
+      nav: ["Services", "Our work", "About", "Contact"],
+      navCta: "Get a quote",
+      headline: "Outdoor spaces, built to be lived in.",
+      body: "Garden design, planting and stonework for homes across the valley.",
+      cta: "Request a quote",
+      secondary: "See our work",
+      tiles: ["Garden design", "Patios & paths", "Seasonal care"],
+    } satisfies SiteMock,
+    phoneBar: ["Call", "Get a quote"],
+    notesLabel: "What the design is doing",
+    notes: [
+      { title: "Says what you do", body: "The offer is clear before anyone scrolls." },
+      { title: "One clear next step", body: "A single main button, not ten competing links." },
+      { title: "Contact, one tap away", body: "On a phone, calling or asking for a quote is always in reach." },
+    ],
+    caption: "Illustrative example site for a fictional business, not a client project.",
+  },
+  compare: {
+    title: "Your website is often your first impression.",
+    intro:
+      "Before customers call, they look you up. The same business can make two very different first impressions.",
+    sliderLabel: "Compare the same website before and after a redesign",
+    before: "Before",
+    after: "After",
+    beforeSite: {
+      name: "Fernway Landscaping Co.",
+      welcome: "Welcome to our website!",
+      nav: ["Home", "About Us", "Services", "Gallery", "Links", "News", "FAQ", "Testimonials", "Contact"],
+      body: "Fernway Landscaping Co. has been proud to serve our community. We offer a wide variety of services for residential and commercial properties. Please browse our website for more information about what we can do for you. Thank you for visiting!",
+      link: "Click here for more info",
+      list: ["Lawn Mowing", "Hedge Trimming", "Mulch", "Tree Service", "Snow Removal", "And Much More!!"],
+      footer: "For contact details please see the Contact page.",
+    },
+    problemsLabel: "What changed",
+    problems: [
+      { problem: "Looks dated", fix: "A modern design that matches the quality of the work" },
+      { problem: "Hard to use on a phone", fix: "Layouts designed for phones as well as desktops" },
+      { problem: "Unclear what's on offer", fix: "Services stated plainly, in customers' words" },
+      { problem: "Contact details buried", fix: "A clear way to get in touch on every page" },
+      { problem: "Slow and confusing", fix: "Fast pages with an obvious next step" },
+    ],
+    caption: "Illustrative example for a fictional business. Drag the handle, or use the arrow keys, to compare.",
+  },
+  qualities: {
+    title: "What goes into a KAP website.",
+    intro: "Six things every site we build is designed around, because they're what your visitors notice.",
+    items: [
+      { icon: "Palette", title: "Modern, professional design", body: "A look that fits your business and builds trust, not a template with your logo dropped in." },
+      { icon: "MonitorSmartphone", title: "Responsive layouts", body: "Designed for phones, tablets and desktops, so every visitor gets a page that works on their screen." },
+      { icon: "Signpost", title: "Clear messaging and navigation", body: "Plain words about what you offer, and menus that take people where they expect to go." },
+      { icon: "MousePointerClick", title: "Easy ways to get in touch", body: "Contact forms, email links and calls to action placed where visitors are ready to use them." },
+      { icon: "Gauge", title: "Fast, accessible pages", body: "Pages that load quickly and work with keyboards, screen readers and enlarged text." },
+      { icon: "FileCode2", title: "Maintainable build", body: "Clean, documented code that's straightforward to update as your business changes." },
+    ] as { icon: ServiceIcon; title: string; body: string }[],
+    specimen: { label: "Your brand, not ours", type: "Aa" },
+    scale: { label: "Readable at any text size", sample: "Aa" },
+  },
+  // Stage names from the owner's instruction; descriptions are proposed wording. No turnaround or
+  // revision-count promises.
+  approach: {
+    title: "Built around your business.",
+    intro: "A collaborative process, with your feedback shaping the site before it launches.",
+    evolution: {
+      draft: "First layout",
+      final: "Ready to launch",
+      caption: "Illustrative: the example site from the top of this page, from first layout to finished design.",
+    },
+    steps: [
+      { icon: "Search", title: "Understand your business", body: "We learn what you offer, who your customers are and what you want visitors to do." },
+      { icon: "LayoutTemplate", title: "Initial design", body: "We design your key pages first, so you can see the direction before it's built." },
+      { icon: "MessageSquareText", title: "Your feedback", body: "You review the design and tell us what's working and what isn't." },
+      { icon: "SlidersHorizontal", title: "Refine and build", body: "We refine the design and build the site, checking it on phones, tablets and desktops as we go." },
+      { icon: "Rocket", title: "Prepare for launch", body: "We set page titles and descriptions, test the contact form and check everything again before it goes live." },
+    ] as { icon: ServiceIcon; title: string; body: string }[],
+  },
+  // KAP's own site as the example (owner's instruction). Every point is a checkable fact about
+  // this site; it is never framed as a client project.
+  showcase: {
+    eyebrow: "Our work, in action",
+    title: "You're looking at one.",
+    body: "This website is KAP's own, designed and built in-house. It isn't a client project, but it's the most direct example we can show you of how we build: the design, the way it adapts to your screen, and how each page leads to a conversation.",
+    points: [
+      "Checked at 17 screen widths, from a small phone to a wide monitor, and with enlarged text",
+      "One main action, repeated where you're ready for it: Let's Talk About Your Business",
+      "Built on Next.js, with a working contact form and online payments through Stripe",
+    ],
+    tryIt: "Try it: open this page on another screen, or resize your browser window.",
+    screensLabel: "Pages from this site, on a phone",
+    // Real captures of this site (authentic; design/open-items.md), 390px wide, first screen.
+    screens: [
+      { label: "Homepage", href: "/", src: "/images/websites/kap-home-phone.png" },
+      { label: "AI Workflow Automation", href: "/services/workflow-automation", src: "/images/websites/kap-workflow-phone.png" },
+      { label: "Customer Engagement", href: "/services/customer-engagement", src: "/images/websites/kap-engagement-phone.png" },
+    ],
+  },
+  connect: {
+    title: "A website that connects to the rest of your business.",
+    intro:
+      "For many websites, the contact form is where the job ends. With KAP, it can be where your workflow begins.",
+    form: { label: "Your website", fields: ["Name", "Email", "How can we help?"], button: "Send" },
+    afterLabel: "What can happen next",
+    items: [
+      { icon: "BellRing", title: "Your team is notified", body: "The right person hears about each new inquiry." },
+      { icon: "Contact", title: "Lead added to your CRM", body: "Contact details recorded without retyping." },
+      { icon: "Send", title: "Customer follow-up", body: "A reply goes out promptly, in your words." },
+      { icon: "CalendarCheck", title: "Appointment requests", body: "Requests reach your calendar or scheduling tool." },
+      { icon: "Plug", title: "Other integrations", body: "Connected to the tools you already use." },
+    ] as { icon: ServiceIcon; title: string; body: string }[],
+    note: "Examples of what can be connected. What fits depends on your business and the tools you use.",
+    links: [
+      { label: "Explore AI Workflow Automation", href: "/services/workflow-automation" },
+      { label: "Add an AI assistant to your site", href: "/services/customer-engagement" },
+    ],
+  },
+  closing: {
+    title: "Ready for a website that works harder?",
+    body: "Tell us about your business and your current website, if you have one. We'll talk through what it needs to turn more visitors into inquiries.",
+    emailLead: "Prefer email?",
+  },
+};
+
+// Header Services menu (owner, 2026-10-30): only the three services with their own pages. The
+// other two stay on the homepage, which the "all services" link reaches.
+export const SERVICES_NAV: {
+  label: string;
+  items: { icon: Service["icon"]; title: string; description: string; href: string }[];
+  all: { label: string; href: string };
+} = {
+  label: "Services",
+  items: [
+    {
+      icon: "Workflow",
+      title: "AI Workflow Automation",
+      description: "Connect your tools and automate repetitive tasks and follow-ups.",
+      href: SERVICE_WORKFLOW.path,
+    },
+    {
+      icon: "MessagesSquare",
+      title: "AI-Powered Customer Engagement",
+      description: "Answer inquiries promptly, with people in charge when it matters.",
+      href: SERVICE_ENGAGEMENT.path,
+    },
+    {
+      icon: "Globe",
+      title: "Website Development",
+      description: "Modern websites built to turn visitors into inquiries.",
+      href: SERVICE_WEBSITES.path,
+    },
+  ],
+  all: { label: "See all services", href: "/#solutions" },
+};
+
 // Not on the homepage: placement and reassurance wording await owner approval (brief B2).
 export const SOLUTIONS_SURVEY_COPY = {
   eyebrow: "Quick fit-check",
@@ -693,6 +885,7 @@ export const GOAL_OPTIONS: GoalOption[] = [
   { value: "support", label: "Customer service" },
   { value: "leadgen", label: "Lead generation" },
   { value: "video", label: "Video / content" },
+  { value: "website", label: "Website Development" },
   { value: "other", label: "Not sure yet" },
 ];
 

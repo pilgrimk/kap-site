@@ -10,24 +10,30 @@ export type ServiceHeroCopyContent = {
   secondaryCta: { label: string; href: string };
 };
 
-/** The text column every service hero shares: eyebrow, two-line headline, subhead and CTAs. */
-export function ServiceHeroCopy({ content }: { content: ServiceHeroCopyContent }) {
-  const { eyebrow, headlineLead, headlineEmphasis, subhead, secondaryCta } = content;
-
+/** Eyebrow and two-line headline. */
+export function ServiceHeroHeadline({ content }: { content: ServiceHeroCopyContent }) {
   return (
     <div>
       <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-coral-ink md:text-xs">
-        {eyebrow}
+        {content.eyebrow}
       </p>
       <h1
         id="service-title"
         className="mt-4 font-display text-[clamp(2.75rem,1.4rem+3.6vw,4.9rem)] font-bold leading-[1.02] tracking-tight md:mt-5"
       >
-        {headlineLead} <span className="block text-balance text-brand-magenta">{headlineEmphasis}</span>
+        {content.headlineLead} <span className="block text-balance text-brand-magenta">{content.headlineEmphasis}</span>
       </h1>
-      <p className="mt-6 max-w-[42ch] text-[1.05rem] leading-[1.6] text-ink-soft md:text-[1.15rem]">
-        {subhead}
-      </p>
+    </div>
+  );
+}
+
+/** Subhead with the primary and secondary calls to action. */
+export function ServiceHeroActions({ content, className }: { content: ServiceHeroCopyContent; className?: string }) {
+  const { subhead, secondaryCta } = content;
+
+  return (
+    <div className={className}>
+      <p className="max-w-[42ch] text-[1.05rem] leading-[1.6] text-ink-soft md:text-[1.15rem]">{subhead}</p>
       <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-3 md:mt-9">
         <Button
           asChild
@@ -43,6 +49,16 @@ export function ServiceHeroCopy({ content }: { content: ServiceHeroCopyContent }
           {secondaryCta.label}
         </Link>
       </div>
+    </div>
+  );
+}
+
+/** The text column every service hero shares: eyebrow, two-line headline, subhead and CTAs. */
+export function ServiceHeroCopy({ content }: { content: ServiceHeroCopyContent }) {
+  return (
+    <div>
+      <ServiceHeroHeadline content={content} />
+      <ServiceHeroActions content={content} className="mt-6" />
     </div>
   );
 }

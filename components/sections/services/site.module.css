@@ -1,0 +1,635 @@
+/* Website Design & Development: the illustrative "Fernway" site, drawn in HTML and CSS.
+   Everything inside a frame is sized in em, and the em is a fraction of the frame's width
+   (container query units), so the mock scales as one picture at every screen size. */
+
+/* ---- Browser frame ---------------------------------------------------------------------- */
+
+.frame {
+  container-type: inline-size;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  background: var(--paper);
+  box-shadow: 0 30px 60px -36px rgba(26, 26, 26, 0.45);
+}
+
+.scaled {
+  font-size: calc(100cqi / 64);
+}
+
+.chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  height: 2.6em;
+  padding: 0 1.1em;
+  border-bottom: 1px solid #e6dcbc;
+  background: #f6f0dd;
+}
+
+.dot {
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
+  background: #dcd1b2;
+}
+
+.url {
+  margin-inline: auto;
+  padding: 0.3em 1.4em;
+  border-radius: 99em;
+  background: #fffdf5;
+  color: #6b6457;
+  font-size: 0.85em;
+}
+
+.viewport {
+  position: relative;
+  height: 37.4em;
+  overflow: hidden;
+}
+
+/* ---- The redesigned site --------------------------------------------------------------- */
+
+.site {
+  --fw-green: #1f3d2b;
+  --fw-ink: #4a5a4e;
+  --fw-sage: #e3ebdc;
+  --fw-cream: #fbf9f2;
+  --fw-terra: #c45f37;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  background: var(--fw-cream);
+  color: var(--fw-green);
+  font-family: var(--font-sans);
+}
+
+.siteNav {
+  display: flex;
+  align-items: center;
+  gap: 1.7em;
+  padding: 1.1em 2.4em;
+  font-size: 0.95em;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  margin-right: auto;
+  font-weight: 700;
+}
+
+.leaf {
+  width: 1.3em;
+  height: 1.3em;
+  border-radius: 0 1em;
+  background: var(--fw-green);
+}
+
+.navCta {
+  padding: 0.45em 1.1em;
+  border-radius: 99em;
+  background: var(--fw-green);
+  color: var(--fw-cream);
+  font-weight: 600;
+}
+
+.heroRow {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  align-items: center;
+  gap: 2.4em;
+  padding: 1.2em 2.4em 0;
+}
+
+.copy {
+  position: relative;
+}
+
+.headline {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: 3.3em;
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.body {
+  max-width: 22em;
+  margin-top: 0.9em;
+  color: var(--fw-ink);
+  font-size: 1.05em;
+  line-height: 1.45;
+}
+
+.actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.2em;
+  margin-top: 1.4em;
+}
+
+.cta {
+  position: relative;
+  padding: 0.75em 1.3em;
+  border-radius: 0.5em;
+  background: var(--fw-terra);
+  color: #fff;
+  font-weight: 600;
+}
+
+.secondary {
+  border-bottom: 1px solid currentColor;
+  font-weight: 600;
+}
+
+/* A garden, as layered hills: no photograph, so nothing implies real work */
+.garden {
+  aspect-ratio: 5 / 4;
+  border-radius: 1.2em;
+  background:
+    radial-gradient(circle at 74% 28%, #f6d58a 0 8%, transparent 8.5%),
+    radial-gradient(110% 55% at 18% 102%, #2f5a3c 0 50%, transparent 50.5%),
+    radial-gradient(120% 65% at 88% 108%, #4d7a4f 0 50%, transparent 50.5%),
+    radial-gradient(160% 80% at 50% 125%, #8fb07f 0 55%, transparent 55.5%),
+    linear-gradient(#f3e3c4, #e7eedb);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1em;
+  padding: 1.6em 2.4em 2em;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.9em 1em;
+  border-radius: 0.8em;
+  background: var(--fw-sage);
+  font-weight: 600;
+}
+
+.tileIcon {
+  width: 1.5em;
+  height: 1.5em;
+  flex-shrink: 0;
+  border-radius: 0.4em;
+  background: var(--fw-green);
+  opacity: 0.85;
+}
+
+/* ---- Wireframe (the same layout before colour and type) ------------------------------- */
+
+.wire {
+  --wire: #d9d3c2;
+  background: #fffdf7;
+  background-image: radial-gradient(#e8e2d0 1px, transparent 1px);
+  background-size: 1.6em 1.6em;
+}
+
+.wireLine,
+.wireHead,
+.wireBox,
+.wirePill,
+.wireButton,
+.wireTile {
+  display: block;
+  border-radius: 0.3em;
+  background: var(--wire);
+}
+
+.wireLine {
+  height: 0.7em;
+}
+
+.wireHead {
+  width: 100%;
+  height: 2.6em;
+  margin-top: 0.7em;
+}
+
+.wirePill {
+  width: 6.5em;
+  height: 2em;
+  border-radius: 99em;
+}
+
+.wireButton {
+  width: 9em;
+  height: 2.6em;
+  margin-top: 1.8em;
+  border: 2px dashed #b9b19b;
+  background: transparent;
+}
+
+.wireImage {
+  border: 2px dashed #b9b19b;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 1px), #cfc8b4 50%, transparent calc(50% + 1px)),
+    linear-gradient(to top left, transparent calc(50% - 1px), #cfc8b4 50%, transparent calc(50% + 1px));
+}
+
+.wireTile {
+  height: 3.4em;
+  border-radius: 0.8em;
+}
+
+/* ---- Phone ----------------------------------------------------------------------------- */
+
+.phone {
+  container-type: inline-size;
+  overflow: hidden;
+  border: 5px solid var(--brand-charcoal);
+  border-radius: 26px;
+  background: var(--brand-charcoal);
+  box-shadow: 0 30px 50px -28px rgba(26, 26, 26, 0.55);
+}
+
+.phoneScreen {
+  position: relative;
+  display: flex;
+  height: calc(100cqi * 19 / 9);
+  flex-direction: column;
+  font-size: calc(100cqi / 24);
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.7em 1.4em 0.3em;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.phoneNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8em 1.4em;
+}
+
+.menu {
+  display: grid;
+  gap: 0.28em;
+  width: 1.3em;
+}
+
+.menu > span {
+  height: 0.16em;
+  border-radius: 1em;
+  background: var(--fw-green);
+}
+
+.phoneGarden {
+  aspect-ratio: 4 / 3;
+  margin: 0 1.4em;
+  border-radius: 1em;
+}
+
+.phoneHeadline {
+  /* 1.4em of the mock's base size, expressed at this 2.05em type size */
+  margin: 0.3em 0 0;
+  padding: 0 calc(1.4em / 2.05);
+  font-family: var(--font-display);
+  font-size: 2.05em;
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+.phoneBody {
+  margin: 0.8em 1.4em 0;
+  color: var(--fw-ink);
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+.phoneTiles {
+  display: grid;
+  gap: 0.5em;
+  margin: 1.2em 1.4em 1em;
+  font-size: 0.95em;
+}
+
+.bar {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 0.6em;
+  margin-top: auto;
+  padding: 0.9em 1.2em 1.4em;
+  border-top: 1px solid #e3e0d2;
+  background: #fff;
+  font-weight: 600;
+  text-align: center;
+}
+
+.bar > span {
+  padding: 0.7em 0;
+  border-radius: 0.6em;
+}
+
+.barCall {
+  border: 1px solid var(--fw-green);
+}
+
+.barQuote {
+  position: relative;
+  background: var(--fw-terra);
+  color: #fff;
+}
+
+/* ---- Annotation pins (sized in rem so they stay legible on a small mock) ---------------- */
+
+.pin {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  width: 1.6rem;
+  height: 1.6rem;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--brand-cream);
+  border-radius: 50%;
+  background: var(--brand-magenta);
+  color: var(--brand-cream);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+
+
+.pinHeadline {
+  top: -1rem;
+  left: -0.5rem;
+}
+
+.pinCta {
+  top: -0.85rem;
+  left: -0.85rem;
+}
+
+.pinBar {
+  top: -0.85rem;
+  right: -0.35rem;
+}
+
+/* ---- Dated "before" site --------------------------------------------------------------- */
+
+.dated {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  background: #fff;
+  color: #222;
+  font-family: "Times New Roman", Times, serif;
+  text-align: center;
+}
+
+.datedBanner {
+  padding: 0.9em 1em 0.8em;
+  background: linear-gradient(#64944a, #2f5f1f);
+  color: #fffbe0;
+}
+
+.datedName {
+  font-size: 2.5em;
+  font-weight: 700;
+  text-shadow: 0.06em 0.06em 0 #000;
+}
+
+.datedWelcome {
+  margin-top: 0.2em;
+  color: #ffe36b;
+  font-size: 1.15em;
+  font-style: italic;
+}
+
+.datedNav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3em;
+  padding: 0.6em 3em;
+  background: #ddd;
+}
+
+.datedNav > span {
+  padding: 0.2em 0.6em;
+  border: 2px outset #bbb;
+  background: linear-gradient(#f4f4f4, #c8c8c8);
+  color: #00e;
+  font-size: 0.9em;
+  text-decoration: underline;
+}
+
+.datedMain {
+  display: grid;
+  grid-template-columns: 1fr 2.2fr;
+  gap: 1.4em;
+  padding: 1.6em 4em;
+  text-align: left;
+}
+
+.datedPhoto {
+  aspect-ratio: 4 / 3;
+  border: 4px ridge #aaa;
+  background:
+    radial-gradient(120% 60% at 30% 110%, #6f8f5c 0 50%, transparent 50.5%),
+    linear-gradient(#b9c6cf, #d6dccf);
+  filter: saturate(0.6) contrast(0.9);
+}
+
+.datedText {
+  color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.95em;
+  line-height: 1.35;
+}
+
+.datedLink {
+  display: inline-block;
+  margin-top: 0.8em;
+  color: #00e;
+  text-decoration: underline;
+}
+
+.datedList {
+  margin-top: 0.9em;
+  padding-left: 1.4em;
+  color: #2a6a1a;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  line-height: 1.5;
+  list-style: square;
+}
+
+.datedFooter {
+  margin-top: auto;
+  padding: 0.7em;
+  border-top: 1px dashed #bbb;
+  color: #777;
+  font-size: 0.8em;
+}
+
+/* ---- Before / after slider ------------------------------------------------------------- */
+
+.compare {
+  --pos: 50%;
+  position: absolute;
+  inset: 0;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+.leftLayer {
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+
+.range {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: ew-resize;
+  opacity: 0;
+  touch-action: pan-y;
+}
+
+.handle {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  width: 3px;
+  translate: -50% 0;
+  background: var(--brand-cream);
+  box-shadow: 0 0 0 1px rgba(26, 26, 26, 0.25);
+  pointer-events: none;
+}
+
+.knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  translate: -50% -50%;
+  border: 2px solid var(--brand-cream);
+  border-radius: 50%;
+  background: var(--brand-charcoal);
+  color: var(--brand-cream);
+  box-shadow: 0 8px 20px -8px rgba(26, 26, 26, 0.6);
+}
+
+.range:focus-visible ~ .handle .knob {
+  outline: 3px solid var(--brand-magenta);
+  outline-offset: 3px;
+}
+
+.tag {
+  position: absolute;
+  z-index: 2;
+  bottom: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99rem;
+  background: var(--brand-charcoal);
+  color: var(--brand-cream);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.tagLeft {
+  left: 0.75rem;
+}
+
+.tagRight {
+  right: 0.75rem;
+}
+
+/* ---- Hero motion: plays once; the un-animated state is the finished picture ------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .enterBrowser {
+    animation: rise 560ms cubic-bezier(0.23, 1, 0.32, 1) 100ms both;
+  }
+
+  .enterPhone {
+    animation: slide 620ms cubic-bezier(0.23, 1, 0.32, 1) 480ms both;
+  }
+
+  .pop {
+    animation: pop 300ms cubic-bezier(0.23, 1, 0.32, 1) var(--d, 0ms) both;
+  }
+
+  .fade {
+    animation: fade 360ms cubic-bezier(0.23, 1, 0.32, 1) var(--d, 0ms) both;
+  }
+
+  .stage[data-paused] * {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes slide {
+  from {
+    opacity: 0;
+    transform: translate(10%, 6%);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Small screens: annotation pins and tags scale down with the mocks they sit on */
+@media (width < 40rem) {
+  .pin {
+    width: 1.3rem;
+    height: 1.3rem;
+    font-size: 0.6875rem;
+  }
+
+  .tag {
+    padding: 0.15rem 0.45rem;
+    font-size: 0.625rem;
+  }
+}

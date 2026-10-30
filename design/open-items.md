@@ -51,7 +51,7 @@ Record: `design/services.md`.
   scheduling workflows (no scheduling integration is used on the site itself, brief A6).
 - **Hunter O'Brien's quote** is the first sentence of his published recommendation; still to be
   checked against the LinkedIn original (B4).
-- **Nav label "Solutions" vs "Services":** recommended change once a services overview exists.
+- **Nav label "Solutions" vs "Services":** resolved by the Services menu (Phase 2D).
 - **Social image:** the page uses the site-wide Open Graph image; a service-specific one is optional.
 
 ## AI-Powered Customer Engagement page (approved by the owner 2026-10-29)
@@ -64,7 +64,41 @@ Record: `design/services.md` (Phase 2B).
 - **Chandra Wrightsell's quote:** the first sentence of the published recommendation; to be checked against the LinkedIn original (B4).
 - **Example conversations** are illustrative, with invented customers and businesses; confirm the owner is comfortable with the HVAC and catering examples.
 - **Social image:** site-wide Open Graph image; a service-specific one is optional.
-- **Nav label:** still "Solutions" (see the Workflow item).
+- **Nav label:** resolved by the Services menu (Phase 2D).
+
+## Website Design & Development page (approved by the owner 2026-10-30)
+
+Record: `design/services.md` (Phase 2C).
+
+- **Proposed wording:** everything except the hero headline and supporting copy (the owner's). The problems, qualities, process stages and automation examples follow the owner's lists; their descriptions are proposed.
+- **Brief B3:** commercial website development engagements are still unclassified. The page shows no client sites; once delivered client work is confirmed (with the client's permission), a real example could join the self-referential one.
+- **"You're looking at one" claims** to confirm:
+  - the site was "designed and built in-house";
+  - "Checked at 17 screen widths ... and with enlarged text", which is true of the redesigned pages in this branch's QA;
+  - "Built on Next.js, with a working contact form and online payments through Stripe".
+- **Process claims** to confirm: KAP designs key pages before building and collects feedback. Before launch it sets page titles and descriptions and tests the contact form.
+- **Appointment requests** (section F): confirm KAP builds these for clients. KAP's own site still has no scheduling (brief A6).
+- **Illustrative "Fernway Landscaping"** business and its dated "before" site are invented; confirm the owner is comfortable with them.
+- **Contact form:** resolved; "Website Development" was added with owner approval (Phase 2D).
+- **Social image:** site-wide Open Graph image; a service-specific one is optional.
+- **Phone captures go stale** when the homepage or service-page heroes change. Re-capture `public/images/websites/kap-{home,workflow,engagement}-phone.png` then.
+
+### Imagery provenance: `public/images/websites/kap-*-phone.png`
+
+| Field | Value |
+| --- | --- |
+| Class | Authentic: screenshots of KAP's own website (this repository) |
+| Source | Captured with Playwright from the local production build, 2026-10-30: 390x844 at 2x, reduced motion, analytics blocked |
+| Licensing | KAP's own work; no third-party imagery appears in the captured viewports |
+| Production status | Cleared (the owner's own site), subject to the staleness note above |
+
+## Services navigation (2026-10-30)
+
+Record: `design/services.md` (Phase 2D).
+
+- **Proposed wording:** the menu's one-line descriptions, "See all services", and the form label "What can we help with?".
+- **Header "Contact" link removed:** the "Let's Talk" CTA reaches `/contact`; the footer still lists Contact.
+- **Pre-existing `/payment` overflow:** 6px at 320px with a 20px browser font (form and aside cards). Not changed here, because it sits next to the protected Stripe flow.
 
 ## Pending owner decisions
 
