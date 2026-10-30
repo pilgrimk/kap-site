@@ -27,8 +27,8 @@ Full record: `design/homepage.md`.
 - **Recommendations:** check the three excerpts against the LinkedIn originals (brief B4).
 - **Hero and full page are CORRECT, below the STRONG target** (see `design/homepage.md`).
 - **Service pages** (brief A3) are not built; the homepage does not link to them yet.
-- **Outside the homepage, unchanged:** the About page still shows the unsourced "3.5M+" and
-  "200+" stats (B5) and a "Book a Discovery Call" button (A6) via `WhyKap` and `FinalCTA`.
+- **Outside the homepage:** the About page's unsourced "3.5M+" and "200+" stats (B5) and its "Book a
+  Discovery Call" button (A6) were removed in the About redesign (2026-10-30).
 - **Nav label** kept as "Solutions" (existing URL); the concepts used "Services".
 - **YouTube video `bjfNFUCjJLU` ("KAP Enterprises - Automations")**: approved by the owner
   (2026-10-29), who confirmed it still represents KAP's current services. Implemented between
@@ -99,6 +99,30 @@ Record: `design/services.md` (Phase 2D).
 - **Proposed wording:** the menu's one-line descriptions, "See all services", and the form label "What can we help with?".
 - **Header "Contact" link removed:** the "Let's Talk" CTA reaches `/contact`; the footer still lists Contact.
 - **Pre-existing `/payment` overflow:** 6px at 320px with a 20px browser font (form and aside cards). Not changed here, because it sits next to the protected Stripe flow.
+
+## About page (approved by the owner 2026-10-30)
+
+Record: `design/about.md`.
+
+- **Founder photograph (brief B5):** none is approved, so none was used or generated. The founder
+  section uses a typographic "30+" panel; a professional photograph would strengthen it most.
+- **Proposed wording:** everything except the owner's hero headline, including the mission
+  statement, the problem descriptions, the founder narrative and the five working habits.
+- **Process claims to confirm:** KAP starts by understanding the business, recommends what fits,
+  builds in steps, tests with realistic examples before launch and explains what was built.
+- **"Founder" title:** from the owner's instruction; the brief itself says "led by". Confirm.
+- **Recommendations:** three excerpts, whole sentences, unedited, from the recommendations
+  published on the previous site, different from the homepage's. Still to be checked against the
+  LinkedIn originals (B4).
+- **Removed, pending sourcing:** "3.5M+ transactions per month" and "200+ enterprise client systems
+  integrated" (B5).
+- **Not used, pending confirmation:**
+  - the applied-mathematics background, and the tools and protocols list (n8n, Make, Airtable,
+    REST, SOAP, HL7, SQL), from the previous About copy;
+  - "healthcare, finance, property management, and manufacturing" as Kevin's industries (the page
+    names healthcare, payments and manufacturing from A2).
+- **Other capabilities line:** "KAP also builds sales and marketing automations and custom software
+  integrations" (brief A1). Confirm this is current.
 
 ## Pending owner decisions
 

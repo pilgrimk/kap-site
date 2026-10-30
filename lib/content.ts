@@ -1,8 +1,3 @@
-export type Stat = {
-  value: string;
-  label: string;
-};
-
 /* ---------------------------------------------------------------------------------------------
    Homepage (brief A4, A12). The hero headline is working copy, open to revision at acceptance
    review (brief B1). Factual claims trace to brief A2 or to existing site copy.
@@ -267,7 +262,7 @@ export type ServiceIcon =
   | "Search" | "Lightbulb" | "Wrench" | "FileCheck" | "PhoneMissed" | "Hourglass" | "Moon"
   | "MessageCircleQuestion" | "UserRound" | "SlidersHorizontal" | "Plug" | "Palette"
   | "MonitorSmartphone" | "Signpost" | "MousePointerClick" | "Gauge" | "FileCode2"
-  | "LayoutTemplate" | "MessageSquareText" | "Rocket";
+  | "LayoutTemplate" | "MessageSquareText" | "Rocket" | "Workflow" | "MessagesSquare" | "Globe";
 
 export const SERVICE_WORKFLOW = {
   path: "/services/workflow-automation",
@@ -798,69 +793,6 @@ export const SOLUTIONS_SURVEY_COPY = {
   reassurance: "No obligation · Instant results · 100% confidential",
 };
 
-export const WHY_KAP_COPY = {
-  eyebrow: "Built by an engineer, not a marketer",
-  title:
-    "30 years of shipping enterprise software. Now applied to AI automation for your business.",
-  body: [
-    "Kevin Pilgrim has spent three decades building the kind of systems most companies never see: HL7 medical interfaces processing millions of transactions a month, PCI-compliant payment integrations for nationwide property management platforms, and machine-control software for semiconductor equipment installed in four countries.",
-    "KAP Enterprises brings that same engineering discipline to AI automation for small and mid-sized businesses. Instead of patched-together no-code workflows, you get systems built the way enterprise software is built — reliable, maintainable, and designed to run unattended.",
-  ],
-};
-
-export const WHY_KAP_STATS: Stat[] = [
-  { value: "3.5M+", label: "Transactions per month built and maintained" },
-  { value: "30+", label: "Years shipping production software" },
-  { value: "200+", label: "Enterprise client systems integrated" },
-];
-
-export const FINAL_CTA_COPY = {
-  eyebrow: "Let's build it",
-  headline: "Ready to automate the busywork holding your business back?",
-  subhead:
-    "Tell us where time is leaking. We'll show you what to automate first — and build it for you.",
-  primary: { label: "Get Started", href: "/contact" },
-  secondary: { label: "Book a Discovery Call", href: "/contact" },
-};
-
-export const ABOUT_HERO = {
-  eyebrow: "About KAP Enterprises",
-  title: "Three decades of integration. Now focused on AI automation.",
-  description:
-    "KAP Enterprises is the AI automation practice of Kevin Pilgrim, a software engineer who has spent 30+ years building systems that have to work — in healthcare, finance, property management, and manufacturing.",
-};
-
-export const ABOUT_NARRATIVE: string[] = [
-  "Kevin Pilgrim has spent three decades in software engineering, building systems where reliability isn't optional. The work has ranged from manufacturing-floor controls running production equipment around the clock, to clinical interfaces processing millions of healthcare transactions a month, to PCI-compliant payment integrations serving nationwide enterprise clients. Different industries, very different stacks, one constant requirement: integrate complex systems and make them work without supervision, year after year.",
-  "That experience — in regulated industries, under hard reliability constraints, at production scale — is what KAP Enterprises now brings to AI automation. The technologies are different. The engineering discipline isn't. Automations are designed and built the way enterprise software is built: monitored, recoverable, documented, and engineered to absorb the inevitable changes in tools, APIs, and the business they support.",
-  "For a growing business, that means automation systems that actually hold up. Not patched-together workflows that break the first time a vendor changes an API. Not someone learning AI on your dime. Real systems built by an engineer with decades of shipping production software at scale, now focused on putting that rigor to work on AI for SMBs.",
-];
-
-export const ABOUT_PRINCIPLES_COPY = {
-  eyebrow: "How the background shapes the work",
-  title: "What 30 years of shipping software brings to your automation.",
-};
-
-export type Principle = {
-  title: string;
-  body: string;
-};
-
-export const ABOUT_PRINCIPLES: Principle[] = [
-  {
-    title: "Built to run unattended",
-    body: "Production software runs without supervision — for years, across thousands of users. KAP's automations are designed the same way: monitored, recoverable, and engineered to survive the real world.",
-  },
-  {
-    title: "Integration-first",
-    body: "Three decades of integrating clinical systems, payment processors, and manufacturing equipment means knowing exactly where automations break — and designing around it before you find out.",
-  },
-  {
-    title: "Engineered for change",
-    body: "Tools change. APIs change. Your business changes. The system is built so that adapting is a small task, not a rewrite — because every previous one was.",
-  },
-];
-
 export const PAYMENT_HERO = {
   eyebrow: "Make a payment",
   title: "Pay your KAP invoice securely.",
@@ -889,12 +821,172 @@ export const GOAL_OPTIONS: GoalOption[] = [
   { value: "other", label: "Not sure yet" },
 ];
 
-export const ABOUT_BENEFITS = {
-  eyebrow: "What it means for you",
-  title: "Built to fit the business you already have.",
-  paragraphs: [
-    "Most automation work hits a wall where it meets the systems your business already runs on — your CRM, your accounting platform, your scheduling tools, the custom databases nobody documented. The tools used to build automations — n8n, Make, Airtable, the major AI APIs — aren't where projects fail. The protocols underneath are: REST and JSON for modern APIs, SOAP and HL7 for older enterprise platforms, SQL for the data layer. We've spent decades fluent in those protocols, which means we can meet your business wherever it already lives instead of asking it to change.",
-    "When an automation needs a custom interface — a dashboard for your team, a portal for your customers, a form that triggers a workflow — we build that too. Same hands, same engineering standards. No handing you off to a different vendor for the front-end, no waiting weeks for a contractor to come up to speed on what we just built.",
-    "Underneath it all, you're getting systems designed from first principles, not glued together from tutorials. The discipline that goes into them — analytical rigor from an applied-mathematics background, hardened over thirty years of building production software — is the reason they hold up when the inputs get messy, fail in ways you can recover from, and scale as your business grows instead of needing to be replaced when you do.",
-  ],
+/* ---------------------------------------------------------------------------------------------
+   About page (/about, owner instruction 2026-10-30). Biography is limited to brief A2: Kevin
+   Pilgrim, founder, a software engineer with 30+ years of experience, and his career achievements,
+   which are always framed as his career, never as KAP's history or client work. Recommendation
+   excerpts are whole sentences, unedited, from the recommendations published on the previous site
+   (brief A7; still to be checked against the LinkedIn originals, B4). No unsourced statistics.
+   ------------------------------------------------------------------------------------------- */
+export const ABOUT_PAGE = {
+  path: "/about",
+  meta: {
+    title: "About",
+    description:
+      "KAP Enterprises helps small businesses use practical technology to improve operations, respond to customers and grow. It is led by founder Kevin Pilgrim, a software engineer with 30+ years of experience.",
+  },
+  hero: {
+    eyebrow: "About KAP Enterprises",
+    headlineLead: "Experienced technology.",
+    headlineEmphasis: "Practical solutions.",
+    subhead:
+      "KAP Enterprises helps small businesses use practical technology to improve operations, respond to customers and grow, without unnecessary complexity.",
+    secondaryCta: { label: "Meet the founder", href: "#founder" },
+    map: {
+      careerLabel: "Kevin's career",
+      careerNote: "30+ years of software engineering",
+      career: [
+        { field: "Healthcare", detail: "Clinical data interfaces" },
+        { field: "Payments", detail: "PCI-compliant integrations" },
+        { field: "Manufacturing", detail: "Machine-control software" },
+      ],
+      hub: "KAP Enterprises",
+      outcomesLabel: "Your business",
+      outcomes: [
+        { icon: "Workflow", text: "Busywork automated" },
+        { icon: "MessagesSquare", text: "Inquiries answered promptly" },
+        { icon: "Globe", text: "A website that works harder" },
+      ] as { icon: ServiceIcon; text: string }[],
+    },
+    caption: "The experience behind KAP, applied to the everyday needs of a small business.",
+  },
+  why: {
+    title: "Running a small business shouldn't mean running its software.",
+    intro:
+      "Nobody starts a business to copy details between apps, send the same reminders every week or answer the same questions late at night. But that is where many owners' hours go.",
+    problems: [
+      {
+        icon: "ArrowLeftRight",
+        title: "Disconnected systems",
+        body: "Customer details in one app, invoices in another, the schedule in a third, and someone keeping them in step by hand.",
+      },
+      {
+        icon: "Repeat",
+        title: "Repetitive tasks",
+        body: "The same data entry, reminders and follow-ups, done again every week.",
+      },
+      {
+        icon: "Inbox",
+        title: "Customer messages",
+        body: "Inquiries arriving by email, form and message, each one waiting until someone has time.",
+      },
+    ] as { icon: ServiceIcon; title: string; body: string }[],
+    missionLabel: "Our mission",
+    mission:
+      "To help small businesses put practical technology to work, so they spend less time on busywork, respond to customers sooner and grow sustainably.",
+  },
+  founder: {
+    eyebrow: "Meet the founder",
+    name: "Kevin Pilgrim",
+    role: "Founder, KAP Enterprises",
+    years: "30+",
+    yearsLabel: "years of software engineering",
+    paragraphs: [
+      "KAP Enterprises is led by Kevin Pilgrim, a software engineer with more than 30 years of experience building systems that have to keep working, in healthcare, payments and manufacturing.",
+      "That is where KAP's approach comes from. Systems that carry clinical data or process payments can't be fragile: they are planned around how the work really happens, tested before they go live and documented so others can follow them. KAP brings the same habits to the everyday systems a growing business depends on, at a scale that suits it.",
+    ],
+    careerLabel: "From Kevin's career",
+    career: HOME_CREDIBILITY.career,
+    careerNote: "Achievements from Kevin's engineering career, not KAP client projects.",
+  },
+  approach: {
+    title: "How we approach the work.",
+    intro: "Five habits that shape every project, whatever its size.",
+    steps: [
+      {
+        title: "Understand your business first",
+        body: "We start with how work actually moves through your business and what you want to change, before any technology comes up.",
+      },
+      {
+        title: "Recommend what fits",
+        body: "The right tool suits your budget, your team and the systems you already have. It isn't always the newest one.",
+      },
+      {
+        title: "Build carefully",
+        body: "Work is done in manageable steps, connecting to the tools and data you already rely on with care.",
+      },
+      {
+        title: "Test thoroughly",
+        body: "Workflows, pages and forms are tried with realistic examples before they go live.",
+      },
+      {
+        title: "Make it understandable",
+        body: "You'll know what was built, how it works and what to do when something needs to change.",
+      },
+    ],
+  },
+  services: {
+    title: "What we help businesses do.",
+    intro: "Three services, each with its own page.",
+    items: [
+      {
+        icon: "Workflow",
+        title: SERVICE_WORKFLOW.meta.title,
+        headline: `${SERVICE_WORKFLOW.hero.headlineLead} ${SERVICE_WORKFLOW.hero.headlineEmphasis}`,
+        description: "Connect the tools you already use and automate repetitive tasks, follow-ups and handoffs.",
+        href: SERVICE_WORKFLOW.path,
+      },
+      {
+        icon: "MessagesSquare",
+        title: SERVICE_ENGAGEMENT.meta.title,
+        headline: `${SERVICE_ENGAGEMENT.hero.headlineLead} ${SERVICE_ENGAGEMENT.hero.headlineEmphasis}`,
+        description: "Help customers get answers sooner and reach the right person, even when your team is busy.",
+        href: SERVICE_ENGAGEMENT.path,
+      },
+      {
+        icon: "Globe",
+        title: "Website Development",
+        headline: `${SERVICE_WEBSITES.hero.headlineLead} ${SERVICE_WEBSITES.hero.headlineEmphasis}`,
+        description: "Modern, mobile-friendly websites built to earn trust and turn visitors into inquiries.",
+        href: SERVICE_WEBSITES.path,
+      },
+    ] as { icon: ServiceIcon; title: string; headline: string; description: string; href: string }[],
+    others:
+      "KAP also builds sales and marketing automations and custom software integrations. If you need something along those lines,",
+    othersLink: { label: "tell us about it", href: "/contact" },
+  },
+  trust: {
+    title: "In their words.",
+    intro: "Excerpts from recommendations written by clients Kevin has worked with.",
+    items: [
+      {
+        quote:
+          "If you're looking for someone who not only delivers great technical work but also genuinely cares about your understanding and success, Kevin is your guy.",
+        author: "Hunter O'Brien",
+        role: "Creative Team Lead",
+        company: "MemberUp",
+        relationship: "Client, n8n automation project",
+      },
+      {
+        quote: "By the end of our time together, I felt confident and equipped to build automations on my own.",
+        author: "Peter Greco",
+        role: "Agile Coach & Senior Product Manager",
+        company: "Independent Consultant",
+        relationship: "Client",
+      },
+      {
+        quote:
+          "Kevin has played a pivotal role in enhancing our digital presence and client engagement strategies.",
+        author: "Chandra Wrightsell",
+        role: "Global Strategy & Branding Executive",
+        company: "JT Advisors Group LLC",
+        relationship: "Client",
+      },
+    ] as Recommendation[],
+  },
+  closing: {
+    title: "Let's talk about what your business needs.",
+    body: "Tell us how things run today and where they get stuck. We'll help you work out what's worth improving first.",
+    emailLead: "Prefer email?",
+  },
 };

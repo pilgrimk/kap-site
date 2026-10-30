@@ -1,0 +1,210 @@
+/* About hero: Kevin's career on the left, KAP at the centre, the small business on the right.
+   Below 48rem the map is a compact stack of centred pills, joined into and out of the hub; from 48rem
+   it is three columns joined by curves. The curves are drawn in a 100x100 box stretched over the
+   board, so each column's three rows must be equal (1fr, no gaps) for the curve ends to meet the
+   row centres at 1/6, 1/2 and 5/6. */
+
+.board {
+  position: relative;
+  display: grid;
+  gap: 1.75rem;
+}
+
+.lines {
+  display: none;
+}
+
+.column {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem 0.45rem 0.5rem;
+}
+
+.career {
+  padding-inline: 0.85rem;
+  background: #232323;
+  color: var(--brand-cream);
+}
+
+.outcome {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.hubWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* The vertical connectors of the stacked layout */
+.hubWrap::before,
+.hubWrap::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  height: 1.75rem;
+}
+
+.hubWrap::before {
+  bottom: 100%;
+  background: color-mix(in srgb, var(--brand-charcoal) 30%, transparent);
+}
+
+.hubWrap::after {
+  top: 100%;
+  background: color-mix(in srgb, var(--coral-ink) 60%, transparent);
+}
+
+.hub {
+  position: relative;
+  display: flex;
+  width: 4.75rem;
+  height: 4.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow:
+    0 0 0 1px var(--rule),
+    0 18px 36px -18px rgb(177 41 110 / 0.45);
+}
+
+/* Thin logo-gradient ring */
+.hub::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  z-index: -1;
+  border-radius: 50%;
+  background: conic-gradient(from 200deg, var(--brand-magenta), var(--brand-coral), var(--brand-amber), var(--brand-magenta));
+  opacity: 0.55;
+}
+
+/* Backed so the curves pass behind it rather than through it */
+.hubLabel {
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  background: var(--background);
+  white-space: nowrap;
+}
+
+@media (width >= 48rem) {
+  .board {
+    grid-template-columns: 36% 28% 36%;
+    gap: 0;
+  }
+
+  .lines {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .column {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    justify-content: normal;
+    gap: 0;
+  }
+
+  .chip {
+    width: 100%;
+    gap: 0.75rem;
+    border-radius: 14px;
+    padding: 0.8rem 1rem;
+  }
+
+  .hub {
+    width: 7rem;
+    height: 7rem;
+  }
+
+  .row {
+    padding-block: 0.4rem;
+  }
+
+  .career {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+  }
+
+  .hubWrap {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .hubWrap::before,
+  .hubWrap::after {
+    display: none;
+  }
+
+  /* Keep the circle, not circle plus label, on the board's centre line */
+  .hubLabel {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    left: 50%;
+    translate: -50% 0;
+  }
+}
+
+/* One-shot entrance: career, then the lines into KAP, then the lines out to the business.
+   Fails open: without the animation everything is simply shown. */
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 520ms cubic-bezier(0.23, 1, 0.32, 1) var(--d, 0ms) both;
+  }
+
+  .draw {
+    stroke-dasharray: 1;
+    animation: draw 520ms cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0ms) both;
+  }
+
+  .pop {
+    animation: pop 480ms cubic-bezier(0.23, 1, 0.32, 1) var(--d, 0ms) both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
+}
