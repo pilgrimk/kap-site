@@ -5,7 +5,7 @@ import { HOME_VIDEO } from "@/lib/content";
 import { PRIMARY_CTA } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { HomeHeading } from "./HomeHeading";
-import h from "./home.module.css";
+import h from "@/components/shared/optimism.module.css";
 
 /**
  * KAP's own automation video. Nothing loads from YouTube until the visitor presses Play.

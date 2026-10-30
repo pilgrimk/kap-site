@@ -2,7 +2,7 @@ import { Activity, FileText, RefreshCw, RotateCcw } from "lucide-react";
 import { HOME_CREDIBILITY } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { HomeHeading } from "./HomeHeading";
-import h from "./home.module.css";
+import h from "@/components/shared/optimism.module.css";
 
 const traitIcons = [Activity, RotateCcw, FileText, RefreshCw];
 

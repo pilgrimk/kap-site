@@ -41,6 +41,19 @@ Full record: `design/homepage.md`.
   - The HeyGen watermark is visible in the video itself (owner decision whether to re-render).
   - The privacy policy must cover YouTube (brief B6).
 
+## AI Workflow Automation page (approved by the owner 2026-10-29)
+
+Record: `design/services.md`.
+
+- **Proposed wording to confirm:** approach step descriptions, scenario outcomes, capability
+  descriptions and the closing copy (step names and the hero are the owner's).
+- **"Appointments and scheduling"** is listed as an example the owner named; confirm KAP builds
+  scheduling workflows (no scheduling integration is used on the site itself, brief A6).
+- **Hunter O'Brien's quote** is the first sentence of his published recommendation; still to be
+  checked against the LinkedIn original (B4).
+- **Nav label "Solutions" vs "Services":** recommended change once a services overview exists.
+- **Social image:** the page uses the site-wide Open Graph image; a service-specific one is optional.
+
 ## Pending owner decisions
 
 - **Hero copy** — the proposed headline is not approved (brief, Part B).

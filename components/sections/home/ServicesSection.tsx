@@ -1,8 +1,9 @@
+import Link from "next/link";
 import { ArrowRight, Blocks, Globe, Megaphone, MessagesSquare, Workflow } from "lucide-react";
 import { HOME_SERVICES, type Service } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { HomeHeading } from "./HomeHeading";
-import h from "./home.module.css";
+import h from "@/components/shared/optimism.module.css";
 
 const icons: Record<Service["icon"], typeof Workflow> = {
   Workflow,
@@ -49,6 +50,15 @@ export function ServicesSection() {
                 </li>
               ))}
             </ul>
+            {featured.link ? (
+              <Link
+                href={featured.link.href}
+                className="mt-7 inline-flex items-center gap-2 rounded-sm border-b border-foreground/40 pb-0.5 font-semibold transition-colors duration-150 hover:border-coral-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
+              >
+                {featured.link.label}
+                <ArrowRight aria-hidden className="size-4 text-coral-ink" />
+              </Link>
+            ) : null}
           </article>
 
           <ul className="divide-y divide-rule border-y border-rule lg:col-span-5">

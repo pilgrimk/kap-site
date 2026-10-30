@@ -12,10 +12,13 @@ import { useEffect, useRef } from "react";
 export function WorkflowMotion({
   className,
   labelledBy,
+  layoutQuery = "(width < 48rem)",
   children,
 }: {
   className?: string;
   labelledBy: string;
+  /** Media query at which the diagram switches layout (and so its connector elements) */
+  layoutQuery?: string;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -41,7 +44,7 @@ export function WorkflowMotion({
     observer.observe(el);
 
     let frame = 0;
-    const layout = window.matchMedia("(width < 48rem)");
+    const layout = window.matchMedia(layoutQuery);
     const restart = () => {
       cancelAnimationFrame(frame);
       // Next frame, so animations on newly displayed connector pieces exist before resetting.
@@ -61,7 +64,7 @@ export function WorkflowMotion({
       layout.removeEventListener("change", restart);
       cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [layoutQuery]);
 
   return (
     <figure ref={ref} className={className} aria-labelledby={labelledBy}>

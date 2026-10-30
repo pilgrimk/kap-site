@@ -1,0 +1,42 @@
+import {
+  ArrowLeftRight,
+  BellRing,
+  CalendarCheck,
+  Clock,
+  Contact,
+  FileCheck,
+  FileSpreadsheet,
+  Funnel,
+  Inbox,
+  Keyboard,
+  Lightbulb,
+  Mail,
+  Repeat,
+  Search,
+  Send,
+  Sparkles,
+  Wrench,
+  type LucideIcon,
+} from "lucide-react";
+import type { ServiceIcon } from "@/lib/content";
+
+/** Icon names used in service-page content, mapped to the site's one icon family. */
+export const serviceIcons: Record<ServiceIcon, LucideIcon> = {
+  ArrowLeftRight,
+  BellRing,
+  CalendarCheck,
+  Clock,
+  Contact,
+  FileCheck,
+  FileSpreadsheet,
+  Funnel,
+  Inbox,
+  Keyboard,
+  Lightbulb,
+  Mail,
+  Repeat,
+  Search,
+  Send,
+  Sparkles,
+  Wrench,
+};

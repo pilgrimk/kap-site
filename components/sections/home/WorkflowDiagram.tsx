@@ -1,7 +1,7 @@
 import { BellRing, Contact, Inbox, Send, Sparkles } from "lucide-react";
 import { HOME_WORKFLOW } from "@/lib/content";
 import { cn } from "@/lib/utils";
-import { WorkflowMotion } from "./WorkflowMotion";
+import { WorkflowMotion } from "@/components/shared/WorkflowMotion";
 import s from "./workflow.module.css";
 
 const resultIcons = [Contact, Send, BellRing];

@@ -83,7 +83,7 @@ export type Service = {
 export const HOME_SERVICES: {
   title: string;
   intro: string;
-  featured: Service & { points: string[] };
+  featured: Service & { points: string[]; link?: { label: string; href: string } };
   others: Service[];
 } = {
   title: "What we automate.",
@@ -99,6 +99,7 @@ export const HOME_SERVICES: {
       "Inquiries and requests sorted and routed",
       "Routine updates and reminders sent on schedule",
     ],
+    link: { label: "Explore AI Workflow Automation", href: "/services/workflow-automation" },
   },
   others: [
     {
@@ -247,6 +248,143 @@ export const HOME_FINAL_CTA = {
   title: "Tell us where the busywork piles up.",
   body: "Describe how work moves through your business today, and we'll talk through what's worth automating first.",
   emailLead: "Prefer email?",
+};
+
+/* ---------------------------------------------------------------------------------------------
+   Service page: AI Workflow Automation (/services/workflow-automation, brief A3 and A5).
+   Hero headline, supporting message, outcomes, example situations, automation categories and
+   the four approach steps come from the owner's Phase 2A instruction (2026-10-29). Technology and
+   credibility lines come from existing About-page copy and brief A2. Automation categories are
+   examples of what can be built, not packaged products.
+   ------------------------------------------------------------------------------------------- */
+
+export type ServiceIcon =
+  | "Inbox" | "Sparkles" | "Contact" | "Send" | "BellRing" | "Keyboard" | "Clock"
+  | "FileSpreadsheet" | "Repeat" | "Funnel" | "CalendarCheck" | "Mail" | "ArrowLeftRight"
+  | "Search" | "Lightbulb" | "Wrench" | "FileCheck";
+
+export const SERVICE_WORKFLOW = {
+  path: "/services/workflow-automation",
+  meta: {
+    title: "AI Workflow Automation",
+    description:
+      "KAP Enterprises connects the tools your small business already uses and automates repetitive tasks, follow-ups and handoffs, so your team can focus on customers.",
+  },
+  hero: {
+    eyebrow: "AI Workflow Automation",
+    headlineLead: "Less busywork.",
+    headlineEmphasis: "More business.",
+    subhead:
+      "We connect the tools your business already uses and automate repetitive tasks, follow-ups and handoffs, so your team can focus on customers instead of administrative work.",
+    secondaryCta: { label: "See an example workflow", href: "#example" },
+    board: {
+      label: "Everyday tasks",
+      manual: "By hand",
+      automated: "Automated",
+      tasks: [
+        { icon: "Keyboard", text: "Copy a website inquiry into the CRM" },
+        { icon: "Send", text: "Send the follow-up email" },
+        { icon: "FileSpreadsheet", text: "Update the tracking spreadsheet" },
+        { icon: "BellRing", text: "Tell the team a new lead arrived" },
+      ] as { icon: ServiceIcon; text: string }[],
+      caption: "Illustrative example tasks.",
+    },
+    outcomesLabel: "What changes",
+    outcomes: [
+      "Less manual data entry",
+      "Faster customer follow-up",
+      "Fewer missed inquiries",
+      "Better coordination between systems",
+      "Less administrative work",
+      "More time for customers",
+    ],
+  },
+  scenarios: {
+    title: "Sound familiar?",
+    todayLabel: "Today",
+    automatedLabel: "With automation",
+    items: [
+      {
+        icon: "Inbox",
+        today: "A website inquiry arrives, and someone has to type it into the CRM.",
+        automated: "The inquiry lands in your CRM on its own, ready to act on.",
+      },
+      {
+        icon: "Clock",
+        today: "A new customer needs a follow-up, but the message goes out late.",
+        automated: "A follow-up goes out promptly, written the way you would say it.",
+      },
+      {
+        icon: "FileSpreadsheet",
+        today: "Details are copied by hand between spreadsheets and business apps.",
+        automated: "Your spreadsheets and apps stay in step automatically.",
+      },
+      {
+        icon: "Repeat",
+        today: "Staff repeat the same administrative steps every day.",
+        automated: "Routine steps run in the background, and people step in when needed.",
+      },
+    ] as { icon: ServiceIcon; today: string; automated: string }[],
+  },
+  capabilities: {
+    title: "What we can automate.",
+    intro:
+      "A few of the workflows we can build. Each one is designed around the tools you already use, so the details are always specific to your business.",
+    items: [
+      { icon: "Funnel", title: "Lead capture and routing", body: "New leads collected from your forms and channels, and sent to the right person." },
+      { icon: "BellRing", title: "Follow-ups and notifications", body: "Timely replies to customers and alerts to your team, without anyone remembering to send them." },
+      { icon: "FileSpreadsheet", title: "CRM and spreadsheet updates", body: "Records created and kept current, so nobody retypes the same details." },
+      { icon: "CalendarCheck", title: "Appointments and scheduling", body: "Bookings, confirmations and reminders handled as part of the flow." },
+      { icon: "Mail", title: "Email processing and admin", body: "Incoming messages sorted, summarised or routed, and routine admin taken off the list." },
+      { icon: "ArrowLeftRight", title: "Data sync across platforms", body: "The same information kept consistent across the apps your business runs on." },
+    ] as { icon: ServiceIcon; title: string; body: string }[],
+  },
+  example: {
+    title: "How an automation works.",
+    intro: "One inquiry, followed from the moment it arrives.",
+    label: "Example workflow",
+    steps: [
+      { icon: "Inbox", title: "Inquiry arrives", body: "A customer fills in the form on your website." },
+      { icon: "Sparkles", title: "Automatically processed", body: "AI reads the request and picks out the details and urgency." },
+      { icon: "Contact", title: "CRM updated", body: "The contact and request are added to your CRM, with no retyping." },
+      { icon: "Send", title: "Follow-up sent", body: "The customer gets a prompt reply in your words." },
+      { icon: "BellRing", title: "Team notified", body: "The right person is told when a human is needed." },
+    ] as { icon: ServiceIcon; title: string; body: string }[],
+    caption:
+      "Illustrative example, not a client project. Every workflow is built around the tools you already use.",
+  },
+  // Step names are the owner's; step descriptions are proposed wording with no ongoing-support
+  // promise (brief B3).
+  approach: {
+    title: "How we work with you.",
+    intro: "A clear, practical process, built around how your business already runs.",
+    steps: [
+      { icon: "Search", title: "Understand your process", body: "We learn how the work moves today: the tools, the people involved and where the time goes." },
+      { icon: "Lightbulb", title: "Find the best opportunities", body: "We identify which steps are worth automating first, and which are better left to people." },
+      { icon: "Wrench", title: "Build and integrate", body: "We build the workflow and connect it to the tools you already use." },
+      { icon: "FileCheck", title: "Test, refine and hand over", body: "We test it with you, refine it, and hand it over with documentation your team can follow." },
+    ] as { icon: ServiceIcon; title: string; body: string }[],
+  },
+  tools: {
+    title: "Proven tools, built properly.",
+    body: "We build on established automation platforms such as n8n and Make, connect your CRM and other business tools through their APIs, and add AI where it genuinely helps. Every workflow is designed and built the way enterprise software is built.",
+    chips: ["n8n", "Make", "Airtable", "CRMs", "REST APIs", "SQL databases", "AI models"],
+    credential: "KAP Enterprises is led by Kevin Pilgrim, a software engineer with 30+ years of experience.",
+    // Whole sentence, unedited, from the recommendation already published on the current site
+    // (brief A7; still to be checked against the LinkedIn original, B4).
+    recommendation: {
+      quote: "Kevin helped me set up an n8n project, and I couldn't recommend him more highly.",
+      author: "Hunter O'Brien",
+      role: "Creative Team Lead",
+      company: "MemberUp",
+      relationship: "Client, n8n automation project",
+    },
+  },
+  closing: {
+    title: "What's one task you'd love to never do again?",
+    body: "Tell us about a repetitive process in your business. We'll talk through whether it can be automated, and what it would take.",
+    emailLead: "Prefer email?",
+  },
 };
 
 // Not on the homepage: placement and reassurance wording await owner approval (brief B2).

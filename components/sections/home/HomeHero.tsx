@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { HOME_HERO } from "@/lib/content";
 import { PRIMARY_CTA } from "@/lib/constants";
 import { WorkflowDiagram } from "./WorkflowDiagram";
-import h from "./home.module.css";
+import h from "@/components/shared/optimism.module.css";
 
 /**
  * Headline across the top; the copy and the workflow panel share one top edge below it. On

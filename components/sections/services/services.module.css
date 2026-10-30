@@ -1,0 +1,109 @@
+/* Service-page visuals (brief A12 motion language). Every animated element's un-animated state is
+   its finished state, so reduced-motion users, and anyone the animation never runs for, see the
+   complete picture. Only opacity, transform and clip-path animate. Breakpoints in rem. */
+
+/* ---- Task board: each everyday task flips from "By hand" to "Automated", once, on load ---- */
+/* Narrow screens: the status sits under the task text; from 40rem it ends the row. */
+.status { display: grid; justify-items: start; }
+@media (width >= 40rem) { .status { justify-items: end; } }
+.status > * { grid-area: 1 / 1; }
+.manual { opacity: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .manual { animation: fade-out 260ms cubic-bezier(0.23, 1, 0.32, 1) var(--d) both; }
+  .automated { animation: pop-in 320ms cubic-bezier(0.23, 1, 0.32, 1) var(--d) both; }
+}
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes pop-in { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: none; } }
+
+/* ---- Linear example workflow: five steps on one 7s cycle ---- */
+.flow {
+  --wire: rgba(26, 26, 26, 0.26);
+  --signal: var(--coral-ink);
+  --gap: 2rem;
+  --cycle: 7s;
+  --draw: cubic-bezier(0.77, 0, 0.175, 1);
+  --activate: cubic-bezier(0.23, 1, 0.32, 1);
+  /* No margin here: module CSS is unlayered and would override Tailwind's spacing utilities. */
+}
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
+.step { position: relative; display: flex; gap: 1rem; align-items: flex-start; border-radius: 14px; border: 1px solid #e6dcbc; background: var(--paper); padding: 1rem; }
+
+/* Activation ring: hidden in the finished, static state */
+.step::after { content: ""; position: absolute; inset: -1px; border: 1.5px solid var(--signal); border-radius: inherit; opacity: 0; pointer-events: none; }
+
+/* Connector to the next step: neutral wire with the signal drawn over it.
+   Below 64rem the steps stack, so the connector runs down from the tile centre. */
+.conn { position: absolute; left: calc(1rem + 20px - 1px); top: 100%; width: 2px; height: 1.25rem; background: var(--wire); }
+.conn::after { content: ""; position: absolute; inset: 0; background: var(--signal); }
+.step:last-child .conn { display: none; }
+
+@media (width >= 64rem) {
+  .steps { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--gap); }
+  .step { flex-direction: column; height: 100%; }
+  .conn { left: 100%; top: calc(1rem + 20px - 1px); width: var(--gap); height: 2px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .conn::after {
+    --hide: inset(0 0 100% 0);
+    animation-duration: var(--cycle);
+    animation-timing-function: var(--draw);
+    animation-iteration-count: infinite;
+  }
+  .step::after {
+    animation-duration: var(--cycle);
+    animation-timing-function: var(--activate);
+    animation-iteration-count: infinite;
+  }
+  .s1::after { animation-name: on-1; }
+  .s2::after { animation-name: on-2; }
+  .s3::after { animation-name: on-3; }
+  .s4::after { animation-name: on-4; }
+  .s5::after { animation-name: on-5; }
+  .s1 .conn::after { animation-name: draw-1; }
+  .s2 .conn::after { animation-name: draw-2; }
+  .s3 .conn::after { animation-name: draw-3; }
+  .s4 .conn::after { animation-name: draw-4; }
+
+  /* Paused while the page is hidden or the figure is off screen (WorkflowMotion) */
+  .flow[data-paused] *,
+  .flow[data-paused] *::before,
+  .flow[data-paused] *::after { animation-play-state: paused; }
+}
+@media (prefers-reduced-motion: no-preference) and (width >= 64rem) {
+  .conn::after { --hide: inset(0 100% 0 0); }
+}
+
+/* Each step lights as the signal reaches it and stays lit; the completed flow holds, then
+   everything fades out together before the next cycle. */
+@keyframes on-1 { 0%, 4.3% { opacity: 0; } 8.6%, 80% { opacity: 1; } 88.6%, 100% { opacity: 0; } }
+@keyframes on-2 { 0%, 13.6% { opacity: 0; } 17.1%, 80% { opacity: 1; } 88.6%, 100% { opacity: 0; } }
+@keyframes on-3 { 0%, 22.1% { opacity: 0; } 25.7%, 80% { opacity: 1; } 88.6%, 100% { opacity: 0; } }
+@keyframes on-4 { 0%, 30.7% { opacity: 0; } 34.3%, 80% { opacity: 1; } 88.6%, 100% { opacity: 0; } }
+@keyframes on-5 { 0%, 39.3% { opacity: 0; } 42.9%, 80% { opacity: 1; } 88.6%, 100% { opacity: 0; } }
+@keyframes draw-1 {
+  0%, 8.6% { clip-path: var(--hide); opacity: 1; }
+  13.6%, 80% { clip-path: inset(0 0 0 0); opacity: 1; }
+  88.6% { clip-path: inset(0 0 0 0); opacity: 0; }
+  90%, 100% { clip-path: var(--hide); opacity: 0; }
+}
+@keyframes draw-2 {
+  0%, 17.1% { clip-path: var(--hide); opacity: 1; }
+  22.1%, 80% { clip-path: inset(0 0 0 0); opacity: 1; }
+  88.6% { clip-path: inset(0 0 0 0); opacity: 0; }
+  90%, 100% { clip-path: var(--hide); opacity: 0; }
+}
+@keyframes draw-3 {
+  0%, 25.7% { clip-path: var(--hide); opacity: 1; }
+  30.7%, 80% { clip-path: inset(0 0 0 0); opacity: 1; }
+  88.6% { clip-path: inset(0 0 0 0); opacity: 0; }
+  90%, 100% { clip-path: var(--hide); opacity: 0; }
+}
+@keyframes draw-4 {
+  0%, 34.3% { clip-path: var(--hide); opacity: 1; }
+  39.3%, 80% { clip-path: inset(0 0 0 0); opacity: 1; }
+  88.6% { clip-path: inset(0 0 0 0); opacity: 0; }
+  90%, 100% { clip-path: var(--hide); opacity: 0; }
+}
