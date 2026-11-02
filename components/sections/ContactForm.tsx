@@ -7,11 +7,12 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
-import { ChevronDown, Loader2 } from "lucide-react";
+import { ChevronDown, CircleAlert, CircleCheck, Loader2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CONTACT_EMAIL } from "@/lib/constants";
-import { GOAL_OPTIONS } from "@/lib/content";
+import { CONTACT_PAGE, GOAL_OPTIONS } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import o from "@/components/shared/optimism.module.css";
 import {
   CONTACT_LIMITS,
   MAX_EMAIL_LENGTH,
@@ -22,63 +23,77 @@ import {
 type Status = "idle" | "submitting" | "success" | "error";
 type FieldErrors = Partial<Record<ContactField, string>>;
 
+const copy = CONTACT_PAGE.form;
+
 const FIELD_ORDER: ContactField[] = ["name", "email", "company", "message"];
 
+// 16px text keeps mobile browsers from zooming into the field on focus.
 const inputClasses =
-  "block w-full rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground transition-colors placeholder:text-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25 disabled:opacity-60 aria-invalid:border-destructive";
+  "block w-full min-w-0 rounded-[10px] border border-rule bg-white px-4 text-base text-foreground transition-[border-color,box-shadow] duration-150 placeholder:text-ink-soft/70 focus:border-brand-magenta focus:outline-none focus:ring-3 focus:ring-brand-magenta/20 disabled:opacity-60 aria-invalid:border-destructive aria-invalid:focus:ring-destructive/20";
 
-function errorId(field: ContactField) {
-  return `${field}-error`;
-}
+const linkClasses =
+  "rounded-sm font-semibold wrap-anywhere underline decoration-foreground/40 underline-offset-4 transition-colors duration-150 hover:decoration-coral-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground";
 
-/** aria-invalid / aria-describedby for a field, only while it has an error. */
-function errorProps(errors: FieldErrors, field: ContactField) {
-  return errors[field]
-    ? { "aria-invalid": true, "aria-describedby": errorId(field) }
-    : {};
+/** aria-invalid / aria-describedby for a field: its help text, and its error while it has one. */
+function describe(errors: FieldErrors, field: ContactField, hasHelp = false) {
+  const invalid = Boolean(errors[field]);
+  const ids = [hasHelp ? `${field}-help` : null, invalid ? `${field}-error` : null].filter(Boolean);
+  return {
+    "aria-invalid": invalid || undefined,
+    "aria-describedby": ids.length ? ids.join(" ") : undefined,
+  };
 }
 
 function Field({
   label,
   htmlFor,
-  required,
-  hint,
+  optional,
+  help,
   error,
   children,
 }: {
   label: string;
   htmlFor: ContactField | "goal";
-  required?: boolean;
-  hint?: string;
+  optional?: boolean;
+  help?: string;
   error?: string;
   children: ReactNode;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="min-w-0">
       <label
         htmlFor={htmlFor}
-        className="flex items-center justify-between text-sm font-medium text-foreground"
+        className="flex flex-wrap items-baseline justify-between gap-x-3 text-[0.9375rem] font-semibold text-foreground"
       >
-        <span>
-          {label}
-          {required ? (
-            <span className="ml-1 text-primary" aria-hidden>
-              *
-            </span>
-          ) : null}
-        </span>
-        {hint ? (
-          <span className="text-xs font-normal text-muted-foreground">
-            {hint}
-          </span>
-        ) : null}
+        {label}
+        {optional ? <span className="text-sm font-normal text-ink-soft">{copy.optional}</span> : null}
       </label>
-      {children}
-      {error && htmlFor !== "goal" ? (
-        <p id={errorId(htmlFor)} className="text-xs text-destructive">
+      <div className="mt-2">{children}</div>
+      {help ? (
+        <p id={`${htmlFor}-help`} className="mt-2 text-sm text-ink-soft">
+          {help}
+        </p>
+      ) : null}
+      {error ? (
+        <p id={`${htmlFor}-error`} className="mt-2 flex items-start gap-1.5 text-sm font-medium text-destructive">
+          <CircleAlert aria-hidden className="mt-0.5 size-4 shrink-0" />
           {error}
         </p>
       ) : null}
+    </div>
+  );
+}
+
+/** The white card the form and its confirmation sit in, with the logo-gradient edge. */
+function Panel({ children }: { children: ReactNode }) {
+  return (
+    <div
+      className={cn(
+        "relative min-w-0 overflow-hidden rounded-[20px] border border-rule bg-paper p-5 shadow-[0_24px_48px_-32px_rgb(26_26_26/0.35)] sm:p-8 md:p-10",
+        o.accentEdge,
+      )}
+    >
+      {children}
     </div>
   );
 }
@@ -89,11 +104,17 @@ export function ContactForm() {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const formRef = useRef<HTMLFormElement>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
+  const submitRef = useRef<HTMLButtonElement>(null);
   const pendingFocusRef = useRef<ContactField | null>(null);
 
   // Announce the confirmation: the form it replaces held keyboard focus.
   useEffect(() => {
     if (status === "success") successHeadingRef.current?.focus();
+  }, [status]);
+
+  // Disabling the button while sending drops keyboard focus to the page; give it back on failure.
+  useEffect(() => {
+    if (status === "error") submitRef.current?.focus();
   }, [status]);
 
   // Focus the first invalid field once it has re-rendered (and is no longer
@@ -174,35 +195,39 @@ export function ContactForm() {
       form.reset();
     } catch (err) {
       setStatus("error");
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      // fetch rejects with a TypeError ("Failed to fetch") when the request never reached the server.
+      setError(
+        err instanceof TypeError
+          ? `${copy.networkError} ${CONTACT_EMAIL}.`
+          : err instanceof Error
+            ? err.message
+            : "Something went wrong.",
+      );
     }
   }
 
   if (status === "success") {
     return (
-      <div className="rounded-2xl bg-card p-10 ring-1 ring-foreground/8">
-        <div className="inline-flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
-          <span aria-hidden className="text-lg">
-            ✓
-          </span>
-        </div>
+      <Panel>
+        <span
+          aria-hidden
+          className="flex size-11 items-center justify-center rounded-full bg-brand-magenta/10 text-brand-magenta"
+        >
+          <CircleCheck className="size-5.5" />
+        </span>
         <h2
           ref={successHeadingRef}
           tabIndex={-1}
-          className="mt-5 scroll-mt-32 text-2xl font-semibold tracking-tight text-foreground focus:outline-none"
+          className="mt-6 scroll-mt-32 font-display text-[1.75rem] font-bold leading-tight tracking-[-0.015em] focus:outline-none"
         >
-          Message received.
+          {copy.success.title}
         </h2>
-        <p className="mt-3 max-w-md text-sm text-muted-foreground">
-          We&apos;ll review what you sent and get back to you within one business
-          day. If something is urgent, you can also email{" "}
-          <a
-            href={`mailto:${CONTACT_EMAIL}`}
-            className="text-foreground underline"
-          >
+        <p className="mt-4 max-w-[52ch] leading-relaxed text-ink-soft">
+          {copy.success.body}{" "}
+          <a href={`mailto:${CONTACT_EMAIL}`} className={cn(linkClasses, "text-foreground")}>
             {CONTACT_EMAIL}
-          </a>{" "}
-          directly.
+          </a>
+          .
         </p>
         <button
           type="button"
@@ -210,26 +235,35 @@ export function ContactForm() {
             setStatus("idle");
             setError(null);
           }}
-          className="mt-6 text-xs font-medium text-primary underline-offset-4 hover:underline"
+          className="mt-8 rounded-sm border-b border-foreground/40 pb-0.5 text-[0.9375rem] font-semibold transition-colors duration-150 hover:border-coral-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
         >
-          Send another message
+          {copy.success.again}
         </button>
-      </div>
+      </Panel>
     );
   }
 
   const submitting = status === "submitting";
 
   return (
-    <form
-      ref={formRef}
-      onSubmit={onSubmit}
-      noValidate
-      className="rounded-2xl bg-card p-8 ring-1 ring-foreground/8"
-    >
-      <div className="space-y-5">
-        <div className="grid gap-5 md:grid-cols-2">
-          <Field label="Name" htmlFor="name" required error={fieldErrors.name}>
+    <Panel>
+      <h2
+        id="contact-form-title"
+        className="scroll-mt-32 font-display text-[1.6rem] font-bold leading-tight tracking-[-0.015em]"
+      >
+        {copy.title}
+      </h2>
+      <p className="mt-2 text-[0.95rem] text-ink-soft">{copy.intro}</p>
+
+      <form
+        ref={formRef}
+        onSubmit={onSubmit}
+        noValidate
+        aria-labelledby="contact-form-title"
+        className="mt-8 grid gap-6"
+      >
+        <div className="grid gap-6 sm:grid-cols-2">
+          <Field label={copy.labels.name} htmlFor="name" error={fieldErrors.name}>
             <input
               id="name"
               name="name"
@@ -238,18 +272,12 @@ export function ContactForm() {
               maxLength={CONTACT_LIMITS.name}
               autoComplete="name"
               disabled={submitting}
-              className={inputClasses}
-              placeholder="Kevin Pilgrim"
+              className={cn(inputClasses, "h-12")}
               onInput={() => clearFieldError("name")}
-              {...errorProps(fieldErrors, "name")}
+              {...describe(fieldErrors, "name")}
             />
           </Field>
-          <Field
-            label="Email"
-            htmlFor="email"
-            required
-            error={fieldErrors.email}
-          >
+          <Field label={copy.labels.email} htmlFor="email" help={copy.help.email} error={fieldErrors.email}>
             <input
               id="email"
               name="email"
@@ -258,120 +286,106 @@ export function ContactForm() {
               maxLength={MAX_EMAIL_LENGTH}
               autoComplete="email"
               disabled={submitting}
-              className={inputClasses}
-              placeholder="you@company.com"
+              className={cn(inputClasses, "h-12")}
               onInput={() => clearFieldError("email")}
-              {...errorProps(fieldErrors, "email")}
+              {...describe(fieldErrors, "email", true)}
             />
           </Field>
         </div>
 
-        <Field
-          label="Company"
-          htmlFor="company"
-          hint="Optional"
-          error={fieldErrors.company}
-        >
-          <input
-            id="company"
-            name="company"
-            type="text"
-            maxLength={CONTACT_LIMITS.company}
-            autoComplete="organization"
-            disabled={submitting}
-            className={inputClasses}
-            placeholder="Acme Inc."
-            onInput={() => clearFieldError("company")}
-            {...errorProps(fieldErrors, "company")}
-          />
-        </Field>
-
-        <Field label="What can we help with?" htmlFor="goal" hint="Optional">
-          <div className="relative">
-            <select
-              id="goal"
-              name="goal"
-              defaultValue=""
+        <div className="grid gap-6 sm:grid-cols-2">
+          <Field label={copy.labels.company} htmlFor="company" optional error={fieldErrors.company}>
+            <input
+              id="company"
+              name="company"
+              type="text"
+              maxLength={CONTACT_LIMITS.company}
+              autoComplete="organization"
               disabled={submitting}
-              className={cn(inputClasses, "appearance-none pr-10")}
-            >
-              <option value="" disabled>
-                Select an area…
-              </option>
-              {GOAL_OPTIONS.map((o) => (
-                <option key={o.value} value={o.label}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-              aria-hidden
+              className={cn(inputClasses, "h-12")}
+              onInput={() => clearFieldError("company")}
+              {...describe(fieldErrors, "company")}
             />
-          </div>
-        </Field>
+          </Field>
 
-        <Field
-          label="Message"
-          htmlFor="message"
-          required
-          error={fieldErrors.message}
-        >
+          <Field label={copy.labels.goal} htmlFor="goal" optional>
+            <div className="relative">
+              <select
+                id="goal"
+                name="goal"
+                defaultValue=""
+                disabled={submitting}
+                className={cn(inputClasses, "h-12 appearance-none pr-11")}
+              >
+                <option value="" disabled>
+                  {copy.goalPlaceholder}
+                </option>
+                {GOAL_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.label}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                aria-hidden
+                className="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-ink-soft"
+              />
+            </div>
+          </Field>
+        </div>
+
+        <Field label={copy.labels.message} htmlFor="message" help={copy.help.message} error={fieldErrors.message}>
           <textarea
             id="message"
             name="message"
             required
-            rows={5}
+            rows={6}
             maxLength={CONTACT_LIMITS.message}
             disabled={submitting}
-            className={cn(inputClasses, "resize-y")}
-            placeholder="Tell us about the busywork, the tools you use, and what success looks like."
+            className={cn(inputClasses, "min-h-40 resize-y py-3 leading-relaxed")}
             onInput={() => clearFieldError("message")}
-            {...errorProps(fieldErrors, "message")}
+            {...describe(fieldErrors, "message", true)}
           />
         </Field>
 
         {/* Honeypot — bots fill anything, humans never see this */}
         <div className="hidden" aria-hidden>
           <label htmlFor="hp">Leave this field blank</label>
-          <input
-            id="hp"
-            name="hp"
-            type="text"
-            tabIndex={-1}
-            autoComplete="off"
-          />
+          <input id="hp" name="hp" type="text" tabIndex={-1} autoComplete="off" />
         </div>
 
         {error ? (
           <div
             role="alert"
-            className="rounded-lg border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-destructive"
+            className="flex items-start gap-2.5 rounded-[10px] border border-destructive/35 bg-destructive/5 px-4 py-3 text-sm font-medium text-destructive"
           >
-            {error}
+            <CircleAlert aria-hidden className="mt-0.5 size-4 shrink-0" />
+            <p className="min-w-0 wrap-anywhere">{error}</p>
           </div>
         ) : null}
 
-        <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground">
-            We&apos;ll reply within one business day.
-          </p>
+        <div className="pt-1">
           <Button
+            ref={submitRef}
             type="submit"
+            variant="coral"
             disabled={submitting}
-            className="h-11 px-6 text-sm font-semibold"
+            className="h-auto min-h-13.5 w-full rounded-[10px] px-6.5 py-3 text-base whitespace-normal sm:w-auto"
           >
             {submitting ? (
               <>
-                <Loader2 className="size-4 animate-spin" aria-hidden />
-                <span>Sending…</span>
+                <Loader2 aria-hidden className="size-4 animate-spin motion-reduce:animate-none" />
+                <span>{copy.submitting}</span>
               </>
             ) : (
-              <span>Send message</span>
+              <>
+                <span>{copy.submit}</span>
+                <Send aria-hidden className="size-4" />
+              </>
             )}
           </Button>
         </div>
-      </div>
-    </form>
+      </form>
+    </Panel>
   );
 }

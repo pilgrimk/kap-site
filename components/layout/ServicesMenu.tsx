@@ -15,7 +15,7 @@ export const serviceNavIcons: Partial<Record<ServiceNavItem["icon"], LucideIcon>
 };
 
 export const navLinkClasses =
-  "rounded-sm text-sm font-medium text-foreground/75 transition-colors duration-150 hover:text-foreground aria-[current=page]:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground";
+  "rounded-sm text-sm font-medium whitespace-nowrap text-foreground/75 transition-colors duration-150 hover:text-foreground aria-[current=page]:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground";
 
 /** Icon tile for a service: magenta when that service's page is open. */
 export function ServiceNavIcon({ item, current, className }: { item: ServiceNavItem; current: boolean; className?: string }) {

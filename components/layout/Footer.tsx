@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   CONTACT_EMAIL,
+  LEGAL_LINKS,
   MAILING_ADDRESS,
   NAV_LINKS,
   PAYMENT_LINK,
@@ -37,7 +38,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/60">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/65">
               Navigate
             </h3>
             <ul className="mt-4 space-y-2 text-sm">
@@ -63,7 +64,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/60">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/65">
               Contact
             </h3>
             <ul className="mt-4 space-y-2 text-sm">
@@ -84,6 +85,18 @@ export function Footer() {
           <p>
             © {year} {SITE_NAME}. All rights reserved.
           </p>
+          <ul className="flex flex-wrap gap-x-6 gap-y-2">
+            {LEGAL_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
           <p>Built by an engineer, not a marketer.</p>
         </div>
       </div>

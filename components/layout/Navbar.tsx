@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ABOUT_LINK, HOME_LINK, PRIMARY_CTA, SITE_NAME } from "@/lib/constants";
+import { ABOUT_LINK, CONTACT_NAV_LINK, HOME_LINK, PRIMARY_CTA, SITE_NAME } from "@/lib/constants";
 import { SERVICES_NAV } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { ServiceNavIcon, ServicesMenu, navLinkClasses } from "./ServicesMenu";
@@ -50,21 +50,26 @@ export function Navbar() {
             priority
             className="h-8 w-auto md:h-10"
           />
+          {/* Short name on phones and between md and lg, where the desktop links need the room */}
           <span className="font-semibold tracking-tight whitespace-nowrap text-foreground">
-            <span className="text-base sm:hidden">KAP</span>
-            <span className="hidden text-base sm:inline md:text-lg">
+            <span className="text-base sm:hidden md:inline md:text-lg lg:hidden">KAP</span>
+            <span className="hidden text-base sm:inline md:hidden lg:inline lg:text-lg">
               KAP Enterprises
             </span>
           </span>
         </Link>
 
-        <nav aria-label="Main" className="hidden items-center gap-8 md:flex">
+        {/* Tighter below lg: four links plus the CTA must fit at 768px with enlarged text */}
+        <nav aria-label="Main" className="hidden items-center gap-5 md:flex lg:gap-8">
           <Link href={HOME_LINK.href} aria-current={current(HOME_LINK.href)} className={navLinkClasses}>
             {HOME_LINK.label}
           </Link>
           <ServicesMenu pathname={pathname} />
           <Link href={ABOUT_LINK.href} aria-current={current(ABOUT_LINK.href)} className={navLinkClasses}>
             {ABOUT_LINK.label}
+          </Link>
+          <Link href={CONTACT_NAV_LINK.href} aria-current={current(CONTACT_NAV_LINK.href)} className={navLinkClasses}>
+            {CONTACT_NAV_LINK.label}
           </Link>
         </nav>
 
@@ -146,6 +151,14 @@ export function Navbar() {
             className={mobileLinkClasses}
           >
             {ABOUT_LINK.label}
+          </Link>
+          <Link
+            href={CONTACT_NAV_LINK.href}
+            aria-current={current(CONTACT_NAV_LINK.href)}
+            onClick={() => setOpen(false)}
+            className={mobileLinkClasses}
+          >
+            {CONTACT_NAV_LINK.label}
           </Link>
           <Button
             asChild

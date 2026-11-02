@@ -195,7 +195,7 @@ export function stripeConfigurationProblem(env: {
 
 /** sessionStorage key written by the payment page's inline return script. */
 export const STRIPE_RETURN_STORAGE_KEY = "kap:stripe-return";
-/** How long a stored return stays usable, so an old tab does not resurface it. */
+/** How long a stored record stays usable, so an old tab does not resurface it. */
 export const STRIPE_RETURN_MAX_AGE_MS = 60 * 60 * 1000;
 
 const CLIENT_SECRET_PATTERN = /^(pi_[A-Za-z0-9]+)_secret_[A-Za-z0-9]+$/;
@@ -243,6 +243,75 @@ export function paymentOutcome(status: string | null | undefined): PaymentOutcom
     default:
       return "unknown";
   }
+}
+
+/**
+ * Whether the page still needs the client secret once this outcome is shown:
+ * a failed payment can be retried, and a processing or unconfirmed one must be
+ * checked with Stripe again on reload. Succeeded and canceled are final.
+ */
+export function needsClientSecret(outcome: PaymentOutcome): boolean {
+  return outcome !== "succeeded" && outcome !== "canceled";
+}
+
+/** What a reload shows after a final outcome. Holds no secret and no customer details. */
+export type SettledPayment = {
+  outcome: "succeeded" | "canceled";
+  paymentIntentId: string;
+  amountCents: number;
+  currency: string;
+};
+
+export type StoredPaymentReturn =
+  | { kind: "pending"; clientSecret: string }
+  | { kind: "settled"; payment: SettledPayment };
+
+/**
+ * Reads the payment return record: either the return script's client secret,
+ * or the secret-free record that replaces it after a final outcome. Returns
+ * null for anything expired, corrupted or of the wrong shape.
+ */
+export function parseStoredPaymentReturn(
+  raw: string,
+  now: number,
+): StoredPaymentReturn | null {
+  let record: unknown;
+  try {
+    record = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  if (!record || typeof record !== "object") return null;
+  const r = record as Record<string, unknown>;
+  if (typeof r.savedAt !== "number" || now - r.savedAt > STRIPE_RETURN_MAX_AGE_MS) {
+    return null;
+  }
+
+  if ("outcome" in r) {
+    const valid =
+      (r.outcome === "succeeded" || r.outcome === "canceled") &&
+      typeof r.paymentIntentId === "string" &&
+      /^pi_[A-Za-z0-9]+$/.test(r.paymentIntentId) &&
+      Number.isInteger(r.amountCents) &&
+      typeof r.currency === "string" &&
+      /^[a-z]{3}$/.test(r.currency);
+    if (!valid) return null;
+    return {
+      kind: "settled",
+      payment: {
+        outcome: r.outcome as SettledPayment["outcome"],
+        paymentIntentId: r.paymentIntentId as string,
+        amountCents: r.amountCents as number,
+        currency: r.currency as string,
+      },
+    };
+  }
+
+  const clientSecret = readStripeReturn({
+    clientSecret: typeof r.clientSecret === "string" ? r.clientSecret : null,
+    paymentIntentId: typeof r.paymentIntentId === "string" ? r.paymentIntentId : null,
+  });
+  return clientSecret ? { kind: "pending", clientSecret } : null;
 }
 
 // ---------------------------------------------------------------------------

@@ -48,10 +48,15 @@ branch. Not committed: awaiting owner review.
   ease-out for activations; only `opacity` and `clip-path` animate (no layout shift).
 - Always readable: neutral wires and all cards stay visible; only the coral signal and rings cycle.
 - Reduced motion: no animation; the complete static diagram (finished signal, no rings).
-- `WorkflowMotion` (client, no React state): pauses while the page is hidden or the diagram is off
+- `WorkflowMotion` (client): pauses while the page is hidden or the diagram is off
   screen, resumes from the same point, and restarts all stages together when the layout switches
   between the phone and wider diagrams. Listeners and the observer are removed on unmount.
 - Phone: compact flow with its own connector pieces, animated on the same cycle.
+
+**Pause/Play (added 2026-11-01, owner decision, finding T-08).** A small mono pill on the caption
+line holds or resumes the cycle from the same frame (`WorkflowMotion`'s `pauseControl`). A visitor's
+pause outlasts scrolling and tab changes. It is hidden under reduced motion and until JavaScript can
+act on it. The caption reserves room for it at all widths.
 
 ## Content decisions and deviations
 

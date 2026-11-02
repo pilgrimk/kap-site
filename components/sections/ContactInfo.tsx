@@ -1,63 +1,66 @@
-import { Clock, Mail, MapPin } from "lucide-react";
+import { Mail } from "lucide-react";
 import { CONTACT_EMAIL, MAILING_ADDRESS } from "@/lib/constants";
+import { CONTACT_PAGE } from "@/lib/content";
 
-const ITEMS = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: (
-      <a
-        href={`mailto:${CONTACT_EMAIL}`}
-        className="text-foreground hover:underline"
-      >
-        {CONTACT_EMAIL}
-      </a>
-    ),
-  },
-  {
-    icon: MapPin,
-    label: "Mail",
-    value: MAILING_ADDRESS,
-  },
-  {
-    icon: Clock,
-    label: "Response time",
-    value: "Within one business day",
-  },
-];
+const { next, direct } = CONTACT_PAGE;
 
+/**
+ * Beside the contact form: what happens after a message is sent, and the direct email route.
+ * Every statement describes the existing flow (see CONTACT_PAGE in lib/content.ts).
+ */
 export function ContactInfo() {
   return (
-    <aside className="rounded-2xl bg-card p-8 ring-1 ring-foreground/8">
-      <h2 className="text-xs font-semibold uppercase tracking-[0.22em] text-foreground/60">
-        Direct
-      </h2>
-      <dl className="mt-6 space-y-7">
-        {ITEMS.map(({ icon: Icon, label, value }) => (
-          <div key={label} className="flex items-start gap-4">
-            <div className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/8 text-primary ring-1 ring-primary/15">
-              <Icon className="size-4" strokeWidth={1.75} />
-            </div>
-            <div className="text-sm">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/70">
-                {label}
-              </dt>
-              <dd className="mt-1.5 text-foreground/85">{value}</dd>
-            </div>
-          </div>
-        ))}
-      </dl>
+    <aside aria-label="About contacting KAP" className="grid min-w-0 content-start gap-10">
+      <section aria-labelledby="contact-next-title">
+        <h2 id="contact-next-title" className="font-display text-[1.35rem] font-bold tracking-[-0.01em]">
+          {next.title}
+        </h2>
+        <ol className="mt-6 grid gap-6">
+          {next.steps.map((step, i) => (
+            <li key={step.title} className="relative flex gap-4">
+              <span
+                aria-hidden
+                className="flex size-9 shrink-0 items-center justify-center rounded-full border border-rule bg-paper font-mono text-[0.8125rem] font-bold text-coral-ink"
+              >
+                {i + 1}
+              </span>
+              {i < next.steps.length - 1 ? (
+                <span aria-hidden className="absolute top-11 -bottom-5 left-[1.0625rem] w-px bg-rule" />
+              ) : null}
+              <div className="min-w-0 pt-1.5">
+                <h3 className="font-semibold leading-snug">{step.title}</h3>
+                <p className="mt-1 text-[0.95rem] leading-relaxed text-ink-soft">{step.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-      <div className="mt-10 border-t border-border/60 pt-6">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-foreground/70">
-          What helps us help you
+      <section aria-labelledby="contact-direct-title" className="rounded-[16px] bg-brand-charcoal p-6 text-brand-cream">
+        <div className="flex items-center gap-3">
+          <span aria-hidden className="flex size-9 items-center justify-center rounded-[10px] bg-brand-amber/15 text-brand-amber">
+            <Mail className="size-4.5" />
+          </span>
+          <h2 id="contact-direct-title" className="font-semibold">
+            {direct.title}
+          </h2>
+        </div>
+        <p className="mt-4 text-[0.95rem] leading-relaxed text-brand-cream/75">{direct.body}</p>
+        <p className="mt-1.5">
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="rounded-sm font-semibold wrap-anywhere text-brand-cream underline decoration-brand-amber/60 underline-offset-4 transition-colors duration-150 hover:decoration-brand-amber focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-cream"
+          >
+            {CONTACT_EMAIL}
+          </a>
         </p>
-        <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-          <li>The repetitive task eating your time.</li>
-          <li>The tools you currently use.</li>
-          <li>What success looks like in 90 days.</li>
-        </ul>
-      </div>
+        <dl className="mt-6 border-t border-brand-cream/15 pt-5 text-[0.95rem]">
+          <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-brand-cream/70">
+            {direct.mailLabel}
+          </dt>
+          <dd className="mt-1.5 text-brand-cream/85">{MAILING_ADDRESS}</dd>
+        </dl>
+      </section>
     </aside>
   );
 }

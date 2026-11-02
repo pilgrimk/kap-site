@@ -8,10 +8,14 @@ const resultIcons = [Contact, Send, BellRing];
 const resultStages = [s.o1, s.o2, s.o3];
 
 export function WorkflowDiagram({ className }: { className?: string }) {
-  const { label, trigger, start, ai, results, caption } = HOME_WORKFLOW;
+  const { label, trigger, start, ai, results, caption, motion } = HOME_WORKFLOW;
 
   return (
-    <WorkflowMotion className={cn(s.flow, className)} labelledBy="workflow-caption">
+    <WorkflowMotion
+      className={cn(s.flow, className)}
+      labelledBy="workflow-caption"
+      pauseControl={{ className: s.pause, ...motion }}
+    >
       <div className={s.head}>
         <span>{label}</span>
         <span>{trigger}</span>

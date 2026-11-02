@@ -8,8 +8,11 @@ import {
   cleanSingleLine,
   contactFieldErrors,
   isCrossSiteRequest,
+  needsClientSecret,
   parseAmountToCents,
+  parseStoredPaymentReturn,
   paymentOutcome,
+  STRIPE_RETURN_MAX_AGE_MS,
   readJsonBody,
   readStripeReturn,
   stripeConfigurationProblem,
@@ -357,5 +360,66 @@ describe("isCrossSiteRequest", () => {
     assert.equal(isCrossSiteRequest(withSite("same-site")), false);
     assert.equal(isCrossSiteRequest(withSite("none")), false);
     assert.equal(isCrossSiteRequest(withSite(null)), false);
+  });
+});
+
+describe("payment return record", () => {
+  const now = 1_800_000_000_000;
+  const secret = "pi_abc123_secret_def456";
+  const pending = (extra = {}) =>
+    JSON.stringify({ clientSecret: secret, paymentIntentId: "pi_abc123", savedAt: now, ...extra });
+  const settled = (extra = {}) =>
+    JSON.stringify({ outcome: "succeeded", paymentIntentId: "pi_abc123", amountCents: 25000, currency: "usd", savedAt: now, ...extra });
+
+  it("keeps the client secret only while the outcome still needs it", () => {
+    assert.equal(needsClientSecret("succeeded"), false);
+    assert.equal(needsClientSecret("canceled"), false);
+    assert.equal(needsClientSecret("failed"), true);
+    assert.equal(needsClientSecret("processing"), true);
+    assert.equal(needsClientSecret("unknown"), true);
+  });
+
+  it("reads the return script's record as pending", () => {
+    assert.deepEqual(parseStoredPaymentReturn(pending(), now), { kind: "pending", clientSecret: secret });
+  });
+
+  it("reads a final outcome as settled, with no secret", () => {
+    const stored = parseStoredPaymentReturn(settled(), now);
+    assert.equal(stored.kind, "settled");
+    assert.deepEqual(stored.payment, { outcome: "succeeded", paymentIntentId: "pi_abc123", amountCents: 25000, currency: "usd" });
+    assert.equal(JSON.stringify(stored).includes("secret"), false);
+    assert.equal(parseStoredPaymentReturn(settled({ outcome: "canceled" }), now).payment.outcome, "canceled");
+  });
+
+  it("never carries a stray secret through a settled record", () => {
+    const stored = parseStoredPaymentReturn(settled({ clientSecret: secret }), now);
+    assert.equal(JSON.stringify(stored).includes(secret), false);
+  });
+
+  it("expires both kinds after the maximum age, and not before", () => {
+    const late = now + STRIPE_RETURN_MAX_AGE_MS + 1;
+    assert.equal(parseStoredPaymentReturn(pending(), late), null);
+    assert.equal(parseStoredPaymentReturn(settled(), late), null);
+    assert.notEqual(parseStoredPaymentReturn(pending(), now + STRIPE_RETURN_MAX_AGE_MS), null);
+  });
+
+  it("rejects missing or corrupted data", () => {
+    for (const raw of ["", "{", "null", "[]", "42", '"text"', "{}"]) {
+      assert.equal(parseStoredPaymentReturn(raw, now), null, raw);
+    }
+    assert.equal(parseStoredPaymentReturn(pending({ savedAt: "soon" }), now), null);
+    assert.equal(parseStoredPaymentReturn(pending({ clientSecret: "forged" }), now), null);
+    assert.equal(parseStoredPaymentReturn(pending({ clientSecret: 7 }), now), null);
+    assert.equal(parseStoredPaymentReturn(pending({ paymentIntentId: "pi_other" }), now), null);
+  });
+
+  it("only accepts a settled record for a final outcome, in the right shape", () => {
+    for (const outcome of ["failed", "processing", "unknown", "paid", null]) {
+      assert.equal(parseStoredPaymentReturn(settled({ outcome }), now), null, String(outcome));
+    }
+    assert.equal(parseStoredPaymentReturn(settled({ paymentIntentId: "<b>x</b>" }), now), null);
+    assert.equal(parseStoredPaymentReturn(settled({ amountCents: "25000" }), now), null);
+    assert.equal(parseStoredPaymentReturn(settled({ amountCents: 1.5 }), now), null);
+    assert.equal(parseStoredPaymentReturn(settled({ currency: "dollars" }), now), null);
   });
 });

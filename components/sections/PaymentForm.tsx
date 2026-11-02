@@ -14,20 +14,35 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import {
+  ArrowLeft,
+  CircleAlert,
+  CircleCheck,
+  CircleHelp,
+  CircleX,
+  Clock,
+  Loader2,
+  Lock,
+  type LucideIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CONTACT_EMAIL } from "@/lib/constants";
+import { PAYMENT_PAGE } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import o from "@/components/shared/optimism.module.css";
 import {
   MAX_EMAIL_LENGTH,
   MAX_INVOICE_REFERENCE_LENGTH,
   MAX_PAYER_NAME_LENGTH,
-  STRIPE_RETURN_MAX_AGE_MS,
+  PAYMENT_ERRORS,
   STRIPE_RETURN_STORAGE_KEY,
+  needsClientSecret,
+  parseStoredPaymentReturn,
   paymentOutcome,
   readStripeReturn,
   validatePaymentRequest,
   type PaymentOutcome,
+  type StoredPaymentReturn,
 } from "@/lib/validation";
 
 declare global {
@@ -37,14 +52,18 @@ declare global {
   }
 }
 
+const copy = PAYMENT_PAGE.form;
+
 const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 const stripePromise: Promise<StripeJs | null> = publishableKey
   ? loadStripe(publishableKey)
   : Promise.resolve(null);
 
+// 16px text keeps mobile browsers from zooming into the field on focus.
 const inputClasses =
-  "block w-full rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground transition-colors placeholder:text-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25 disabled:opacity-60";
+  "block h-12 w-full min-w-0 rounded-[10px] border border-rule bg-white px-4 text-base text-foreground transition-[border-color,box-shadow] duration-150 placeholder:text-ink-soft/70 focus:border-brand-magenta focus:outline-none focus:ring-3 focus:ring-brand-magenta/20 disabled:opacity-60 aria-invalid:border-destructive aria-invalid:focus:ring-destructive/20";
 
+// Stripe's Payment Element renders in its own frame, so it is themed here to match the fields.
 const stripeAppearance = {
   theme: "flat" as const,
   variables: {
@@ -54,24 +73,24 @@ const stripeAppearance = {
     colorDanger: "#dc2626",
     colorTextSecondary: "#5c5c5c",
     fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
-    fontSizeBase: "14px",
-    borderRadius: "8px",
+    fontSizeBase: "16px",
+    borderRadius: "10px",
     spacingUnit: "4px",
   },
   rules: {
     ".Input": {
-      border: "1px solid #e8e2c9",
+      border: "1px solid #e3dcc2",
       padding: "12px 16px",
       backgroundColor: "#ffffff",
     },
     ".Input:focus": {
       border: "1px solid #b1296e",
-      boxShadow: "0 0 0 3px rgba(177, 41, 110, 0.25)",
+      boxShadow: "0 0 0 3px rgba(177, 41, 110, 0.2)",
     },
     ".Label": {
-      fontWeight: "500",
+      fontWeight: "600",
       color: "#1a1a1a",
-      fontSize: "14px",
+      fontSize: "15px",
       marginBottom: "8px",
     },
   },
@@ -89,12 +108,12 @@ function formatAmount(cents: number, currency = "usd") {
 // ---------------------------------------------------------------------------
 
 /**
- * The client secret Stripe returned with the customer, if any. The inline
- * script normally captures it before hydration; sessionStorage keeps it across
- * a reload; reading the URL directly is a fallback for when the script did
- * not run.
+ * The payment return to show, if any. The inline script normally captures the
+ * client secret before hydration; sessionStorage keeps the record across a
+ * reload; reading the URL directly is a fallback for when the script did not
+ * run.
  */
-function loadPendingReturn(): string | null {
+function loadStoredReturn(): StoredPaymentReturn | null {
   let raw = window.__kapStripeReturn ?? null;
   if (!raw) {
     try {
@@ -109,36 +128,19 @@ function loadPendingReturn(): string | null {
     if (secret || params.has("redirect_status")) {
       window.history.replaceState(window.history.state, "", "/payment");
     }
-    return readStripeReturn({
+    const clientSecret = readStripeReturn({
       clientSecret: secret,
       paymentIntentId: params.get("payment_intent"),
     });
+    return clientSecret ? { kind: "pending", clientSecret } : null;
   }
 
-  try {
-    const record = JSON.parse(raw) as {
-      clientSecret?: string;
-      paymentIntentId?: string | null;
-      savedAt?: number;
-    };
-    if (
-      typeof record.savedAt !== "number" ||
-      Date.now() - record.savedAt > STRIPE_RETURN_MAX_AGE_MS
-    ) {
-      clearPendingReturn();
-      return null;
-    }
-    return readStripeReturn({
-      clientSecret: record.clientSecret,
-      paymentIntentId: record.paymentIntentId,
-    });
-  } catch {
-    clearPendingReturn();
-    return null;
-  }
+  const stored = parseStoredPaymentReturn(raw, Date.now());
+  if (!stored) clearStoredReturn();
+  return stored;
 }
 
-function clearPendingReturn() {
+function clearStoredReturn() {
   window.__kapStripeReturn = undefined;
   try {
     window.sessionStorage.removeItem(STRIPE_RETURN_STORAGE_KEY);
@@ -149,11 +151,37 @@ function clearPendingReturn() {
 
 type PaymentResult = {
   outcome: PaymentOutcome;
-  clientSecret: string;
+  /** Kept only while the outcome still needs it: see needsClientSecret. */
+  clientSecret: string | null;
   paymentIntentId: string | null;
   amountCents: number | null;
   currency: string;
 };
+
+/**
+ * Stripe has answered, so a final outcome no longer needs the client secret:
+ * drop it from memory and storage. A reload then shows the same result from a
+ * secret-free record, rather than an empty form that invites a second payment.
+ */
+function settleReturn(result: PaymentResult): PaymentResult {
+  if (needsClientSecret(result.outcome)) return result;
+  clearStoredReturn();
+  try {
+    window.sessionStorage.setItem(
+      STRIPE_RETURN_STORAGE_KEY,
+      JSON.stringify({
+        outcome: result.outcome,
+        paymentIntentId: result.paymentIntentId,
+        amountCents: result.amountCents,
+        currency: result.currency,
+        savedAt: Date.now(),
+      }),
+    );
+  } catch {
+    // Storage unavailable: a reload shows the form again.
+  }
+  return { ...result, clientSecret: null };
+}
 
 async function checkPaymentStatus(clientSecret: string): Promise<PaymentResult> {
   const unknown: PaymentResult = {
@@ -185,42 +213,121 @@ async function checkPaymentStatus(clientSecret: string): Promise<PaymentResult> 
 // Form pieces
 // ---------------------------------------------------------------------------
 
+type DetailsField = "amount" | "reference" | "name" | "email";
+type Details = Record<DetailsField, string>;
+
+const emptyDetails: Details = { amount: "", reference: "", name: "", email: "" };
+
+// The shared validator returns one message; this places it under its field.
+const errorField: Record<string, DetailsField> = {
+  [PAYMENT_ERRORS.amountInvalid]: "amount",
+  [PAYMENT_ERRORS.amountPrecision]: "amount",
+  [PAYMENT_ERRORS.amountTooLow]: "amount",
+  [PAYMENT_ERRORS.amountTooHigh]: "amount",
+  [PAYMENT_ERRORS.nameRequired]: "name",
+  [PAYMENT_ERRORS.nameTooLong]: "name",
+  [PAYMENT_ERRORS.emailInvalid]: "email",
+  [PAYMENT_ERRORS.referenceTooLong]: "reference",
+};
+
+type FieldError = { field: DetailsField; message: string };
+
+/** Accessible props for a field: its help and error text, and its invalid state. */
+function describe(field: DetailsField, fieldError: FieldError | null, hasHelp = false) {
+  const invalid = fieldError?.field === field;
+  const ids = [hasHelp ? `${field}-help` : null, invalid ? `${field}-error` : null].filter(Boolean);
+  return {
+    "aria-invalid": invalid || undefined,
+    "aria-describedby": ids.length ? ids.join(" ") : undefined,
+  };
+}
+
 function Field({
   label,
   htmlFor,
-  required,
-  hint,
+  optional,
+  help,
+  error,
   children,
 }: {
   label: string;
-  htmlFor: string;
-  required?: boolean;
-  hint?: string;
+  htmlFor: DetailsField;
+  optional?: string;
+  help?: string;
+  error?: string;
   children: ReactNode;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="min-w-0">
       <label
         htmlFor={htmlFor}
-        className="flex items-center justify-between text-sm font-medium text-foreground"
+        className="flex flex-wrap items-baseline justify-between gap-x-3 text-[0.9375rem] font-semibold text-foreground"
       >
-        <span>
-          {label}
-          {required ? (
-            <span className="ml-1 text-primary" aria-hidden>
-              *
-            </span>
-          ) : null}
-        </span>
-        {hint ? (
-          <span className="text-xs font-normal text-muted-foreground">
-            {hint}
-          </span>
-        ) : null}
+        {label}
+        {optional ? <span className="text-sm font-normal text-ink-soft">{optional}</span> : null}
       </label>
+      <div className="mt-2">{children}</div>
+      {help ? (
+        <p id={`${htmlFor}-help`} className="mt-2 text-sm text-ink-soft">
+          {help}
+        </p>
+      ) : null}
+      {error ? (
+        <p id={`${htmlFor}-error`} className="mt-2 flex items-start gap-1.5 text-sm font-medium text-destructive">
+          <CircleAlert aria-hidden className="mt-0.5 size-4 shrink-0" />
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function StepHeading({ step, headingRef }: { step: 0 | 1; headingRef?: React.Ref<HTMLHeadingElement> }) {
+  return (
+    <div>
+      <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-coral-ink">
+        Step {step + 1} {copy.stepOf} {copy.steps.length}
+      </p>
+      <h2
+        ref={headingRef}
+        tabIndex={headingRef ? -1 : undefined}
+        className="mt-2 scroll-mt-32 font-display text-[1.6rem] font-bold leading-tight tracking-[-0.015em] focus:outline-none"
+      >
+        {copy.steps[step]}
+      </h2>
+    </div>
+  );
+}
+
+/** The white card every stage of the payment sits in, with the logo-gradient edge. */
+function Panel({ className, children }: { className?: string; children: ReactNode }) {
+  return (
+    <div
+      className={cn(
+        "relative min-w-0 overflow-hidden rounded-[20px] border border-rule bg-paper p-5 shadow-[0_24px_48px_-32px_rgb(26_26_26/0.35)] sm:p-8 md:p-10",
+        o.accentEdge,
+        className,
+      )}
+    >
       {children}
     </div>
   );
+}
+
+function ErrorAlert({ children }: { children: ReactNode }) {
+  return (
+    <div
+      role="alert"
+      className="flex items-start gap-2.5 rounded-[10px] border border-destructive/35 bg-destructive/5 px-4 py-3 text-sm font-medium text-destructive"
+    >
+      <CircleAlert aria-hidden className="mt-0.5 size-4 shrink-0" />
+      <p className="min-w-0 wrap-anywhere">{children}</p>
+    </div>
+  );
+}
+
+function Spinner() {
+  return <Loader2 className="size-4 animate-spin motion-reduce:animate-none" aria-hidden />;
 }
 
 function CardStep({
@@ -234,6 +341,12 @@ function CardStep({
   const elements = useElements();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  // Keyboard and screen-reader users land on the new step rather than on a removed button.
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -259,48 +372,40 @@ function CardStep({
   const amountDisplay = formatAmount(amountCents);
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
-      <div className="rounded-lg bg-muted px-5 py-4">
-        <div className="flex items-baseline justify-between gap-4">
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/70">
-            Amount due
-          </span>
-          <span className="text-2xl font-semibold tracking-tight text-foreground">
-            {amountDisplay}
-          </span>
-        </div>
+    <form onSubmit={onSubmit} className="grid gap-7">
+      <StepHeading step={1} headingRef={headingRef} />
+
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 rounded-[14px] bg-deep-cream px-5 py-4">
+        <span className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-ink-soft">
+          {copy.amountDue}
+        </span>
+        <span className="font-display text-[1.75rem] font-bold tracking-[-0.02em]">{amountDisplay}</span>
       </div>
 
       <PaymentElement />
 
-      {error ? (
-        <div
-          role="alert"
-          className="rounded-lg border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-destructive"
-        >
-          {error}
-        </div>
-      ) : null}
+      {error ? <ErrorAlert>{error}</ErrorAlert> : null}
 
-      <div className="flex flex-col items-stretch gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col-reverse items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
         <button
           type="button"
           onClick={onBack}
           disabled={submitting}
-          className="inline-flex items-center gap-2 self-start text-xs font-medium text-foreground/70 transition-colors hover:text-foreground disabled:opacity-50"
+          className="inline-flex items-center gap-2 self-start rounded-sm py-1 text-[0.9375rem] font-semibold text-ink-soft transition-colors duration-150 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground disabled:opacity-50 sm:self-center"
         >
-          <ArrowLeft className="size-3.5" />
-          Back to amount
+          <ArrowLeft aria-hidden className="size-4" />
+          {copy.back}
         </button>
         <Button
           type="submit"
+          variant="coral"
           disabled={!stripe || submitting}
-          className="h-11 px-6 text-sm font-semibold"
+          className="h-auto min-h-13.5 rounded-[10px] px-6.5 py-3 text-base whitespace-normal"
         >
           {submitting ? (
             <>
-              <Loader2 className="size-4 animate-spin" aria-hidden />
-              <span>Processing…</span>
+              <Spinner />
+              <span>{copy.processing}</span>
             </>
           ) : (
             <span>Pay {amountDisplay}</span>
@@ -313,26 +418,28 @@ function CardStep({
 
 function CheckingState() {
   return (
-    <div
-      role="status"
-      className="flex items-center gap-3 rounded-2xl bg-card p-10 text-sm text-muted-foreground ring-1 ring-foreground/8"
-    >
-      <Loader2 className="size-4 animate-spin" aria-hidden />
-      <span>Checking your payment status…</span>
-    </div>
+    <Panel>
+      <div role="status" className="flex items-center gap-3 text-ink-soft">
+        <Spinner />
+        <span>Checking your payment status…</span>
+      </div>
+    </Panel>
   );
 }
 
 function ContactLink() {
   return (
-    <a href={`mailto:${CONTACT_EMAIL}`} className="text-foreground underline">
+    <a
+      href={`mailto:${CONTACT_EMAIL}`}
+      className="rounded-sm font-semibold wrap-anywhere text-foreground underline decoration-foreground/40 underline-offset-4 hover:decoration-coral-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+    >
       {CONTACT_EMAIL}
     </a>
   );
 }
 
 const linkButtonClasses =
-  "text-xs font-medium text-primary underline-offset-4 hover:underline";
+  "rounded-sm border-b border-foreground/40 pb-0.5 text-[0.9375rem] font-semibold transition-colors duration-150 hover:border-coral-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground";
 
 function ResultState({
   result,
@@ -355,18 +462,19 @@ function ResultState({
       ? formatAmount(result.amountCents, result.currency)
       : null;
   const reference = result.paymentIntentId ? (
-    <p className="mt-4 text-sm text-muted-foreground">
+    <p className="mt-5 rounded-[10px] bg-deep-cream px-4 py-3 text-sm text-ink-soft">
       Payment reference:{" "}
-      <span className="font-mono text-foreground">{result.paymentIntentId}</span>
+      <span className="font-mono wrap-anywhere text-foreground">{result.paymentIntentId}</span>
     </p>
   ) : null;
 
   const content: Record<
     PaymentOutcome,
-    { icon: string; title: string; body: ReactNode; actions: ReactNode }
+    { icon: LucideIcon; tone: string; title: string; body: ReactNode; actions: ReactNode }
   > = {
     succeeded: {
-      icon: "✓",
+      icon: CircleCheck,
+      tone: "bg-brand-magenta text-brand-cream",
       title: "Payment received.",
       body: (
         <>
@@ -382,7 +490,8 @@ function ResultState({
       ),
     },
     processing: {
-      icon: "…",
+      icon: Clock,
+      tone: "bg-brand-amber/25 text-foreground",
       title: "Payment processing.",
       body: (
         <>
@@ -399,7 +508,8 @@ function ResultState({
       ),
     },
     failed: {
-      icon: "!",
+      icon: CircleAlert,
+      tone: "bg-destructive/10 text-destructive",
       title: "Payment not completed.",
       body: (
         <>
@@ -409,11 +519,12 @@ function ResultState({
         </>
       ),
       actions: (
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+        <div className="flex flex-wrap items-center gap-x-7 gap-y-4">
           <Button
             type="button"
+            variant="coral"
             onClick={onRetry}
-            className="h-11 px-6 text-sm font-semibold"
+            className="h-auto min-h-13.5 rounded-[10px] px-6.5 py-3 text-base"
           >
             Try again
           </Button>
@@ -424,7 +535,8 @@ function ResultState({
       ),
     },
     canceled: {
-      icon: "×",
+      icon: CircleX,
+      tone: "bg-deep-cream text-foreground",
       title: "Payment canceled.",
       body: (
         <>
@@ -439,7 +551,8 @@ function ResultState({
       ),
     },
     unknown: {
-      icon: "?",
+      icon: CircleHelp,
+      tone: "bg-deep-cream text-foreground",
       title: "We couldn't confirm your payment.",
       body: (
         <>
@@ -457,26 +570,24 @@ function ResultState({
     },
   };
 
-  const { icon, title, body, actions } = content[result.outcome];
+  const { icon: Icon, tone, title, body, actions } = content[result.outcome];
 
   return (
-    <div className="rounded-2xl bg-card p-10 ring-1 ring-foreground/8">
-      <div className="inline-flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
-        <span aria-hidden className="text-lg">
-          {icon}
-        </span>
+    <Panel>
+      <div className={cn("flex size-12 items-center justify-center rounded-full", tone)}>
+        <Icon aria-hidden className="size-6" />
       </div>
       <h2
         ref={headingRef}
         tabIndex={-1}
-        className="mt-5 scroll-mt-32 text-2xl font-semibold tracking-tight text-foreground focus:outline-none"
+        className="mt-6 scroll-mt-32 font-display text-[1.75rem] font-bold leading-tight tracking-[-0.015em] focus:outline-none"
       >
         {title}
       </h2>
-      <p className="mt-3 max-w-md text-sm text-muted-foreground">{body}</p>
+      <p className="mt-3 max-w-[52ch] leading-relaxed text-ink-soft">{body}</p>
       {result.outcome === "unknown" ? null : reference}
-      <div className="mt-6">{actions}</div>
-    </div>
+      <div className="mt-8">{actions}</div>
+    </Panel>
   );
 }
 
@@ -493,22 +604,34 @@ export function PaymentForm() {
   const [result, setResult] = useState<PaymentResult | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldError, setFieldError] = useState<FieldError | null>(null);
+  // What the customer typed, so "Change details" brings it back.
+  const [details, setDetails] = useState<Details>(emptyDetails);
+  const formRef = useRef<HTMLFormElement>(null);
 
   // A Stripe redirect lands here; ask Stripe what actually happened.
   useEffect(() => {
-    const pending = loadPendingReturn();
-    if (!pending) return;
+    const stored = loadStoredReturn();
+    if (!stored) return;
     let cancelled = false;
     // Deferred out of the effect body (react-hooks/set-state-in-effect); it
     // still renders before the status request can resolve.
     queueMicrotask(() => {
-      if (!cancelled) setStage("checking");
-    });
-    checkPaymentStatus(pending).then((checked) => {
       if (cancelled) return;
-      setResult(checked);
-      setStage("result");
+      if (stored.kind === "settled") {
+        setResult({ ...stored.payment, clientSecret: null });
+        setStage("result");
+      } else {
+        setStage("checking");
+      }
     });
+    if (stored.kind === "pending") {
+      checkPaymentStatus(stored.clientSecret).then((checked) => {
+        if (cancelled) return;
+        setResult(settleReturn(checked));
+        setStage("result");
+      });
+    }
     return () => {
       cancelled = true;
     };
@@ -519,16 +642,29 @@ export function PaymentForm() {
     if (submitting) return;
     setSubmitting(true);
     setError(null);
+    setFieldError(null);
 
     const data = new FormData(e.currentTarget);
-    const validation = validatePaymentRequest({
+    const entered: Details = {
       amount: String(data.get("amount") ?? ""),
+      reference: String(data.get("reference") ?? ""),
+      name: String(data.get("name") ?? ""),
+      email: String(data.get("email") ?? ""),
+    };
+    const validation = validatePaymentRequest({
+      amount: entered.amount,
       name: data.get("name"),
       email: data.get("email"),
       reference: data.get("reference"),
     });
     if (!validation.ok) {
-      setError(validation.error);
+      const field = errorField[validation.error];
+      if (field) {
+        setFieldError({ field, message: validation.error });
+        formRef.current?.querySelector<HTMLInputElement>(`#${field}`)?.focus();
+      } else {
+        setError(validation.error);
+      }
       setSubmitting(false);
       return;
     }
@@ -559,30 +695,49 @@ export function PaymentForm() {
       if (!body.clientSecret) {
         throw new Error("Server did not return a payment session.");
       }
+      setDetails(entered);
       setClientSecret(body.clientSecret);
       setAmountCents(cents);
       setStage("card");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      // fetch rejects with a TypeError when the request never reaches the server.
+      setError(
+        err instanceof TypeError
+          ? `We couldn't reach the payment service. Check your connection and try again, or email ${CONTACT_EMAIL}.`
+          : err instanceof Error
+            ? err.message
+            : "Something went wrong.",
+      );
     } finally {
       setSubmitting(false);
     }
   }
 
   function reset() {
-    clearPendingReturn();
+    clearStoredReturn();
     setStage("details");
     setClientSecret(null);
     setAmountCents(0);
     setResult(null);
+    setError(null);
+    setFieldError(null);
+    setDetails(emptyDetails);
+  }
+
+  // Back to the details with what was typed; submitting them again starts a
+  // new payment, exactly as before.
+  function backToDetails() {
+    setStage("details");
+    setClientSecret(null);
+    setAmountCents(0);
     setError(null);
   }
 
   // Retry on the same PaymentIntent, so a failed attempt never leaves a
   // second open payment behind.
   function retry() {
-    if (!result || result.amountCents === null) return reset();
-    clearPendingReturn();
+    if (!result?.clientSecret || result.amountCents === null) return reset();
+    clearStoredReturn();
     setClientSecret(result.clientSecret);
     setAmountCents(result.amountCents);
     setResult(null);
@@ -591,15 +746,15 @@ export function PaymentForm() {
 
   if (!publishableKey) {
     return (
-      <div className="rounded-2xl bg-card p-8 ring-1 ring-foreground/8">
-        <h2 className="text-lg font-semibold text-foreground">
+      <Panel>
+        <h2 className="font-display text-[1.5rem] font-bold leading-tight">
           Payment system not configured
         </h2>
-        <p className="mt-3 text-sm text-muted-foreground">
+        <p className="mt-3 leading-relaxed text-ink-soft">
           The Stripe publishable key is missing. Please email{" "}
           <ContactLink /> and we&apos;ll send a payment link directly.
         </p>
-      </div>
+      </Panel>
     );
   }
 
@@ -613,29 +768,30 @@ export function PaymentForm() {
 
   if (stage === "card" && clientSecret) {
     return (
-      <div className="rounded-2xl bg-card p-8 ring-1 ring-foreground/8">
+      <Panel>
         <Elements
           stripe={stripePromise}
           options={{ clientSecret, appearance: stripeAppearance }}
         >
-          <CardStep amountCents={amountCents} onBack={reset} />
+          <CardStep amountCents={amountCents} onBack={backToDetails} />
         </Elements>
-      </div>
+      </Panel>
     );
   }
 
+  const fieldMessage = (field: DetailsField) =>
+    fieldError?.field === field ? fieldError.message : undefined;
+
   return (
-    <form
-      onSubmit={onDetailsSubmit}
-      noValidate
-      className="rounded-2xl bg-card p-8 ring-1 ring-foreground/8"
-    >
-      <div className="space-y-5">
-        <Field label="Amount due (USD)" htmlFor="amount" required>
+    <Panel>
+      <form ref={formRef} onSubmit={onDetailsSubmit} noValidate className="grid gap-7">
+        <StepHeading step={0} />
+
+        <Field label={copy.amount.label} htmlFor="amount" help={copy.amount.help} error={fieldMessage("amount")}>
           <div className="relative">
             <span
               aria-hidden
-              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground"
+              className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-xl font-semibold text-ink-soft"
             >
               $
             </span>
@@ -648,50 +804,65 @@ export function PaymentForm() {
               max="100000"
               step="0.01"
               required
+              aria-required
+              defaultValue={details.amount}
               disabled={submitting}
-              className={cn(inputClasses, "pl-7")}
+              className={cn(inputClasses, "h-14 pl-9 text-xl font-semibold")}
               placeholder="0.00"
+              {...describe("amount", fieldError, true)}
             />
           </div>
         </Field>
 
-        <Field label="Invoice / reference" htmlFor="reference" hint="Optional">
+        <Field
+          label={copy.reference.label}
+          htmlFor="reference"
+          optional={copy.reference.optional}
+          help={copy.reference.help}
+          error={fieldMessage("reference")}
+        >
           <input
             id="reference"
             name="reference"
             type="text"
             maxLength={MAX_INVOICE_REFERENCE_LENGTH}
+            defaultValue={details.reference}
             disabled={submitting}
             className={inputClasses}
             placeholder="INV-2026-014"
+            {...describe("reference", fieldError, true)}
           />
         </Field>
 
-        <div className="grid gap-5 md:grid-cols-2">
-          <Field label="Name" htmlFor="name" required>
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-2 md:gap-5">
+          <Field label={copy.name.label} htmlFor="name" error={fieldMessage("name")}>
             <input
               id="name"
               name="name"
               type="text"
               required
+              aria-required
               maxLength={MAX_PAYER_NAME_LENGTH}
               autoComplete="name"
+              defaultValue={details.name}
               disabled={submitting}
               className={inputClasses}
-              placeholder="Your name"
+              {...describe("name", fieldError)}
             />
           </Field>
-          <Field label="Email" htmlFor="email" required>
+          <Field label={copy.email.label} htmlFor="email" error={fieldMessage("email")}>
             <input
               id="email"
               name="email"
               type="email"
               required
+              aria-required
               maxLength={MAX_EMAIL_LENGTH}
               autoComplete="email"
+              defaultValue={details.email}
               disabled={submitting}
               className={inputClasses}
-              placeholder="you@company.com"
+              {...describe("email", fieldError)}
             />
           </Field>
         </div>
@@ -708,35 +879,30 @@ export function PaymentForm() {
           />
         </div>
 
-        {error ? (
-          <div
-            role="alert"
-            className="rounded-lg border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-destructive"
-          >
-            {error}
-          </div>
-        ) : null}
+        {error ? <ErrorAlert>{error}</ErrorAlert> : null}
 
-        <div className="flex flex-col items-start gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground">
-            Secured by Stripe. Card details never reach our servers.
+        <div className="grid gap-4 border-t border-rule pt-7 sm:flex sm:items-center sm:justify-between sm:gap-6">
+          <p className="flex max-w-[34ch] items-start gap-2 text-sm leading-snug text-ink-soft">
+            <Lock aria-hidden className="mt-0.5 size-4 shrink-0 text-coral-ink" />
+            {copy.secureNote}
           </p>
           <Button
             type="submit"
+            variant="coral"
             disabled={submitting}
-            className="h-11 px-6 text-sm font-semibold"
+            className="h-auto min-h-13.5 w-full shrink-0 rounded-[10px] px-6.5 py-3 text-base whitespace-normal sm:w-auto"
           >
             {submitting ? (
               <>
-                <Loader2 className="size-4 animate-spin" aria-hidden />
-                <span>Preparing…</span>
+                <Spinner />
+                <span>{copy.submitting}</span>
               </>
             ) : (
-              <span>Continue to card</span>
+              <span>{copy.submit}</span>
             )}
           </Button>
         </div>
-      </div>
-    </form>
+      </form>
+    </Panel>
   );
 }
