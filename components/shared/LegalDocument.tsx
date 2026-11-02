@@ -1,23 +1,11 @@
-import { ArrowUpRight, TriangleAlert } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { CONTACT_EMAIL, MAILING_ADDRESS, SITE_NAME } from "@/lib/constants";
-import { LEGAL_DRAFT_NOTICE, type LegalBlock, type LegalDocument as Doc } from "@/lib/content";
+import { LEGAL_CONTENTS_LABEL, type LegalBlock, type LegalDocument as Doc } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import o from "@/components/shared/optimism.module.css";
 
 const linkClasses =
   "rounded-sm font-semibold underline decoration-foreground/40 underline-offset-4 transition-colors duration-150 hover:decoration-coral-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground";
-
-/** An owner or counsel question, kept visible so it cannot be mistaken for settled text. */
-function Confirm({ children }: { children: string }) {
-  return (
-    <div className="rounded-r-[10px] border-l-4 border-brand-amber bg-brand-amber/12 px-5 py-4">
-      <p className="font-mono text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-coral-ink">
-        {LEGAL_DRAFT_NOTICE.confirmLabel}
-      </p>
-      <p className="mt-1.5 text-[0.95rem] leading-relaxed">{children}</p>
-    </div>
-  );
-}
 
 function Table({ head, rows }: { head: string[]; rows: string[][] }) {
   return (
@@ -89,7 +77,6 @@ function Block({ block }: { block: LegalBlock }) {
       </ul>
     );
   }
-  if ("confirm" in block) return <Confirm>{block.confirm}</Confirm>;
   if ("table" in block) return <Table {...block.table} />;
   if ("links" in block) {
     return (
@@ -119,7 +106,7 @@ function Block({ block }: { block: LegalBlock }) {
   );
 }
 
-/** A privacy policy or terms page: compact hero, draft notice, contents, then one reading column. */
+/** A privacy policy or terms page: compact hero, contents, then one reading column. */
 export function LegalDocument({ doc }: { doc: Doc }) {
   return (
     <>
@@ -140,20 +127,9 @@ export function LegalDocument({ doc }: { doc: Doc }) {
       </section>
 
       <div className="mx-auto grid max-w-3xl min-w-0 gap-10 px-6 pb-20 md:px-8 md:pb-28">
-        <aside
-          aria-label={LEGAL_DRAFT_NOTICE.title}
-          className="flex gap-3.5 rounded-[14px] border border-brand-amber/60 bg-brand-amber/12 p-5"
-        >
-          <TriangleAlert aria-hidden className="mt-0.5 size-5 shrink-0 text-coral-ink" />
-          <div className="min-w-0">
-            <p className="font-semibold">{LEGAL_DRAFT_NOTICE.title}</p>
-            <p className="mt-1 text-[0.95rem] leading-relaxed">{LEGAL_DRAFT_NOTICE.body}</p>
-          </div>
-        </aside>
-
         <nav aria-labelledby="legal-contents" className="border-y border-rule py-6">
           <h2 id="legal-contents" className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-ink-soft">
-            {LEGAL_DRAFT_NOTICE.contentsLabel}
+            {LEGAL_CONTENTS_LABEL}
           </h2>
           <ol className="mt-4 grid gap-x-8 gap-y-2 text-[0.95rem] sm:grid-cols-2">
             {doc.sections.map((section, i) => (

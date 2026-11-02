@@ -21,10 +21,6 @@ export const HOME_WORKFLOW: {
   ai: WorkflowStep;
   results: WorkflowStep[];
   caption: string;
-  motion: {
-    pause: { text: string; label: string };
-    play: { text: string; label: string };
-  };
 } = {
   label: "Example workflow",
   trigger: "New inquiry",
@@ -45,10 +41,11 @@ export const HOME_WORKFLOW: {
   ],
   caption:
     "Illustrative example, not a client project. Every workflow is built around the tools you already use.",
-  motion: {
-    pause: { text: "Pause", label: "Pause workflow animation" },
-    play: { text: "Play", label: "Play workflow animation" },
-  },
+};
+
+export const WORKFLOW_MOTION_CONTROL = {
+  pause: { text: "Pause", label: "Pause workflow animation" },
+  play: { text: "Play", label: "Play workflow animation" },
 };
 
 export const HOME_HOURS = {
@@ -66,7 +63,7 @@ export const HOME_HOURS = {
     },
     {
       today: "New leads sit in a spreadsheet until someone has time to chase them",
-      automated: "Every lead logged and followed up on time",
+      automated: "Leads logged and followed up on schedule",
     },
     {
       today: "Reminders and status updates sent by hand every week",
@@ -161,8 +158,8 @@ export const HOME_VIDEO = {
     "An introduction to AI-powered automation for businesses from KAP Enterprises, presented by an AI-generated presenter. The video was produced with one of KAP's own automated video-production workflows.",
 };
 
-// Proposed process wording (brief A4: keep proposed wording distinct from verified practice).
-// Needs the owner's confirmation before launch; it makes no ongoing-support promise (brief B3).
+// Owner-approved 2026-11-02. It promises neither ongoing support nor documentation beyond a project's
+// agreed scope.
 export const HOME_PROCESS = {
   title: "How we work together.",
   steps: [
@@ -180,13 +177,21 @@ export const HOME_PROCESS = {
     },
     {
       title: "Hand it over",
-      body: "You get a documented system your team understands, built to adapt as your tools change.",
+      body: "You get a maintainable system your team understands, with documentation to fit the project's scope and agreed deliverables.",
     },
   ],
 };
 
+// Owner-approved copy (2026-11-02). A modest prompt after the process; the closing band stays the
+// page's main call to action.
+export const HOME_MID_CTA = {
+  title: "Ready to spend less time on repetitive work?",
+  body: "Tell us what you'd like to automate, and we'll help you explore the possibilities.",
+};
+
 // Sources: heading = existing site copy; lead and career facts = brief A2 (Kevin's career, never
-// company accomplishments); build standard = existing About page copy.
+// company accomplishments); engineering principles = owner-approved wording (2026-11-02), which
+// does not imply that every engagement includes ongoing monitoring.
 export const HOME_CREDIBILITY = {
   title: "Built by an engineer, not a marketer.",
   lead: "KAP Enterprises is led by Kevin Pilgrim, a software engineer with 30+ years of experience.",
@@ -206,8 +211,8 @@ export const HOME_CREDIBILITY = {
     },
   ],
   standardLead:
-    "KAP automations are designed and built the way enterprise software is built:",
-  traits: ["Monitored", "Recoverable", "Documented", "Engineered for change"] as const,
+    "We bring enterprise software engineering principles to practical business automations, with an emphasis on:",
+  traits: ["Reliability", "Recoverability", "Documentation", "Maintainability"] as const,
 };
 
 export type Recommendation = {
@@ -371,12 +376,12 @@ export const SERVICE_WORKFLOW = {
       { icon: "Search", title: "Understand your process", body: "We learn how the work moves today: the tools, the people involved and where the time goes." },
       { icon: "Lightbulb", title: "Find the best opportunities", body: "We identify which steps are worth automating first, and which are better left to people." },
       { icon: "Wrench", title: "Build and integrate", body: "We build the workflow and connect it to the tools you already use." },
-      { icon: "FileCheck", title: "Test, refine and hand over", body: "We test it with you, refine it, and hand it over with documentation your team can follow." },
+      { icon: "FileCheck", title: "Test, refine and hand over", body: "We test it with you, refine it, and hand it over with documentation suited to the project's scope." },
     ] as { icon: ServiceIcon; title: string; body: string }[],
   },
   tools: {
     title: "Proven tools, built properly.",
-    body: "We build on established automation platforms such as n8n and Make, connect your CRM and other business tools through their APIs, and add AI where it genuinely helps. Every workflow is designed and built the way enterprise software is built.",
+    body: "We build on established automation platforms such as n8n and Make, connect your CRM and other business tools through their APIs, and add AI where it genuinely helps. We bring enterprise software engineering principles to each workflow, with an emphasis on reliability, recoverability, documentation and maintainability.",
     chips: ["n8n", "Make", "Airtable", "CRMs", "REST APIs", "SQL databases", "AI models"],
     credential: "KAP Enterprises is led by Kevin Pilgrim, a software engineer with 30+ years of experience.",
     // Whole sentence, unedited, from the recommendation already published on the current site
@@ -400,9 +405,9 @@ export const SERVICE_WORKFLOW = {
    Service page: AI-Powered Customer Engagement (/services/customer-engagement, brief A3 and A5).
    Hero headline and supporting copy, the outcomes and the section outline come from the owner's
    instruction (2026-10-29); the supporting copy keeps its dash verbatim. Everything else is
-   proposed wording. AI voice and support agents are still to be classified (brief B3), so channels
-   and capabilities are framed as what can be set up, never as delivered projects. Both example
-   conversations are illustrative, with invented customers and businesses.
+   proposed wording. The owner confirmed on 2026-11-02 that AI voice and support agents have been
+   delivered to clients (brief B3). Both example conversations are illustrative, with invented
+   customers and businesses.
    ------------------------------------------------------------------------------------------- */
 
 export const SERVICE_ENGAGEMENT = {
@@ -574,7 +579,7 @@ export const SERVICE_ENGAGEMENT = {
       { icon: "SlidersHorizontal", title: "Configuration", body: "We set up the assistant's answers, questions and boundaries with you, in your business's voice." },
       { icon: "Plug", title: "Integration", body: "We connect it to the channels and tools you already use, such as your website and CRM." },
       { icon: "FileCheck", title: "Testing", body: "We test realistic conversations, including the awkward ones, and refine them until the handoffs work." },
-      { icon: "Wrench", title: "Handoff", body: "We hand it over with documentation, so your team knows how it works and how to adjust it." },
+      { icon: "Wrench", title: "Handoff", body: "We hand it over with documentation suited to the project's scope, so your team knows how it works and how to adjust it." },
     ] as { icon: ServiceIcon; title: string; body: string }[],
   },
   tools: {
@@ -688,7 +693,7 @@ export const SERVICE_WEBSITES = {
       { icon: "Signpost", title: "Clear messaging and navigation", body: "Plain words about what you offer, and menus that take people where they expect to go." },
       { icon: "MousePointerClick", title: "Easy ways to get in touch", body: "Contact forms, email links and calls to action placed where visitors are ready to use them." },
       { icon: "Gauge", title: "Fast, accessible pages", body: "Pages that load quickly and work with keyboards, screen readers and enlarged text." },
-      { icon: "FileCode2", title: "Maintainable build", body: "Clean, documented code that's straightforward to update as your business changes." },
+      { icon: "FileCode2", title: "Maintainable build", body: "Clean, maintainable code that's straightforward to update as your business changes, with documentation suited to the project's scope." },
     ] as { icon: ServiceIcon; title: string; body: string }[],
     specimen: { label: "Your brand, not ours", type: "Aa" },
     scale: { label: "Readable at any text size", sample: "Aa" },
@@ -718,7 +723,7 @@ export const SERVICE_WEBSITES = {
     title: "You're looking at one.",
     body: "This website is KAP's own, designed and built in-house. It isn't a client project, but it's the most direct example we can show you of how we build: the design, the way it adapts to your screen, and how each page leads to a conversation.",
     points: [
-      "Checked at 17 screen widths, from a small phone to a wide monitor, and with enlarged text",
+      "Checked from small phones to wide monitors, and with enlarged text",
       "One main action, repeated where you're ready for it: Let's Talk About Your Business",
       "Built on Next.js, with a working contact form and online payments through Stripe",
     ],
@@ -1053,7 +1058,7 @@ export const ABOUT_PAGE = {
   },
   approach: {
     title: "How we approach the work.",
-    intro: "Five habits that shape every project, whatever its size.",
+    intro: "How we approach projects, whatever their size.",
     steps: [
       {
         title: "Understand your business first",
@@ -1144,16 +1149,13 @@ export const ABOUT_PAGE = {
 };
 
 /* ---------------------------------------------------------------------------------------------
-   Privacy Policy and Terms (/privacy, /terms). DRAFTS (owner decision 2026-10-30): no legal text
-   existed on this site or the previous one, so both are drafted from the site's verified
-   behaviour. Nothing here is a legal opinion. `confirm` blocks are questions for the owner or
-   counsel and render as visible callouts; the draft notice must stay until both documents have
-   been reviewed (brief A9, B6). Verified facts are recorded in design/legal.md.
+   Privacy Policy and Terms (/privacy, /terms). Approved by the owner on 2026-11-02; not reviewed
+   by an attorney. Both are drafted from the site's verified behaviour and the owner's decisions.
+   Nothing here is a legal opinion. Verified facts are recorded in design/legal.md.
    ------------------------------------------------------------------------------------------- */
 export type LegalBlock =
   | { p: string; lead?: string }
   | { list: string[] }
-  | { confirm: string }
   | { table: { head: string[]; rows: string[][] } }
   | { links: { label: string; href: string }[] }
   | { contact: true };
@@ -1167,11 +1169,22 @@ export type LegalDocument = {
   sections: { id: string; title: string; blocks: LegalBlock[] }[];
 };
 
-export const LEGAL_DRAFT_NOTICE = {
-  title: "Draft for review",
-  body: "This document has not yet been reviewed by the owner or by legal counsel. Highlighted notes mark statements that still need confirmation. It must not be published in this form.",
-  confirmLabel: "To confirm",
-  contentsLabel: "Contents",
+export const LEGAL_CONTENTS_LABEL = "Contents";
+
+// Google Analytics consent notice and footer control (components/shared/AnalyticsConsent.tsx).
+export const ANALYTICS_CONSENT = {
+  title: "Your analytics choice",
+  body: "KAP uses optional Google Analytics to understand site usage. It stays off unless you accept.",
+  privacyLabel: "Privacy Policy",
+  privacyHref: "/privacy",
+  accept: "Accept analytics",
+  decline: "Decline",
+  close: "Close",
+  footerLabel: "Cookie Preferences",
+  statusAccepted: "Analytics is on.",
+  statusDeclined: "Analytics is off.",
+  statusGpc: "Analytics is off because your browser is sending a Global Privacy Control signal. It stays off while that signal is on.",
+  statusUnavailable: "Analytics is off because your browser isn’t letting this site save your choice.",
 };
 
 export const PRIVACY_PAGE: LegalDocument = {
@@ -1184,7 +1197,7 @@ export const PRIVACY_PAGE: LegalDocument = {
   title: "Privacy Policy",
   intro:
     "This policy explains what information this website collects, why, and who else receives it. It covers kap-enterprises-llc.com only, not services KAP provides to clients under separate agreements.",
-  date: "Draft, 30 October 2026",
+  date: "Last updated: November 2, 2026",
   sections: [
     {
       id: "who-we-are",
@@ -1202,15 +1215,11 @@ export const PRIVACY_PAGE: LegalDocument = {
       blocks: [
         {
           lead: "Contact form",
-          p: "When you send a message, we receive your name, email address, company name (optional), the area you choose under “What can we help with?” (optional) and your message. The website delivers your message to KAP’s business inbox by email. It does not send it to any customer database. If you express interest in working with us, relevant information from our correspondence may be recorded in KAP CRM, our own customer relationship management system.",
-        },
-        {
-          confirm:
-            "Confirm whether KAP CRM is hosted or run by a third-party provider. If it is, that provider may need adding to the service providers below.",
+          p: "When you send a message, we receive your name, email address, company name (optional), the area you choose under “What can we help with?” (optional) and your message. The website uses Resend to deliver your message by email to KAP’s business inbox, which is hosted on Google Workspace. The website does not keep your message in its own database, and it does not automatically add submissions to KAP’s customer relationship management system (CRM).",
         },
         {
           lead: "Payment form",
-          p: "When you make a payment, we collect the amount, an invoice or reference number (optional), your name and your email address. Your card or other payment details are entered into Stripe’s payment form and go directly to Stripe. They are not sent to or stored on KAP’s servers.",
+          p: "When you make a payment, we collect the amount, an invoice or reference number (optional), your name and your email address. Your card or other payment details are entered into Stripe’s payment form and go directly to Stripe. KAP does not directly collect or store full payment card details.",
         },
         { lead: "Email", p: "If you write to us directly, we receive whatever your email contains." },
       ],
@@ -1221,7 +1230,7 @@ export const PRIVACY_PAGE: LegalDocument = {
       blocks: [
         {
           lead: "Analytics",
-          p: "This website uses Google Analytics 4 on every page to understand how visitors use it. Google Analytics collects information such as the pages you view, how you reached the site, your device and browser type, and your approximate location, and it uses cookies to recognise returning browsers.",
+          p: "Google Analytics 4 is optional on this website, and it does not load unless you accept it. If you accept, it runs on every page to help us understand how visitors use the site. It collects information such as the pages you view, how you reached the site, your device and browser type, and your approximate location, and it uses cookies to recognise returning browsers. You can decline without losing normal access to the website.",
         },
         {
           lead: "Hosting",
@@ -1257,7 +1266,8 @@ export const PRIVACY_PAGE: LegalDocument = {
       ],
     },
     {
-      // Owner's wording (2026-10-30), verbatim.
+      // Owner's wording (2026-10-30) for the first two paragraphs; the rest applies the owner's
+      // decisions of 2026-11-02 on CRM handling, retention and marketing.
       id: "contact-inquiries",
       title: "How we handle contact inquiries",
       blocks: [
@@ -1268,28 +1278,33 @@ export const PRIVACY_PAGE: LegalDocument = {
           p: "If you express interest in working with us, we may retain your contact information and relevant correspondence to discuss potential services, prepare proposals, and manage our business relationship.",
         },
         {
-          p: "If you do not wish to pursue our services, or the inquiry does not lead to further discussions, we discard the information when it is no longer needed.",
+          p: "KAP may manually or selectively record relevant inquiry details in its internal CRM for follow-up and to manage a business relationship. This is not an automatic connection: the website does not send form submissions to the CRM.",
         },
-        { p: "We do not automatically add website inquiries to a marketing mailing list." },
+        {
+          p: "We keep inquiries while we need them for legitimate business purposes. Inquiries that do not lead to a business relationship are deleted when they are no longer needed. We do not follow a fixed deletion schedule, so we cannot give a specific date.",
+        },
+        {
+          p: "We use contact-form submissions to respond to your inquiry and for related communications you request. We do not use them to enroll you in marketing campaigns.",
+        },
       ],
     },
     {
-      // Owner decisions (2026-10-30, revised). The website has no CRM integration: the payment
-      // route sends payment information only to Stripe (verified; see design/legal.md). Whether
-      // payment information reaches KAP CRM at all is unconfirmed, so nothing here claims either way.
+      // Owner decisions (2026-11-02). The website has no CRM integration: the payment route sends
+      // payment information only to Stripe (verified; see design/legal.md).
       id: "payment-information",
       title: "How we handle payment information",
       blocks: [
         {
-          p: "When you make a payment, the website sends the payment information you enter to Stripe for processing. Your card or other payment details are entered into Stripe’s payment form and processed by Stripe. KAP does not receive or store card numbers.",
+          p: "Stripe processes payments made through this website. The website sends Stripe the amount, your name, your email address and any reference you enter, and you enter your card or other payment details directly into Stripe’s payment form. KAP does not directly collect or store full payment card details.",
         },
         {
-          p: "KAP may keep transaction-related information, such as your name, email address, the amount and any reference you entered, for accounting, tax, customer service and legal purposes. We keep payment records for as long as required to meet applicable tax, accounting and legal obligations. Stripe keeps its own records of each transaction under its own policies, which KAP does not control.",
+          p: "Stripe may send a receipt to the email address you enter, depending on the receipt settings in KAP’s Stripe account.",
         },
-        { p: "Making a payment does not subscribe you to promotional or marketing emails." },
         {
-          confirm:
-            "Unconfirmed: whether payment information reaches KAP CRM, and if so how (for example, a connection between Stripe and KAP CRM set up outside this website). The website itself sends payment information only to Stripe. Describe any such workflow here once confirmed.",
+          p: "KAP may keep transaction-related information, such as your name, email address, the amount and any reference you entered. We keep payment and transaction records as reasonably necessary for accounting, tax, dispute resolution and legal obligations. Stripe keeps its own records of each transaction under its own policies, which KAP does not control.",
+        },
+        {
+          p: "Information you submit through the payment form does not create a marketing subscription, and we do not use it to enroll you in marketing campaigns.",
         },
       ],
     },
@@ -1304,10 +1319,10 @@ export const PRIVACY_PAGE: LegalDocument = {
           table: {
             head: ["Provider", "What it does", "Information it receives"],
             rows: [
-              ["Resend", "Sends contact form messages from the website to KAP’s inbox", "Everything you enter in the contact form"],
+              ["Resend", "Delivers contact form messages from the website to KAP’s inbox by email", "Everything you enter in the contact form"],
               ["Google Workspace (Gmail)", "Hosts KAP’s business email, where contact messages and other correspondence are received and stored", "Contact form messages, and any email you exchange with KAP"],
               ["Stripe", "Processes payments made through the payment page", "Payment details, amount, name, email address and any reference you enter"],
-              ["Google Analytics", "Website analytics", "Usage, device and approximate location information, through cookies"],
+              ["Google Analytics", "Website analytics, only if you accept", "Usage, device and approximate location information, through cookies"],
               ["YouTube (Google)", "Plays the homepage video, only after you press play", "Information about your device and viewing"],
               ["Vercel", "Hosts the website and runs its forms", "Technical request information, and form submissions as they pass through"],
             ],
@@ -1328,20 +1343,17 @@ export const PRIVACY_PAGE: LegalDocument = {
       ],
     },
     {
-      // Owner decision (2026-10-30): KAP does not sell personal information.
+      // Owner decision (2026-11-02): separates KAP's own practice from processing by providers, so
+      // there is no unqualified claim that information never reaches third parties.
       id: "selling-and-sharing",
       title: "Selling and sharing information",
       blocks: [
-        { p: "We do not sell your personal information to third parties." },
+        { p: "We do not sell customer contact lists, and we do not intentionally sell the inquiry details you submit." },
         {
-          p: "We share information with the service providers listed above so that they can send and store messages, process payments, host the website and measure how it is used, and where the law requires it.",
+          p: "Service providers do process information. We share information with the providers listed above so that they can deliver and store messages, process payments, host the website and measure how it is used, and we may disclose it where the law requires it.",
         },
         {
-          p: "Google Analytics collects information about your visit through cookies, and Google handles that information under its own policies. You can opt out of Google Analytics using Google’s browser add-on, linked in the next section.",
-        },
-        {
-          confirm:
-            "For counsel: some privacy laws, such as California’s, define “sale” and “sharing” broadly enough that analytics cookies may count even without payment. Advise whether this statement needs qualifying, and whether any opt-out link, signal handling (such as Global Privacy Control) or Google Analytics setting changes are required.",
+          p: "If you accept analytics, Google Analytics collects information about your visit through cookies, and Google handles that information under its own policies. Your choices are described in the next section, which also links to Google’s browser add-on for opting out of Google Analytics.",
         },
       ],
     },
@@ -1353,13 +1365,26 @@ export const PRIVACY_PAGE: LegalDocument = {
           table: {
             head: ["Name", "Set by", "Where", "Purpose and lifetime"],
             rows: [
-              ["_ga, _ga_…", "Google Analytics", "Every page", "Distinguishes visitors for analytics. Lifetimes are set by Google (see its documentation below)."],
+              ["_ga, _ga_…", "Google Analytics", "Every page, only if you accept analytics", "Distinguishes visitors for analytics. Lifetimes are set by Google (see its documentation below)."],
               ["__stripe_mid", "Stripe", "Payment page", "Fraud prevention. About one year."],
               ["__stripe_sid", "Stripe", "Payment page", "Fraud prevention. About 30 minutes."],
+              ["m", "Stripe (m.stripe.com)", "Payment page", "Fraud prevention and payment security. Duration is determined by Stripe."],
               ["YouTube storage", "YouTube", "Homepage, after you press play", "Video playback, and YouTube’s own purposes."],
-              ["Payment return record", "This website (session storage)", "Payment page", "Shows your payment’s result when Stripe returns you to the page. It first holds a temporary Stripe payment key. Once the payment has succeeded or been canceled, the key is deleted and only the payment reference, amount and status stay, so reloading the page still shows the result. If the payment failed, is processing or could not be confirmed, the key stays so you can retry or the page can check again. Everything is deleted when you start a new payment or try again, after one hour, or when you close the tab."],
+              ["kap.analytics-consent.v1", "This website (local storage)", "Every page", "Remembers whether you accepted or declined analytics. It is stored only in your browser and is not used for marketing. It stays until you change your choice or clear your browser’s storage."],
+              ["Payment return record", "This website (session storage)", "Payment page", "Shows your payment’s result when Stripe returns you to the page. It first holds a temporary Stripe payment key. Once the payment has succeeded or been canceled, the key is deleted and only the payment reference, amount, currency, status and time stay, so reloading the page still shows the result. If the payment failed, is processing or could not be confirmed, the key stays so you can retry or the page can check again. The record is removed when you start a new payment or try again. It stops being used after one hour and is removed the next time the page opens after that. Otherwise, your browser clears it when the tab’s session ends."],
             ],
           },
+        },
+        {
+          p: "If you accept it, Google Analytics uses cookies and similar technologies to help us understand website traffic and usage. You can also manage cookies through your browser settings and use Google’s Analytics opt-out browser add-on. Some website features, including payments, may not function correctly if certain cookies are blocked.",
+        },
+        {
+          lead: "Your analytics choice",
+          p: "The website asks whether you accept or decline analytics, and remembers your decision in your browser. You can change it at any time using “Cookie Preferences” in the footer. If you withdraw your acceptance, this site stops collecting analytics and removes the Google Analytics cookies it can reach. That does not erase information Google has already collected.",
+        },
+        {
+          lead: "Global Privacy Control",
+          p: "If your browser sends a Global Privacy Control signal, analytics stays off while the signal is on, even if you accepted earlier.",
         },
         {
           p: "You can block or delete cookies in your browser settings. Blocking Stripe’s cookies may stop the payment form from working. Google offers a browser add-on for opting out of Google Analytics.",
@@ -1369,10 +1394,6 @@ export const PRIVACY_PAGE: LegalDocument = {
             { label: "Google Analytics cookie usage", href: "https://support.google.com/analytics/answer/11397207" },
             { label: "Google Analytics opt-out add-on", href: "https://tools.google.com/dlpage/gaoptout" },
           ],
-        },
-        {
-          confirm:
-            "The site loads Google Analytics without asking for consent and has no cookie banner. Counsel should advise whether that is acceptable for KAP’s visitors (for example, visitors from the EU, the UK, or US states with privacy laws).",
         },
       ],
     },
@@ -1384,16 +1405,12 @@ export const PRIVACY_PAGE: LegalDocument = {
         {
           list: [
             "Contact inquiries are kept as described under “How we handle contact inquiries”.",
-            "Payment records are kept for as long as required to meet applicable tax, accounting and legal obligations. Stripe keeps its own records separately.",
-            "Analytics data is kept by Google Analytics for the period set in KAP’s Google Analytics account.",
+            "Payment and transaction records are kept as reasonably necessary for accounting, tax, dispute resolution and legal obligations. Stripe keeps its own records separately.",
+            "Analytics data is kept according to the data-retention settings in KAP’s Google Analytics account and Google’s own practices.",
           ],
         },
         {
           p: "When we delete an email or record, copies may remain for a time in our providers’ backups or retained data, under their own practices.",
-        },
-        {
-          confirm:
-            "State the Google Analytics data-retention period. It cannot be read from the website: check it in Google Analytics under Admin › Data collection and modification › Data retention (viewing it changes nothing).",
         },
       ],
     },
@@ -1402,11 +1419,13 @@ export const PRIVACY_PAGE: LegalDocument = {
       title: "Your choices and requests",
       blocks: [
         {
-          p: "You can ask us what personal information we hold about you, ask us to correct it, or ask us to delete it, by emailing the address below. We may need to keep some information, such as payment records, where the law requires it.",
+          p: "To change your analytics choice, use “Cookie Preferences” in the footer. To ask what personal information we hold about you, or to ask us to correct or delete it, email us at the address below and tell us what you are asking for.",
         },
         {
-          confirm:
-            "For counsel: confirm which privacy laws apply to KAP and its visitors (for example US state privacy laws such as California’s, and the EU or UK GDPR if they reach KAP’s visitors), and whether this section needs specific rights, response times, appeal steps or identity verification. None has been assumed.",
+          p: "We may need to verify your identity before acting on a request. We may keep some information where we need it to meet legal obligations, such as payment, tax and accounting records, or to resolve disputes. Stripe, Google and our other providers keep their own records under their own policies.",
+        },
+        {
+          p: "Depending on where you live, privacy laws may give you additional rights, and we will handle requests as those laws require.",
         },
       ],
     },
@@ -1465,15 +1484,15 @@ export const TERMS_PAGE: LegalDocument = {
   },
   title: "Terms & Conditions",
   intro:
-    "These terms apply to your use of kap-enterprises-llc.com. They are general website terms: services KAP provides to clients are governed by separate agreements.",
-  date: "Draft, 30 October 2026",
+    "These terms apply to your use of kap-enterprises-llc.com and its payment page. They are general website terms: services KAP provides to clients are governed by separate agreements.",
+  date: "Last updated: November 2, 2026",
   sections: [
     {
       id: "about",
       title: "About these terms",
       blocks: [
         {
-          p: "This website is operated by KAP Enterprises, LLC (“KAP”, “we”, “us”). By using it, you agree to these terms. If you do not agree, please do not use the website.",
+          p: "This website is operated by KAP Enterprises, LLC (“KAP”, “we”, “us”). These terms set out the rules for using it. They apply when you submit a form or make a payment through the website. If you do not agree with them, please do not use the website.",
         },
       ],
     },
@@ -1485,7 +1504,10 @@ export const TERMS_PAGE: LegalDocument = {
           p: "Using this website, sending us a message or making a payment does not by itself create a client relationship or an agreement for services.",
         },
         {
-          p: "KAP documents client engagements with written agreements, proposals and invoices, depending on the project. These general website terms do not replace those project documents. Where a signed agreement for an engagement sets different terms, that agreement governs the engagement.",
+          p: "These terms govern use of the website and its payment page. Project-specific services, deliverables, ownership rights, schedules, warranties, fees and other obligations are governed by the applicable written proposal or client agreement.",
+        },
+        {
+          p: "If a separately signed client agreement conflicts with these terms on the contracted services, the client agreement controls, subject to applicable law.",
         },
       ],
     },
@@ -1533,20 +1555,30 @@ export const TERMS_PAGE: LegalDocument = {
       title: "Payments made through this website",
       blocks: [
         {
-          p: "The payment page lets clients pay amounts owed to KAP, such as invoices. Payments are in US dollars, between $1.00 and $100,000.00, and are processed by Stripe. You are responsible for entering the correct amount and reference. KAP does not receive or store your card details.",
+          p: "The payment page lets clients pay amounts owed to KAP, such as invoices. The payment page currently supports amounts from $1.00 to $100,000.00 USD, subject to payment processing restrictions. Payments are processed by Stripe. You can add an invoice or reference number if you have one. You are responsible for entering the correct amount and reference. KAP does not directly collect or store full payment card details.",
         },
         {
-          p: "A payment is complete only when the payment page confirms it. If you are unsure whether a payment went through, or you believe an amount is wrong, email us before trying again.",
+          p: "A payment’s status is determined by the payment processor’s records, not solely by the confirmation displayed in your browser. Some payments may take additional time to process, and a payment may complete even if you close the page. If you are unsure whether a payment was successful, please contact KAP before submitting another payment.",
+        },
+      ],
+    },
+    {
+      // Owner decisions (2026-11-02). No automatic refund, no timeframe, and no signed agreement
+      // needed to report a payment error.
+      id: "refunds",
+      title: "Refunds and payment errors",
+      blocks: [
+        {
+          p: "To report a mistaken, duplicate or disputed payment, email us at the address below. Include the amount, the date, the name and email address used, and the payment reference if you have it. Please do not send full card numbers by email. You do not need a signed client agreement to report a payment error.",
         },
         {
-          p: "Refunds and payment disputes are reviewed individually under the applicable client agreement. To raise one, email us at the address below with the payment’s details.",
+          p: "KAP investigates reports of mistaken or duplicate payments, and provides appropriate refunds or corrections based on the circumstances and applicable law. Other refund requests are evaluated individually. A report does not automatically result in a refund, and timing depends on the circumstances.",
+        },
+        {
+          p: "Where a signed client agreement exists, its payment and refund provisions govern, subject to applicable law.",
         },
         {
           p: "Nothing in these terms limits any rights you may have under applicable law, or under your card issuer’s or payment provider’s dispute procedures.",
-        },
-        {
-          confirm:
-            "For counsel: advise whether Stripe’s requirements or consumer-protection rules call for a more explicit public refund policy (for example, stated conditions or timelines). None has been assumed.",
         },
       ],
     },
@@ -1574,18 +1606,28 @@ export const TERMS_PAGE: LegalDocument = {
       title: "Disclaimers and limitation of liability",
       blocks: [
         {
-          confirm:
-            "For counsel: no disclaimer of warranties, limitation of liability or indemnification has been drafted. Whether to include them, their wording, and what the law allows are for legal counsel to decide.",
+          lead: "Website content",
+          p: "To the extent permitted by applicable law, this website and its content are provided “as is” and “as available”. We do not promise that the website’s general information is complete, current or suited to your situation, or that using it will produce a particular result.",
+        },
+        {
+          lead: "Limitation of liability",
+          p: "To the extent permitted by applicable law, KAP is not liable for indirect, incidental, special or consequential losses arising from your use of, or inability to use, the public website, including your reliance on its general information.",
+        },
+        {
+          lead: "What this section does not affect",
+          p: "This section applies to the public website only. It does not limit any liability that the law does not allow to be limited, any rights you have under applicable law that cannot be waived, KAP’s handling of payment errors described above, or any obligation KAP accepts in a signed client agreement. Those obligations are governed by that agreement.",
         },
       ],
     },
     {
       id: "governing-law",
-      title: "Governing law",
+      title: "Governing law and venue",
       blocks: [
         {
-          confirm:
-            "Confirm the governing law and venue for these terms. KAP’s mailing address is in Arizona, but the governing law has not been assumed.",
+          p: "Arizona law governs disputes about this website and these terms, and those disputes are to be brought in the state or federal courts located in Maricopa County, Arizona, subject to mandatory applicable law and consumer protections.",
+        },
+        {
+          p: "This does not override any jurisdictional rights you have under mandatory law, or a different choice made in a separately negotiated client agreement.",
         },
       ],
     },
@@ -1594,7 +1636,7 @@ export const TERMS_PAGE: LegalDocument = {
       title: "Changes to these terms",
       blocks: [
         {
-          p: "We may update these terms from time to time. The date at the top of this page shows when they were last revised. Continuing to use the website after a change means you accept the updated terms.",
+          p: "We may update these terms from time to time. The date at the top of this page shows when they were last revised. The updated terms apply to your use of the website after that date. They do not change a signed client agreement.",
         },
       ],
     },

@@ -37,6 +37,7 @@ export function LinearWorkflow({ id, content }: { id: string; content: ExampleCo
           className={cn(s.flow, "mt-10")}
           labelledBy={`${id}-caption`}
           layoutQuery="(width >= 64rem)"
+          pausable
         >
           <p className="mb-4 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-ink-soft">
             {content.label}
@@ -58,7 +59,7 @@ export function LinearWorkflow({ id, content }: { id: string; content: ExampleCo
               );
             })}
           </ol>
-          <figcaption id={`${id}-caption`} className="mt-5 text-[0.8125rem] text-ink-soft">
+          <figcaption id={`${id}-caption`} className="mt-5 pe-22 text-[0.8125rem] text-ink-soft">
             {content.caption}
           </figcaption>
         </WorkflowMotion>

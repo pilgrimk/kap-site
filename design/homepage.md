@@ -2,7 +2,7 @@
 
 Implements brief A12 (Modern Optimism) in the Next.js app on `kap-website-redesign`. Built from
 `design/concepts/light-treatments/` (theme `optimism`); this record describes what shipped to the
-branch. Not committed: awaiting owner review.
+branch, committed locally and awaiting owner review.
 
 ## Files
 
@@ -54,9 +54,18 @@ branch. Not committed: awaiting owner review.
 - Phone: compact flow with its own connector pieces, animated on the same cycle.
 
 **Pause/Play (added 2026-11-01, owner decision, finding T-08).** A small mono pill on the caption
-line holds or resumes the cycle from the same frame (`WorkflowMotion`'s `pauseControl`). A visitor's
+line holds or resumes the cycle from the same frame (`WorkflowMotion`'s `pausable`, shared with the Workflow Automation page). A visitor's
 pause outlasts scrolling and tab changes. It is hidden under reduced motion and until JavaScript can
 act on it. The caption reserves room for it at all widths.
+
+**Mid-page call to action (added 2026-11-02, owner decision, finding O-05).** `MidPageCTA` follows the
+process section and continues its deep-cream band, separated by a thin rule: one heading, one line and a
+coral "Let's Talk" button to `/contact`. It addresses the recorded lack of a conversion prompt between the
+hero and the closing band, and stays deliberately smaller than the closing band.
+
+**Credibility panel (changed 2026-11-02, owner decision, finding O-03).** It now shows the owner-approved
+engineering principles: reliability, recoverability, documentation and maintainability. The wording
+"Monitored" was removed because not every engagement includes ongoing monitoring.
 
 ## Content decisions and deviations
 

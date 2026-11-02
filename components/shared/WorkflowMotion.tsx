@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
+import { WORKFLOW_MOTION_CONTROL } from "@/lib/content";
+import s from "./workflow-motion.module.css";
 
 /**
  * Wraps the workflow figure and controls its CSS animation cycle: it pauses the cycle while the
@@ -9,8 +11,8 @@ import { Pause, Play } from "lucide-react";
  * switches between the phone and wider diagrams (each uses different connector elements, which
  * would otherwise start out of step).
  * Pass `layoutQuery={null}` when the figure has no layout-specific animations to resync.
- * Pass `pauseControl` to add a visitor Pause/Play button. A visitor's pause holds the current
- * frame and outlasts any visibility change; only their own Play resumes the cycle.
+ * Pass `pausable` for a cycle that repeats: it adds a visitor Pause/Play button. A visitor's pause
+ * holds the current frame and outlasts any visibility change; only their own Play resumes the cycle.
  * Reduced motion needs nothing here: the CSS only animates under no-preference. It also decides
  * whether the button shows, using `data-motion-ready` so it never appears before it can work.
  */
@@ -18,18 +20,14 @@ export function WorkflowMotion({
   className,
   labelledBy,
   layoutQuery = "(width < 48rem)",
-  pauseControl,
+  pausable = false,
   children,
 }: {
   className?: string;
   labelledBy: string;
   /** Media query at which the diagram switches layout (and so its connector elements) */
   layoutQuery?: string | null;
-  pauseControl?: {
-    className: string;
-    pause: { text: string; label: string };
-    play: { text: string; label: string };
-  };
+  pausable?: boolean;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -89,13 +87,13 @@ export function WorkflowMotion({
     applyPause.current();
   }
 
-  const action = paused ? pauseControl?.play : pauseControl?.pause;
+  const action = paused ? WORKFLOW_MOTION_CONTROL.play : WORKFLOW_MOTION_CONTROL.pause;
   const Icon = paused ? Play : Pause;
 
   return (
     <figure ref={ref} className={className} aria-labelledby={labelledBy}>
-      {pauseControl && action ? (
-        <button type="button" className={pauseControl.className} aria-label={action.label} onClick={togglePause}>
+      {pausable ? (
+        <button type="button" className={s.pause} aria-label={action.label} onClick={togglePause}>
           <Icon aria-hidden />
           <span>{action.text}</span>
         </button>

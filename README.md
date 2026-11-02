@@ -28,8 +28,8 @@ Copy `.env.example` to `.env.local` and fill in the values. `.env.local` is giti
 | Variable | Purpose |
 |---|---|
 | `RESEND_API_KEY` | Resend API key. Required for the contact form. |
-| `RESEND_FROM` | Sender address on a verified Resend domain (e.g. `noreply@contact.kap-enterprises-llc.com`). |
-| `RESEND_TO` | Inbox that receives contact-form submissions. Any address — no verification required on the receiving side. |
+| `RESEND_FROM` | Sender address on a verified Resend domain: `noreply@contact.kap-enterprises-llc.com`. Address only: the code adds the "KAP Website" display name. |
+| `RESEND_TO` | Inbox that receives contact-form submissions: `sales@kap-enterprises-llc.com`. No verification required on the receiving side. The `contact.` subdomain is for sending only and has no mailbox. |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key (`pk_*`). Embedded in client JS — safe to expose. |
 | `STRIPE_SECRET_KEY` | Stripe secret key (`sk_*`). Server-only. **Never** commit or paste in chat. |
 

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { AnalyticsConsent } from "@/components/shared/AnalyticsConsent";
 import { MotionProvider } from "@/components/shared/MotionProvider";
 import {
   SEO_KEYWORDS,
@@ -21,8 +21,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
 const titleDefault = `${SITE_NAME} — AI Automation for SMBs`;
 
@@ -72,15 +70,15 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        <AnalyticsConsent />
         <MotionProvider>
           <Navbar />
-          <main id="main-content" className="flex-1">
+          <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
             {children}
           </main>
           <Footer />
         </MotionProvider>
       </body>
-      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }

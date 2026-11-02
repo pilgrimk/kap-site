@@ -12,7 +12,7 @@ type QualityContent = {
 };
 
 // The illustrative Fernway palette from the hero, shown as "a brand that isn't ours"
-const swatches = ["#1f3d2b", "#4d7a4f", "#e3ebdc", "#fbf9f2", "#c45f37"];
+const swatches = ["#1f3d2b", "#4d7a4f", "#e3ebdc", "#fbf9f2", "#b8562f"];
 
 /** A type-and-colour specimen: each site gets its own look. */
 function Specimen({ label, type }: QualityContent["specimen"]) {

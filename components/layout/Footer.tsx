@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { CookiePreferencesControl } from "@/components/shared/AnalyticsConsent";
 import {
   CONTACT_EMAIL,
   LEGAL_LINKS,
@@ -96,6 +97,7 @@ export function Footer() {
                 </Link>
               </li>
             ))}
+            <CookiePreferencesControl />
           </ul>
           <p>Built by an engineer, not a marketer.</p>
         </div>

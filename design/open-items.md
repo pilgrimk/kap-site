@@ -18,13 +18,14 @@ contains no reference. Three things remain, all left alone deliberately:
   concept, not part of the site.
 - Brief item B5 still asks whether the image may be used. The question is closed.
 
-## Homepage implementation (2026-10-29, uncommitted, awaiting owner review)
+## Homepage implementation (2026-10-29, awaiting owner review)
 
 Full record: `design/homepage.md`.
 
-- **Process wording** ("How we work together") is proposed; confirm it matches how KAP works.
+- **Process wording** ("How we work together"): approved by the owner on 2026-11-02.
 - **Recommendations:** check the three excerpts against the LinkedIn originals (brief B4).
-- **Hero and full page are CORRECT, below the STRONG target** (see `design/homepage.md`).
+- **Hero and full page are CORRECT, below the STRONG target** (see `design/homepage.md`). The owner
+  accepted this for launch on 2026-11-02.
 - **Service pages** (brief A3) are not built; the homepage does not link to them yet.
 - **Outside the homepage:** the About page's unsourced "3.5M+" and "200+" stats (B5) and its "Book a
   Discovery Call" button (A6) were removed in the About redesign (2026-10-30).
@@ -58,7 +59,7 @@ Record: `design/services.md`.
 Record: `design/services.md` (Phase 2B).
 
 - **Proposed wording:** everything except the hero headline and supporting copy (the owner's).
-- **Brief B3:** confirm which channels KAP has delivered or will offer: website chat, messaging, email, AI voice agents. The page frames them as possibilities, not delivered work.
+- **Brief B3:** closed. The owner confirmed on 2026-11-02 that AI voice and customer support agents have been delivered to clients.
 - **Scheduling:** confirm KAP builds appointment and callback request flows for clients.
 - **Chandra Wrightsell's quote:** the first sentence of the published recommendation; to be checked against the LinkedIn original (B4).
 - **Example conversations** are illustrative, with invented customers and businesses; confirm the owner is comfortable with the HVAC and catering examples.
@@ -70,10 +71,10 @@ Record: `design/services.md` (Phase 2B).
 Record: `design/services.md` (Phase 2C).
 
 - **Proposed wording:** everything except the hero headline and supporting copy (the owner's). The problems, qualities, process stages and automation examples follow the owner's lists; their descriptions are proposed.
-- **Brief B3:** commercial website development engagements are still unclassified. The page shows no client sites; once delivered client work is confirmed (with the client's permission), a real example could join the self-referential one.
+- **Brief B3:** closed. The owner confirmed on 2026-11-02 that commercial websites have been delivered to clients. The page shows no client sites; a real example, with the client's permission, could join the self-referential one.
 - **"You're looking at one" claims** to confirm:
   - the site was "designed and built in-house";
-  - "Checked at 17 screen widths ... and with enlarged text", which is true of the redesigned pages in this branch's QA;
+  - "Checked from small phones to wide monitors, and with enlarged text", replacing the 17-widths wording on 2026-11-02;
   - "Built on Next.js, with a working contact form and online payments through Stripe".
 - **Process claims** to confirm: KAP designs key pages before building and collects feedback. Before launch it sets page titles and descriptions and tests the contact form.
 - **Appointment requests** (section F): confirm KAP builds these for clients. KAP's own site still has no scheduling (brief A6).
@@ -131,14 +132,13 @@ Record: `design/about.md`.
 - **Other capabilities line:** "KAP also builds sales and marketing automations and custom software
   integrations" (brief A1). Confirm this is current.
 
-## Privacy Policy and Terms (2026-10-30, DRAFTS, uncommitted)
+## Privacy Policy and Terms (approved by the owner 2026-11-02)
 
 Record: `design/legal.md`.
 
-- **LAUNCH BLOCKER:** both pages are drafts with a visible "Draft for review" notice and "To
-  confirm" callouts, and the footer links to them on every page. Merging this branch as it stands
-  would publish them. Owner and legal review are required, then the notice and callouts are removed
-  and both pages are added to the sitemap with noindex removed.
+- **Approved and technically ready for publication** with the coordinated release. Draft notices and
+  `noindex` are removed, and both pages are in the sitemap. They are not attorney-reviewed or legally
+  certified. The mailing address is confirmed: PO Box 3573, Scottsdale, AZ 85271.
 - **Answered by the owner (2026-10-30), now in the drafts:**
   - contact-inquiry handling;
   - payments are added to the CRM;
@@ -151,25 +151,31 @@ Record: `design/legal.md`.
 - **Revised (third round):** KAP CRM is not fed by the website. The "payments are added to the CRM"
   statement was removed, and "Making a payment does not subscribe you to promotional or marketing
   emails" was added (owner confirmed).
-- **Still open (owner):**
-  - whether, and how, payment information reaches KAP CRM (unconfirmed; the website has no CRM
-    integration);
-  - whether KAP CRM is hosted by a third-party provider that should be listed;
-  - the Google Analytics data-retention period: not yet verified by the owner; read it from GA
-    Admin.
-- **For legal counsel:**
-  - GA4 loads without consent or a cookie banner;
-  - whether the "do not sell" statement needs qualifying given GA, and any opt-out or GPC
-    requirement;
-  - which privacy laws apply, and the rights and response steps to state;
-  - whether a more explicit public refund policy is needed (Stripe or consumer protection);
-  - disclaimers, limitation of liability and indemnification (not drafted);
-  - governing law and venue (not assumed).
+- **Analytics consent: implemented (2026-11-02, owner's Option A, uncommitted).** Google Analytics stays off
+  until a visitor accepts, a Global Privacy Control signal keeps it off, and "Cookie Preferences" in the
+  footer changes the choice. Record: `design/final-sitewide-qa.md`, section 19. This is a practical
+  mechanism, not a guarantee of compliance with every privacy law, and it has not been legally reviewed.
+- **Privacy Policy wording changed after approval:** the owner has accepted the updated analytics, cookie and
+  choices text. The date stays November 2, 2026.
+- **Consent refinements (2026-11-02):** withdrawal no longer reloads the page, so unsaved form text is kept.
+  The notice on phones is now 144px tall at 390x844 (17% of the screen) and 163px at 320x568 (29%), or 227px
+  (40%) at 320x568 with enlarged text. Record: `design/final-sitewide-qa.md`, section 19.
+- **Facts still unconfirmed (owner):**
+  - whether KAP CRM is run by a third-party provider. The policy calls it "internal"; if a provider is
+    involved, add it to the providers table;
+  - whether payment details reach KAP CRM. The policy does not say either way;
+  - the Stripe receipt setting. The policy says receipts "may" be sent, which is accurate either way;
+  - the Google Analytics retention setting, and whether advertising features are on. The policy uses
+    general language;
+- **Not reviewed by an attorney:** the disclaimer, liability limit, governing law and refund wording are
+  practical drafts. Adding counsel later remains an option.
+- **Approved as written:** "state or federal courts" in Maricopa County, with no liability cap or
+  indemnification.
 - **Typeform:** not linked on the site today, so not disclosed. Disclose it if the fit-check survey
   is reintroduced (B2).
 - The brief's YouTube privacy item (Homepage section above) is covered by the draft.
 
-## Contact page (2026-10-30, uncommitted, awaiting owner review)
+## Contact page (2026-10-30, awaiting owner review)
 
 Record: `design/contact.md`.
 
@@ -179,14 +185,29 @@ Record: `design/contact.md`.
   intro and help text, "What happens next", the success message and the "How KAP can help" intro.
 - **Process claim to confirm:** "If we can help, we'll recommend a practical first step. If we're not
   the right fit, we'll say so."
-- **Real delivery not tested:** no email was sent. An authorized end-to-end Resend test is still
-  needed (production `RESEND_FROM` and `RESEND_TO`, and the sender domain's verification).
+- **Real delivery passed locally (2026-11-02):** one authorized test from the local server was accepted
+  by Resend (message ID `01a19b0f-c06a-7203-96a4-5953ceb44f1b`), and the owner verified receipt in the
+  business inbox with the expected subject, sender, name, email and message. **VERIFIED for the local
+  configuration only.** See `design/final-sitewide-qa.md`, section 15.
+- **Recipient (owner, 2026-11-01):** the correct inbox is `sales@kap-enterprises-llc.com`.
+  `sales@contact.kap-enterprises-llc.com` has no mailbox and must not be used. Local `RESEND_TO` is
+  now set to the correct address.
+- **Sender (owner, 2026-11-02):** `RESEND_FROM=noreply@contact.kap-enterprises-llc.com`, address only,
+  as the code adds "KAP Website". The owner confirmed in the Resend dashboard that
+  `contact.kap-enterprises-llc.com` is Verified. This replaces the 2026-11-01 proposal to send from the
+  root domain, which has no Resend records.
+- **Do not disturb Google Workspace:** the `contact.` subdomain's records do not touch the root MX,
+  root SPF, Google DKIM or DMARC.
+- **Launch task, production email configuration:** set `RESEND_FROM` and `RESEND_TO` in Vercel to these
+  values, confirm the API key, redeploy, and confirm one real submission from the live site, which needs
+  its own approval. Their current values cannot be read, as Vercel marks them sensitive, so the local
+  test does not prove production's configuration. Use a different visitor address, to confirm replying.
 - **No rate limiter in this repository** (same as the payment form): consider platform-level
   protection.
 - **`PageHero` and `SectionContainer`** are no longer used by any page; remove them in final
   verification if nothing else needs them.
 
-## Payment page (approved by the owner 2026-10-30, uncommitted)
+## Payment page (approved by the owner 2026-10-30)
 
 Record: `design/payment.md`.
 
@@ -199,15 +220,57 @@ Record: `design/payment.md`.
   does not promise a receipt.
 - **Stripe end-to-end testing (brief A10):** still requires an authorized test-mode session; the
   checklist is in `design/payment.md`.
+- **Payment verification:** by owner decision, no further local Stripe testing. The real payment flow is
+  verified after production deployment, and any real charge needs the owner's approval.
 - **No rate limiter in this repository:** the form handles a 429, but nothing here returns one.
   Consider platform-level protection (for example the Vercel firewall). Not changed (protected
   integration).
 - **Pre-existing `/payment` overflow:** fixed (see `design/payment.md`).
 
-## Remediation (2026-11-01, uncommitted)
+## Content findings O-01 to O-05 (owner decisions, 2026-11-02)
 
-Record and evidence: `design/final-sitewide-qa.md`, section 10. Resolved there: T-01, T-02, T-06,
-T-07 and L-02's code and draft wording, plus the homepage part of T-08 and the code part of T-04.
+Record: `design/final-sitewide-qa.md`, section 18. This supersedes the earlier "to confirm" notes in the page
+sections below, where they differ.
+
+**Still awaiting external verification, not complete:**
+- **LinkedIn check (O-01):** compare the seven excerpts, titles and companies with the original LinkedIn
+  recommendations. They were checked only against the previous production code. The owner approved
+  keeping them meanwhile. Brendan Parish and others are not added.
+- **YouTube captions (O-04):** review, correct and publish the auto-generated captions in YouTube Studio
+  before launch. No evidence of this exists yet.
+
+**Closed by owner decision:**
+- **Services (O-02):** the owner confirms all eight were delivered to actual clients: AI voice agents, AI
+  customer support agents, automated content and video production, social media automation, client
+  training on automation tools, ongoing maintenance and support, commercial website development, and
+  appointment scheduling and reminders. Not every engagement automatically includes ongoing monitoring.
+- **Claims (O-03):** wording corrected. "Designed and built in-house", "Founder" and "If we're not the right
+  fit, we'll say so" are retained.
+- **Hero and conversion (O-05):** the hero's eyebrow, headline and subheading are approved, the recorded
+  visual limitations are accepted for launch, and the mid-page call to action is built.
+
+## Coordinated release (authorized 2026-11-02)
+
+The owner approved the design, content, testimonials, legal pages and analytics consent for release.
+
+**Deferred by the owner, not blocking:** YouTube caption editing, social preview images, the LinkedIn source
+check and the smaller P2 findings.
+
+**After deployment:** one approved contact submission from the live site, payment verification, the
+permanent bare-domain redirect, and the rate-limit rollout in `design/final-sitewide-qa.md`, section 14.
+
+## Remediation (2026-11-01)
+
+Record and evidence: `design/final-sitewide-qa.md`, sections 10 and 12 to 14. Resolved there: T-01,
+T-02, T-06, T-07, T-08, T-10, T-11, T-21, L-02's code and draft wording, and the code part of T-04.
+
+**Commit state:** everything up to the first remediation is committed locally in checkpoint
+`f21f5afb83abb4de273106e661b5aa40a711f669`, not pushed. The dependency changes, the Workflow
+Automation control and the mock-site contrast fix are uncommitted in the working tree.
+
+**Launch status:** legal approval (L-01) and the local email test (V-01) are complete. Stripe test-mode
+verification (V-02) is replaced by the owner's decision to verify real payments after deployment.
+Production's email configuration and payment verification are launch tasks.
 
 Still open from that work:
 
@@ -215,17 +278,19 @@ Still open from that work:
   Make it permanent in Vercel's domain settings. Not changed: production configuration.
 - **Open Graph images (T-05):** workflow, engagement, websites and About have no `og:image` or
   `twitter:image`. No artwork was made, by instruction.
-- **Workflow page animation (T-08):** `/services/workflow-automation` still loops with no pause
-  control. Enabling the same control is a small change and needs owner approval.
-- **Rate limiting (T-03):** recommendation is in section 11 of the QA record. Nothing is enabled.
-- **Production Next.js (T-01):** `main` is still on 16.2.6. A separate minimal patch is recommended.
-- **`shadcn` as a production dependency (T-10):** the source of the remaining critical audit item.
+- **Rate limiting (T-03), owner action at launch:** the account is on Vercel Pro, which supports the
+  plan. No rules exist today, and nothing was enabled. Exact steps are in section 14 of the QA record:
+  two rules in Log mode, 7 days of daily checks, then 429 (contact first, payment a day later).
+- **Production Next.js (T-01):** `main` stays on 16.2.6 until the coordinated release, by owner
+  decision. The risk is accepted.
+- **Dependency audit:** 0 production advisories. 34 remain, all development-only, including critical
+  `proxy-addr` through `shadcn`, which the build needs for `shadcn/tailwind.css`.
 - **`@next/third-parties` 16.2.7** is left as it is: compatible with next 16.4.1, and not flagged.
 - **Workflow label spacing (T-20):** the two labels nearly touch at 320px with enlarged text.
 
 ## Pending owner decisions
 
-- **Hero copy** — the proposed headline is not approved (brief, Part B).
+- **Hero copy** — approved by the owner on 2026-11-02.
 - **Hero concept** — Concept 1 is the preferred direction; the refined concept
   (`design/concepts/automation-in-action-refined/`) awaits owner review before homepage
   implementation. Hero impact is **CORRECT, below the STRONG target**, after the bounded
